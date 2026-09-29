@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JUS FEB ORG - Login</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f2f4f7;
+      padding: 20px;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 400px;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.12);
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 8px;
+      background: #166534;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #14532d;
+    }
+
+    #message {
+      text-align: center;
+      margin-top: 15px;
+      color: red;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+      color: #777;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-box">
+
+    <div class="logo">JUS FEB ORG</div>
+
+    <div class="subtitle">
+      Janakalyan Unnayan Sohayok - (JUS)<br>
+      Family Enterprise Business - (FEB)
+    </div>
+
+    <form id="loginForm">
+
+      <label>Username</label>
+      <input type="text" id="username" placeholder="Enter username" required>
+
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter password" required>
+
+      <label>User Type</label>
+      <select id="role">
+        <option value="admin">Admin</option>
+        <option value="branch">Branch User</option>
+        <option value="shop">Shop User</option>
+      </select>
+
+      <button type="submit">LOGIN</button>
+
+    </form>
+
+    <div id="message"></div>
+
+    <div class="footer">
+      JUS FEB ORG Management & Accounting System
+    </div>
+
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+
+      event.preventDefault();
+
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const role = document.getElementById("role").value;
+
+      if (username === "admin" && password === "123456" && role === "admin") {
+
+        localStorage.setItem("jus_login", "true");
+        localStorage.setItem("jus_role", "admin");
+
+        window.location.href = "admin.html";
+
+      } else {
+
+        document.getElementById("message").innerText =
+          "Invalid username or password.";
+
+      }
+
+    });
+  </script>
+
+</body>
+</html>
