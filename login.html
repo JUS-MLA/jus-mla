@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>JUS-FEB Login</title>
 
   <style>
@@ -16,20 +15,23 @@
 
     body {
       min-height: 100vh;
-      background: #f3f4f6;
+      background: linear-gradient(135deg, #0b5ed7, #073b8c);
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
     }
 
-    .login-box {
+    .login-container {
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
+    }
+
+    .login-box {
       background: white;
       padding: 30px 25px;
       border-radius: 16px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.10);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
     }
 
     .logo {
@@ -38,46 +40,48 @@
     }
 
     .logo h1 {
-      color: #166534;
+      color: #073b8c;
       font-size: 32px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .logo p {
-      color: #555;
+      color: #666;
       font-size: 14px;
     }
 
     .form-group {
-      margin-bottom: 18px;
+      margin-bottom: 17px;
     }
 
-    label {
+    .form-group label {
       display: block;
       margin-bottom: 7px;
       font-weight: bold;
       color: #333;
     }
 
-    input {
+    .form-group input,
+    .form-group select {
       width: 100%;
-      padding: 13px;
+      padding: 12px;
       border: 1px solid #ccc;
       border-radius: 8px;
-      font-size: 16px;
+      font-size: 15px;
       outline: none;
     }
 
-    input:focus {
-      border-color: #166534;
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #0b5ed7;
     }
 
     .login-btn {
       width: 100%;
-      padding: 14px;
+      padding: 13px;
       border: none;
       border-radius: 8px;
-      background: #166534;
+      background: #0b5ed7;
       color: white;
       font-size: 16px;
       font-weight: bold;
@@ -85,90 +89,140 @@
     }
 
     .login-btn:hover {
-      background: #14532d;
+      background: #073b8c;
     }
 
-    .message {
-      margin-top: 15px;
+    .error {
+      display: none;
+      background: #ffe5e5;
+      color: #b00020;
+      padding: 10px;
+      border-radius: 7px;
+      margin-bottom: 15px;
       text-align: center;
       font-size: 14px;
-      font-weight: bold;
+    }
+
+    .success {
+      display: none;
+      background: #e3f8e8;
+      color: #187a32;
+      padding: 10px;
+      border-radius: 7px;
+      margin-bottom: 15px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .demo {
+      margin-top: 18px;
+      padding: 12px;
+      background: #f1f5f9;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .demo strong {
+      color: #073b8c;
     }
 
     .back {
       display: block;
       text-align: center;
-      margin-top: 20px;
-      color: #166534;
+      margin-top: 18px;
       text-decoration: none;
-      font-size: 14px;
+      color: #0b5ed7;
+      font-weight: bold;
     }
 
     .footer {
       text-align: center;
-      margin-top: 20px;
-      color: #777;
+      color: #ddd;
       font-size: 12px;
-      line-height: 1.5;
+      margin-top: 15px;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="login-box">
+  <div class="login-container">
 
-    <div class="logo">
-      <h1>JUS-FEB</h1>
-      <p>Management & Accounting System</p>
+    <div class="login-box">
+
+      <div class="logo">
+        <h1>JUS-FEB</h1>
+        <p>Management & Accounting System</p>
+      </div>
+
+      <div id="errorMessage" class="error"></div>
+      <div id="successMessage" class="success"></div>
+
+      <form id="loginForm">
+
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            placeholder="Enter username"
+            autocomplete="username"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter password"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="loginRole">Login Role</label>
+
+          <select id="loginRole">
+            <option value="Main Admin">Main Admin</option>
+            <option value="Branch User">Branch User</option>
+          </select>
+        </div>
+
+        <button type="submit" class="login-btn">
+          🔐 Login
+        </button>
+
+      </form>
+
+      <div class="demo">
+        <strong>Demo Login</strong><br>
+        Username: <strong>admin</strong><br>
+        Password: <strong>JUS@2026</strong><br>
+        Role: <strong>Main Admin</strong>
+      </div>
+
+      <a href="index.html" class="back">
+        ← Back to Home
+      </a>
+
     </div>
 
-    <form onsubmit="login(event)">
-
-      <div class="form-group">
-        <label for="username">Username</label>
-
-        <input
-          type="text"
-          id="username"
-          placeholder="Enter username"
-          required
-        >
-      </div>
-
-      <div class="form-group">
-        <label for="password">Password</label>
-
-        <input
-          type="password"
-          id="password"
-          placeholder="Enter password"
-          required
-        >
-      </div>
-
-      <button type="submit" class="login-btn">
-        LOGIN
-      </button>
-
-      <div id="message" class="message"></div>
-
-    </form>
-
-    <a href="index.html" class="back">
-      ← Back to Home
-    </a>
-
     <div class="footer">
-      Janakalyan Unnayan Sohayok - (JUS)<br>
-      Family Enterprise Business - (FEB)
+      JUS-FEB Management & Accounting System
     </div>
 
   </div>
 
   <script>
 
-    function login(event) {
+    const loginForm = document.getElementById("loginForm");
+
+    loginForm.addEventListener("submit", function(event) {
 
       event.preventDefault();
 
@@ -178,31 +232,83 @@
       const password =
         document.getElementById("password").value;
 
-      const message =
-        document.getElementById("message");
+      const role =
+        document.getElementById("loginRole").value;
 
+      const errorMessage =
+        document.getElementById("errorMessage");
 
-      if (username === "admin" && password === "JUS@2026") {
+      const successMessage =
+        document.getElementById("successMessage");
+
+      errorMessage.style.display = "none";
+      successMessage.style.display = "none";
+
+      /*
+        Demo Admin Login
+      */
+
+      if (
+        username === "admin" &&
+        password === "JUS@2026" &&
+        role === "Main Admin"
+      ) {
 
         localStorage.setItem("jus_login", "true");
         localStorage.setItem("jus_role", "Main Admin");
+        localStorage.setItem("jus_username", username);
+        localStorage.setItem("jus_login_time", new Date().toISOString());
 
-        message.style.color = "green";
-        message.textContent = "Login successful...";
+        successMessage.innerText =
+          "Login successful. Opening Admin Panel...";
+
+        successMessage.style.display = "block";
 
         setTimeout(function() {
           window.location.href = "admin.html";
-        }, 700);
+        }, 500);
 
-      } else {
-
-        message.style.color = "red";
-        message.textContent =
-          "Invalid username or password.";
-
+        return;
       }
 
-    }
+      /*
+        Demo Branch User Login
+        This is for testing the branch system.
+      */
+
+      if (
+        username === "branch" &&
+        password === "JUS@2026" &&
+        role === "Branch User"
+      ) {
+
+        localStorage.setItem("jus_login", "true");
+        localStorage.setItem("jus_role", "Branch User");
+        localStorage.setItem("jus_username", username);
+        localStorage.setItem("jus_login_time", new Date().toISOString());
+
+        successMessage.innerText =
+          "Login successful. Opening Branch Panel...";
+
+        successMessage.style.display = "block";
+
+        setTimeout(function() {
+          window.location.href = "branch.html";
+        }, 500);
+
+        return;
+      }
+
+      /*
+        Invalid Login
+      */
+
+      errorMessage.innerText =
+        "Invalid username, password or role.";
+
+      errorMessage.style.display = "block";
+
+    });
 
   </script>
 
