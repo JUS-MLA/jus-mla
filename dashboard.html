@@ -1,402 +1,204 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JUS-FEB Dashboard</title>
-
-<style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Arial, sans-serif;
-}
-
-body{
-    background:#f4f6f9;
-    color:#222;
-}
-
-header{
-    background:#0b5ed7;
-    color:white;
-    padding:16px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    position:sticky;
-    top:0;
-    z-index:10;
-}
-
-header h1{
-    font-size:20px;
-}
-
-header small{
-    display:block;
-    margin-top:4px;
-    opacity:.9;
-}
-
-.logout{
-    background:#dc3545;
-    color:white;
-    border:0;
-    padding:9px 13px;
-    border-radius:7px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-.container{
-    padding:15px;
-    max-width:1200px;
-    margin:auto;
-}
-
-.welcome{
-    background:white;
-    padding:18px;
-    border-radius:12px;
-    margin-bottom:15px;
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
-}
-
-.welcome h2{
-    color:#0b5ed7;
-    margin-bottom:6px;
-}
-
-.cards{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
-    gap:12px;
-    margin-bottom:20px;
-}
-
-.card{
-    background:white;
-    padding:15px;
-    border-radius:12px;
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
-    border-left:5px solid #0b5ed7;
-}
-
-.card .icon{
-    font-size:28px;
-}
-
-.card h3{
-    font-size:14px;
-    margin:7px 0;
-}
-
-.card p{
-    font-size:20px;
-    font-weight:bold;
-}
-
-.section-title{
-    margin:20px 0 10px;
-    color:#333;
-}
-
-.modules{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
-    gap:12px;
-}
-
-.module{
-    background:white;
-    border:0;
-    border-radius:12px;
-    padding:18px 10px;
-    text-align:center;
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
-    cursor:pointer;
-    transition:.2s;
-}
-
-.module:hover{
-    transform:translateY(-3px);
-    background:#eef5ff;
-}
-
-.module .emoji{
-    font-size:32px;
-    display:block;
-    margin-bottom:8px;
-}
-
-.module strong{
-    font-size:14px;
-}
-
-.quick{
-    margin-top:20px;
-    background:white;
-    padding:15px;
-    border-radius:12px;
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
-}
-
-.quick button{
-    margin:5px;
-    padding:10px 14px;
-    border:0;
-    border-radius:7px;
-    background:#0b5ed7;
-    color:white;
-    cursor:pointer;
-}
-
-.notice{
-    margin-top:20px;
-    background:#fff3cd;
-    border:1px solid #ffe69c;
-    padding:14px;
-    border-radius:10px;
-}
-
-footer{
-    text-align:center;
-    padding:25px 10px;
-    color:#777;
-    font-size:13px;
-}
-</style>
-</head>
-
-<body>
-
-<header>
-    <div>
-        <h1>🏢 JUS-FEB</h1>
-        <small>Janakalyan Unnayan Sohayok - (JUS)</small>
-    </div>
-
-    <button class="logout" onclick="logout()">🚪 Logout</button>
-</header>
-
-<div class="container">
-
-    <div class="welcome">
-        <h2>📊 Management Dashboard</h2>
-        <p>Family Enterprise Business - (FEB)</p>
-        <small>Management & Accounting System</small>
-    </div>
-
-    <!-- SUMMARY -->
-    <h3 class="section-title">📌 Overview</h3>
-
-    <div class="cards">
-
-        <div class="card">
-            <div class="icon">💰</div>
-            <h3>Cash Balance</h3>
-            <p>৳ 0</p>
-        </div>
-
-        <div class="card">
-            <div class="icon">🏦</div>
-            <h3>Total Fund</h3>
-            <p>৳ 0</p>
-        </div>
-
-        <div class="card">
-            <div class="icon">👥</div>
-            <h3>Members</h3>
-            <p>0</p>
-        </div>
-
-        <div class="card">
-            <div class="icon">💳</div>
-            <h3>Loan</h3>
-            <p>৳ 0</p>
-        </div>
-
-        <div class="card">
-            <div class="icon">📈</div>
-            <h3>Interest</h3>
-            <p>৳ 0</p>
-        </div>
-
-        <div class="card">
-            <div class="icon">⏳</div>
-            <h3>Total Due</h3>
-            <p>৳ 0</p>
-        </div>
-
-        <div class="card">
-            <div class="icon">📦</div>
-            <h3>Stock Value</h3>
-            <p>৳ 0</p>
-        </div>
-
-        <div class="card">
-            <div class="icon">🚌</div>
-            <h3>Bookings</h3>
-            <p>0</p>
-        </div>
-
-    </div>
-
-    <!-- MAIN MODULES -->
-    <h3 class="section-title">🧩 Management Modules</h3>
-
-    <div class="modules">
-
-        <button class="module" onclick="openModule('Member')">
-            <span class="emoji">👥</span>
-            <strong>Member</strong>
-        </button>
-
-        <button class="module" onclick="openModule('Loan & Interest')">
-            <span class="emoji">💳</span>
-            <strong>Loan & Interest</strong>
-        </button>
-
-        <button class="module" onclick="openModule('Cash & Fund')">
-            <span class="emoji">💰</span>
-            <strong>Cash & Fund</strong>
-        </button>
-
-        <button class="module" onclick="openModule('Branch')">
-            <span class="emoji">🏢</span>
-            <strong>Branch</strong>
-        </button>
-
-        <button class="module" onclick="openModule('Shop')">
-            <span class="emoji">🏪</span>
-            <strong>Shop</strong>
-        </button>
-
-        <button class="module" onclick="openModule('Product & Stock')">
-            <span class="emoji">📦</span>
-            <strong>Product & Stock</strong>
-        </button>
-
-        <button class="module" onclick="openModule('Accounting')">
-            <span class="emoji">🧾</span>
-            <strong>Accounting</strong>
-        </button>
-
-        <button class="module" onclick="openModule('Income & Expense')">
-            <span class="emoji">💵</span>
-            <strong>Income & Expense</strong>
-        </button>
-
-        <button class="module" onclick="openModule('Travel & Booking')">
-            <span class="emoji">🚌</span>
-            <strong>Travel & Booking</strong>
-        </button>
-
-        <button class="module" onclick="openModule('Internet Package')">
-            <span class="emoji">🌐</span>
-            <strong>Internet Package</strong>
-        </button>
-
-        <button class="module" onclick="openModule('Agriculture')">
-            <span class="emoji">🌾</span>
-            <strong>Agriculture</strong>
-        </button>
-
-        <button class="module" onclick="openModule('Tree Information')">
-            <span class="emoji">🌳</span>
-            <strong>Tree Information</strong>
-        </button>
-
-        <button class="module" onclick="openModule('Project')">
-            <span class="emoji">🏗️</span>
-            <strong>Project</strong>
-        </button>
-
-        <button class="module" onclick="openModule('Reports')">
-            <span class="emoji">📊</span>
-            <strong>Reports</strong>
-        </button>
-
-        <button class="module" onclick="openModule('Correction Needed')">
-            <span class="emoji">✏️</span>
-            <strong>Correction Needed</strong>
-        </button>
-
-        <button class="module" onclick="openModule('Notifications')">
-            <span class="emoji">🔔</span>
-            <strong>Notifications</strong>
-        </button>
-
-        <button class="module" onclick="openModule('Users & Permission')">
-            <span class="emoji">🔐</span>
-            <strong>Users & Permission</strong>
-        </button>
-
-        <button class="module" onclick="openModule('Activity Log')">
-            <span class="emoji">📜</span>
-            <strong>Activity Log</strong>
-        </button>
-
-        <button class="module" onclick="openModule('Settings')">
-            <span class="emoji">⚙️</span>
-            <strong>Settings</strong>
-        </button>
-
-    </div>
-
-    <!-- QUICK ACTION -->
-    <div class="quick">
-        <h3>⚡ Quick Actions</h3>
-
-        <button onclick="openModule('New Member')">➕ New Member</button>
-        <button onclick="openModule('Cash In')">💰 Cash In</button>
-        <button onclick="openModule('Cash Out')">💸 Cash Out</button>
-        <button onclick="openModule('New Loan')">💳 New Loan</button>
-        <button onclick="openModule('New Product')">📦 Add Product</button>
-        <button onclick="openModule('New Booking')">🚌 New Booking</button>
-        <button onclick="openModule('New Expense')">🧾 Expense</button>
-        <button onclick="openModule('Report')">📊 Report</button>
-    </div>
-
-    <div class="notice">
-        ⚠️ <strong>System Notice:</strong>
-        Branch and project postings will be reviewed by Admin.
-        Correction and approval history will be maintained.
-    </div>
-
-</div>
-
-<footer>
-    JUS-FEB Management & Accounting System<br>
-    Janakalyan Unnayan Sohayok - (JUS)
-</footer>
+<!-- DASHBOARD LIVE DATA INTEGRATION -->
 
 <script>
 
-function openModule(name){
-    alert(
-        "📂 " + name +
-        "\\n\\nএই Module পরবর্তী ধাপে Database-এর সাথে যুক্ত করা হবে।"
+function updateDashboardData(){
+
+    const totalMemberCount =
+        typeof members !== "undefined"
+        ? members.length
+        : 0;
+
+    const totalAccountCount =
+        typeof loans !== "undefined"
+        ? loans.length
+        : 0;
+
+    const totalCollectedAmount =
+        typeof payments !== "undefined"
+        ? payments.reduce(
+            (sum,payment) =>
+                sum + Number(payment.amount || 0),
+            0
+        )
+        : 0;
+
+    const totalDueAmount =
+        typeof loans !== "undefined"
+        ? loans.reduce(
+            (sum,loan) =>
+                sum + Number(loan.due || 0),
+            0
+        )
+        : 0;
+
+
+    /* Possible Dashboard IDs */
+
+    const memberElements = [
+        "dashboardMembers",
+        "totalDashboardMembers",
+        "dashMembers",
+        "totalMembers"
+    ];
+
+    const accountElements = [
+        "dashboardAccounts",
+        "totalDashboardAccounts",
+        "dashAccounts",
+        "totalLoans"
+    ];
+
+    const collectionElements = [
+        "dashboardCollection",
+        "totalDashboardCollection",
+        "dashCollection",
+        "totalCollected"
+    ];
+
+    const dueElements = [
+        "dashboardDue",
+        "totalDashboardDue",
+        "dashDue",
+        "totalDue"
+    ];
+
+
+    updateElements(
+        memberElements,
+        totalMemberCount
     );
+
+
+    updateElements(
+        accountElements,
+        totalAccountCount
+    );
+
+
+    updateElements(
+        collectionElements,
+        "৳ " +
+        totalCollectedAmount.toLocaleString()
+    );
+
+
+    updateElements(
+        dueElements,
+        "৳ " +
+        totalDueAmount.toLocaleString()
+    );
+
 }
 
-function logout(){
 
-    const confirmLogout =
-        confirm("আপনি কি Logout করতে চান?");
+function updateElements(
+    elementIds,
+    value
+){
 
-    if(confirmLogout){
+    elementIds.forEach(id => {
 
-        /*
-        Login page-এর নাম index.html
-        */
-        window.location.href = "index.html";
+        const element =
+            document.getElementById(id);
+
+        if(element){
+
+            element.innerText = value;
+
+        }
+
+    });
+
+}
+
+
+/*
+ * Refresh Dashboard after
+ * Member is added.
+ */
+
+const originalSaveMember =
+    window.saveMember;
+
+if(typeof originalSaveMember === "function"){
+
+    window.saveMember = function(){
+
+        originalSaveMember();
+
+        setTimeout(
+            updateDashboardData,
+            100
+        );
+
+    };
+
+}
+
+
+/*
+ * Refresh Dashboard after
+ * Loan is added.
+ */
+
+const originalSaveLoan =
+    window.saveLoan;
+
+if(typeof originalSaveLoan === "function"){
+
+    window.saveLoan = function(){
+
+        originalSaveLoan();
+
+        setTimeout(
+            updateDashboardData,
+            100
+        );
+
+    };
+
+}
+
+
+/*
+ * Refresh Dashboard after
+ * Payment is added.
+ */
+
+const originalSavePayment =
+    window.savePayment;
+
+if(typeof originalSavePayment === "function"){
+
+    window.savePayment = function(){
+
+        originalSavePayment();
+
+        setTimeout(
+            updateDashboardData,
+            100
+        );
+
+    };
+
+}
+
+
+/*
+ * Refresh Dashboard when page loads.
+ */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        setTimeout(
+            updateDashboardData,
+            300
+        );
+
     }
-}
+);
 
 </script>
-
-</body>
-</html>
