@@ -1472,3 +1472,1455 @@ function openJUSSection(sectionId){
 }
 
 </script>
+<!-- ============================= -->
+<!-- JUS-FEB LOGIN SYSTEM -->
+<!-- ============================= -->
+
+<section id="login" class="content-section">
+
+    <div style="max-width:420px;margin:40px auto;">
+
+        <div class="card">
+
+            <h2 style="text-align:center;">
+                JUS-FEB Login
+            </h2>
+
+            <p style="text-align:center;margin:10px 0 20px;">
+                Management & Accounting System
+            </p>
+
+            <div style="margin-bottom:15px;">
+                <label>User ID</label>
+
+                <input
+                    type="text"
+                    id="loginUserId"
+                    placeholder="Enter User ID"
+                    style="width:100%;padding:12px;margin-top:6px;"
+                >
+            </div>
+
+
+            <div style="margin-bottom:15px;">
+                <label>Password</label>
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Enter Password"
+                    style="width:100%;padding:12px;margin-top:6px;"
+                >
+            </div>
+
+
+            <button
+                class="btn btn-primary"
+                onclick="jusLogin()"
+                style="width:100%;padding:12px;"
+            >
+                🔐 Login
+            </button>
+
+
+            <p
+                id="loginMessage"
+                style="text-align:center;margin-top:15px;"
+            ></p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<script>
+
+/* ============================= */
+/* JUS-FEB LOGIN */
+/* ============================= */
+
+let currentJUSUser = null;
+
+
+/* LOGIN FUNCTION */
+
+function jusLogin(){
+
+    const userId =
+        document.getElementById("loginUserId").value.trim();
+
+    const password =
+        document.getElementById("loginPassword").value;
+
+
+    const message =
+        document.getElementById("loginMessage");
+
+
+    if(!userId || !password){
+
+        message.textContent =
+            "Please enter User ID and Password.";
+
+        return;
+
+    }
+
+
+    const users =
+        typeof jusUsers !== "undefined"
+            ? jusUsers
+            : [];
+
+
+    const user =
+        users.find(function(u){
+
+            return (
+                String(u.userId) === String(userId) &&
+                String(u.password) === String(password) &&
+                u.status !== "Inactive"
+            );
+
+        });
+
+
+    if(!user){
+
+        message.textContent =
+            "Invalid User ID or Password.";
+
+        return;
+
+    }
+
+
+    currentJUSUser = user;
+
+
+    localStorage.setItem(
+        "JUS_CURRENT_USER",
+        JSON.stringify(user)
+    );
+
+
+    message.textContent =
+        "Login Successful";
+
+
+    setTimeout(function(){
+
+        openJUSSection("dashboard");
+
+    },500);
+
+}
+
+
+/* ============================= */
+/* LOGOUT */
+/* ============================= */
+
+function jusLogout(){
+
+    currentJUSUser = null;
+
+    localStorage.removeItem(
+        "JUS_CURRENT_USER"
+    );
+
+
+    alert("Logged out successfully.");
+
+    openJUSSection("login");
+
+}
+
+
+/* ============================= */
+/* LOAD CURRENT USER */
+/* ============================= */
+
+function loadCurrentJUSUser(){
+
+    const saved =
+        localStorage.getItem(
+            "JUS_CURRENT_USER"
+        );
+
+
+    if(saved){
+
+        try{
+
+            currentJUSUser =
+                JSON.parse(saved);
+
+        }catch(error){
+
+            currentJUSUser = null;
+
+        }
+
+    }
+
+}
+
+
+/* ============================= */
+/* USER ROLE CHECK */
+/* ============================= */
+
+function isJUSAdmin(){
+
+    return (
+        currentJUSUser &&
+        currentJUSUser.role === "Admin"
+    );
+
+}
+
+
+function isJUSBranchUser(){
+
+    return (
+        currentJUSUser &&
+        currentJUSUser.role === "Branch User"
+    );
+
+}
+
+
+/* ============================= */
+/* LOGIN STARTUP */
+/* ============================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        loadCurrentJUSUser();
+
+    }
+);
+
+</script>
+<!-- ============================= -->
+<!-- JUS-FEB BRANCH ACCESS SYSTEM -->
+<!-- ============================= -->
+
+<script>
+
+function getCurrentUserBranch(){
+
+    if(!currentJUSUser){
+        return "";
+    }
+
+    return String(currentJUSUser.branch || "").trim();
+
+}
+
+
+/* ============================= */
+/* BRANCH ACCESS CHECK */
+/* ============================= */
+
+function canAccessBranch(branchName){
+
+    if(!currentJUSUser){
+        return false;
+    }
+
+
+    /* Admin can access all branches */
+
+    if(currentJUSUser.role === "Admin"){
+        return true;
+    }
+
+
+    /* Branch User can access own branch */
+
+    return (
+        String(branchName).trim() ===
+        getCurrentUserBranch()
+    );
+
+}
+
+
+/* ============================= */
+/* FILTER MEMBERS BY BRANCH */
+/* ============================= */
+
+function getAccessibleMembers(){
+
+    if(!currentJUSUser){
+        return [];
+    }
+
+
+    if(currentJUSUser.role === "Admin"){
+        return members || [];
+    }
+
+
+    const branch =
+        getCurrentUserBranch();
+
+
+    return (members || []).filter(function(member){
+
+        return String(member.branch || "").trim() === branch;
+
+    });
+
+}
+
+
+/* ============================= */
+/* FILTER LOANS BY BRANCH */
+/* ============================= */
+
+function getAccessibleLoans(){
+
+    if(!currentJUSUser){
+        return [];
+    }
+
+
+    if(currentJUSUser.role === "Admin"){
+        return loans || [];
+    }
+
+
+    const branch =
+        getCurrentUserBranch();
+
+
+    return (loans || []).filter(function(loan){
+
+        return String(loan.branch || "").trim() === branch;
+
+    });
+
+}
+
+
+/* ============================= */
+/* BRANCH ACCESS MESSAGE */
+/* ============================= */
+
+function showBranchAccessMessage(){
+
+    if(!currentJUSUser){
+        return;
+    }
+
+
+    if(currentJUSUser.role === "Admin"){
+
+        console.log(
+            "JUS-FEB: Admin Access - All Branches"
+        );
+
+    }else{
+
+        console.log(
+            "JUS-FEB: Branch Access - " +
+            getCurrentUserBranch()
+        );
+
+    }
+
+}
+
+
+/* ============================= */
+/* CHECK LOGIN BEFORE ACCESS */
+/* ============================= */
+
+function requireJUSLogin(){
+
+    if(!currentJUSUser){
+
+        alert(
+            "Please login first."
+        );
+
+        openJUSSection("login");
+
+        return false;
+
+    }
+
+    return true;
+
+}
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        setTimeout(function(){
+
+            showBranchAccessMessage();
+
+        },700);
+
+    }
+);
+
+</script>
+<!-- ============================= -->
+<!-- JUS-FEB MEMBER ACCOUNT LINK -->
+<!-- ============================= -->
+
+<script>
+
+function findJUSMember(memberId){
+
+    return (members || []).find(function(member){
+
+        return String(member.memberId).trim() ===
+               String(memberId).trim();
+
+    });
+
+}
+
+
+/* ============================= */
+/* GET MEMBER INFORMATION */
+/* ============================= */
+
+function getMemberAccountInfo(memberId){
+
+    const member =
+        findJUSMember(memberId);
+
+
+    if(!member){
+        return null;
+    }
+
+
+    return {
+
+        memberId: member.memberId,
+
+        memberName: member.memberName,
+
+        nid: member.nid,
+
+        mobile: member.mobile,
+
+        branch: member.branch,
+
+        status: member.status
+
+    };
+
+}
+
+
+/* ============================= */
+/* MEMBER ID CHANGE */
+/* ============================= */
+
+function loadMemberForAccount(){
+
+    const input =
+        document.getElementById("loanMemberId");
+
+    if(!input){
+        return;
+    }
+
+
+    const memberId =
+        input.value.trim();
+
+
+    const member =
+        findJUSMember(memberId);
+
+
+    const nameField =
+        document.getElementById("loanMemberName");
+
+    const branchField =
+        document.getElementById("loanBranch");
+
+
+    if(!member){
+
+        if(nameField){
+            nameField.value = "";
+        }
+
+        if(branchField){
+            branchField.value = "";
+        }
+
+        return;
+
+    }
+
+
+    if(nameField){
+        nameField.value =
+            member.memberName || "";
+    }
+
+
+    if(branchField){
+        branchField.value =
+            member.branch || "";
+    }
+
+}
+
+
+/* ============================= */
+/* ACCOUNT NUMBER GENERATOR */
+/* ============================= */
+
+function generateJUSAccountId(){
+
+    const prefix = "JUS-";
+
+    const number =
+        Date.now()
+        .toString()
+        .slice(-8);
+
+
+    return prefix + number;
+
+}
+
+
+/* ============================= */
+/* MEMBER ACCOUNT COUNT */
+/* ============================= */
+
+function getMemberAccountCount(memberId){
+
+    return (loans || []).filter(function(loan){
+
+        return String(loan.memberId).trim() ===
+               String(memberId).trim();
+
+    }).length;
+
+}
+
+
+/* ============================= */
+/* MEMBER ACCOUNT SUMMARY */
+/* ============================= */
+
+function getMemberAccountSummary(memberId){
+
+    const memberLoans =
+        (loans || []).filter(function(loan){
+
+            return String(loan.memberId).trim() ===
+                   String(memberId).trim();
+
+        });
+
+
+    let original = 0;
+    let paid = 0;
+    let due = 0;
+
+
+    memberLoans.forEach(function(loan){
+
+        original += Number(loan.original || 0);
+
+        paid += Number(loan.paid || 0);
+
+        due += Number(loan.due || 0);
+
+    });
+
+
+    return {
+
+        accounts: memberLoans.length,
+
+        original: original,
+
+        paid: paid,
+
+        due: due
+
+    };
+
+}
+
+</script>
+<!-- ============================= -->
+<!-- JUS-FEB PAYMENT VALIDATION -->
+<!-- ============================= -->
+
+<script>
+
+function validateJUSPayment(){
+
+    const accountId =
+        document.getElementById("paymentAccountId");
+
+    const memberId =
+        document.getElementById("paymentMemberId");
+
+    const paidAmount =
+        document.getElementById("paymentPaidAmount");
+
+
+    if(!accountId || !memberId || !paidAmount){
+        return false;
+    }
+
+
+    const account =
+        (loans || []).find(function(loan){
+
+            return String(loan.accountId).trim() ===
+                   String(accountId.value).trim();
+
+        });
+
+
+    if(!account){
+
+        alert(
+            "Account ID not found!"
+        );
+
+        return false;
+
+    }
+
+
+    if(
+        String(account.memberId).trim() !==
+        String(memberId.value).trim()
+    ){
+
+        alert(
+            "Member ID does not match this Account!"
+        );
+
+        return false;
+
+    }
+
+
+    const amount =
+        Number(paidAmount.value);
+
+
+    if(!amount || amount <= 0){
+
+        alert(
+            "Please enter a valid payment amount."
+        );
+
+        return false;
+
+    }
+
+
+    const due =
+        Number(account.due || 0);
+
+
+    if(amount > due){
+
+        alert(
+            "Payment cannot be greater than Due Amount."
+        );
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* ============================= */
+/* ACCOUNT PAYMENT INFORMATION */
+/* ============================= */
+
+function getPaymentAccountInfo(accountId){
+
+    const account =
+        (loans || []).find(function(loan){
+
+            return String(loan.accountId).trim() ===
+                   String(accountId).trim();
+
+        });
+
+
+    if(!account){
+
+        return null;
+
+    }
+
+
+    const member =
+        findJUSMember(account.memberId);
+
+
+    return {
+
+        accountId: account.accountId,
+
+        memberId: account.memberId,
+
+        memberName:
+            member ? member.memberName : "",
+
+        branch: account.branch,
+
+        original:
+            Number(account.original || 0),
+
+        paid:
+            Number(account.paid || 0),
+
+        due:
+            Number(account.due || 0),
+
+        status:
+            account.status
+
+    };
+
+}
+
+
+/* ============================= */
+/* AUTO LOAD ACCOUNT INFO */
+/* ============================= */
+
+function loadPaymentAccount(){
+
+    const input =
+        document.getElementById("paymentAccountId");
+
+
+    if(!input){
+        return;
+    }
+
+
+    const info =
+        getPaymentAccountInfo(
+            input.value.trim()
+        );
+
+
+    const memberField =
+        document.getElementById("paymentMemberId");
+
+
+    if(info && memberField){
+
+        memberField.value =
+            info.memberId;
+
+    }
+
+}
+
+
+/* ============================= */
+/* SAFE PAYMENT SAVE */
+/* ============================= */
+
+const originalSavePayment =
+    typeof savePayment === "function"
+        ? savePayment
+        : null;
+
+
+if(originalSavePayment){
+
+    savePayment = function(){
+
+        if(!validateJUSPayment()){
+
+            return;
+
+        }
+
+
+        originalSavePayment.apply(
+            this,
+            arguments
+        );
+
+    };
+
+}
+
+</script>
+<!-- ============================= -->
+<!-- JUS-FEB ADVANCED REPORTS -->
+<!-- ============================= -->
+
+<script>
+
+function generateJUSReport(){
+
+    const reportData = {
+
+        generatedAt:
+            new Date().toLocaleString(),
+
+        totalMembers:
+            (members || []).length,
+
+        totalAccounts:
+            (loans || []).length,
+
+        totalPayments:
+            (payments || []).length,
+
+        totalOriginal:
+            (loans || []).reduce(function(total, loan){
+
+                return total +
+                    Number(loan.original || 0);
+
+            },0),
+
+        totalCollected:
+            (payments || []).reduce(function(total, payment){
+
+                return total +
+                    Number(payment.paidAmount || 0);
+
+            },0),
+
+        totalDue:
+            (loans || []).reduce(function(total, loan){
+
+                return total +
+                    Number(loan.due || 0);
+
+            },0)
+
+    };
+
+
+    return reportData;
+
+}
+
+
+/* ============================= */
+/* PRINT ADVANCED REPORT */
+/* ============================= */
+
+function printJUSAdvancedReport(){
+
+    const report =
+        generateJUSReport();
+
+
+    const reportWindow =
+        window.open(
+            "",
+            "_blank"
+        );
+
+
+    if(!reportWindow){
+
+        alert(
+            "Please allow pop-ups to print the report."
+        );
+
+        return;
+
+    }
+
+
+    reportWindow.document.write(`
+
+        <html>
+
+        <head>
+
+            <title>JUS-FEB Report</title>
+
+            <style>
+
+                body{
+                    font-family:Arial,sans-serif;
+                    padding:30px;
+                }
+
+                h1,h2{
+                    text-align:center;
+                }
+
+                .info{
+                    margin:20px 0;
+                }
+
+                table{
+                    width:100%;
+                    border-collapse:collapse;
+                    margin-top:20px;
+                }
+
+                th,td{
+                    border:1px solid #999;
+                    padding:10px;
+                    text-align:left;
+                }
+
+                th{
+                    background:#eee;
+                }
+
+            </style>
+
+        </head>
+
+
+        <body>
+
+            <h1>
+                Janakalyan Unnayan Sohayok - (JUS)
+            </h1>
+
+            <h2>
+                Family Enterprise Business - (FEB)
+            </h2>
+
+            <h2>
+                Management & Accounting Report
+            </h2>
+
+
+            <div class="info">
+
+                <strong>
+                    Generated:
+                </strong>
+
+                ${report.generatedAt}
+
+            </div>
+
+
+            <table>
+
+                <tr>
+                    <th>Report Item</th>
+                    <th>Value</th>
+                </tr>
+
+                <tr>
+                    <td>Total Members</td>
+                    <td>${report.totalMembers}</td>
+                </tr>
+
+                <tr>
+                    <td>Total Accounts</td>
+                    <td>${report.totalAccounts}</td>
+                </tr>
+
+                <tr>
+                    <td>Total Payments</td>
+                    <td>${report.totalPayments}</td>
+                </tr>
+
+                <tr>
+                    <td>Total Original</td>
+                    <td>৳ ${report.totalOriginal.toFixed(2)}</td>
+                </tr>
+
+                <tr>
+                    <td>Total Collected</td>
+                    <td>৳ ${report.totalCollected.toFixed(2)}</td>
+                </tr>
+
+                <tr>
+                    <td>Total Due</td>
+                    <td>৳ ${report.totalDue.toFixed(2)}</td>
+                </tr>
+
+            </table>
+
+
+            <br><br>
+
+            <p>
+                JUS-FEB Management & Accounting System
+            </p>
+
+        </body>
+
+        </html>
+
+    `);
+
+
+    reportWindow.document.close();
+
+
+    setTimeout(function(){
+
+        reportWindow.print();
+
+    },500);
+
+}
+
+
+/* ============================= */
+/* EXPORT REPORT AS CSV */
+/* ============================= */
+
+function exportJUSPaymentsCSV(){
+
+    const data =
+        payments || [];
+
+
+    if(data.length === 0){
+
+        alert(
+            "No payment data available."
+        );
+
+        return;
+
+    }
+
+
+    let csv =
+        "Payment ID,Account ID,Member ID,Date,Paid Amount,Payment Method,Note\n";
+
+
+    data.forEach(function(payment){
+
+        csv +=
+            `"${payment.paymentId || ""}",` +
+            `"${payment.accountId || ""}",` +
+            `"${payment.memberId || ""}",` +
+            `"${payment.paymentDate || ""}",` +
+            `"${payment.paidAmount || 0}",` +
+            `"${payment.paymentMethod || ""}",` +
+            `"${payment.note || ""}"\n`;
+
+    });
+
+
+    const blob =
+        new Blob(
+            [csv],
+            {type:"text/csv;charset=utf-8;"}
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
+
+    link.href = url;
+
+
+    link.download =
+        "JUS-FEB-Payment-Report.csv";
+
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+/* ============================= */
+/* REPORT BUTTONS */
+/* ============================= */
+
+function addJUSReportButtons(){
+
+    const reportSection =
+        document.getElementById("reports");
+
+
+    if(!reportSection){
+        return;
+    }
+
+
+    if(
+        document.getElementById(
+            "jusAdvancedReportButtons"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    const box =
+        document.createElement("div");
+
+
+    box.id =
+        "jusAdvancedReportButtons";
+
+
+    box.style.margin =
+        "20px 0";
+
+
+    box.style.display =
+        "flex";
+
+
+    box.style.gap =
+        "10px";
+
+
+    box.style.flexWrap =
+        "wrap";
+
+
+    box.innerHTML = `
+
+        <button
+            class="btn btn-primary"
+            onclick="printJUSAdvancedReport()"
+        >
+            🖨️ Print Report
+        </button>
+
+        <button
+            class="btn btn-success"
+            onclick="exportJUSPaymentsCSV()"
+        >
+            📊 Export Payments CSV
+        </button>
+
+    `;
+
+
+    reportSection.prepend(box);
+
+}
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        setTimeout(function(){
+
+            addJUSReportButtons();
+
+        },800);
+
+    }
+);
+
+</script>
+<!-- ============================= -->
+<!-- JUS-FEB FINAL DASHBOARD -->
+<!-- ============================= -->
+
+<script>
+
+function updateJUSFinalDashboard(){
+
+    const memberTotal = (members || []).length;
+    const loanTotal = (loans || []).length;
+    const paymentTotal = (payments || []).length;
+
+    let collected = 0;
+    let due = 0;
+    let original = 0;
+
+    (loans || []).forEach(function(loan){
+
+        original += Number(loan.original || 0);
+        collected += Number(loan.paid || 0);
+        due += Number(loan.due || 0);
+
+    });
+
+
+    const values = {
+
+        dashboardMembers: memberTotal,
+        totalDashboardMembers: memberTotal,
+        dashboardAccounts: loanTotal,
+        totalDashboardAccounts: loanTotal,
+        dashboardCollection: collected,
+        totalDashboardCollection: collected,
+        dashboardDue: due,
+        totalDashboardDue: due
+
+    };
+
+
+    Object.keys(values).forEach(function(id){
+
+        const element =
+            document.getElementById(id);
+
+        if(element){
+
+            element.textContent =
+                values[id].toLocaleString();
+
+        }
+
+    });
+
+}
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        setTimeout(function(){
+
+            updateJUSFinalDashboard();
+
+        },1000);
+
+    }
+);
+
+</script>
+  <!-- ============================= -->
+<!-- JUS-FEB FINAL MENU CONNECTION -->
+<!-- ============================= -->
+
+<script>
+
+function jusOpenSection(sectionId){
+
+    document
+        .querySelectorAll(".content-section")
+        .forEach(function(section){
+
+            section.style.display = "none";
+
+        });
+
+
+    const target =
+        document.getElementById(sectionId);
+
+
+    if(target){
+
+        target.style.display = "block";
+
+        window.scrollTo({
+            top:0,
+            behavior:"smooth"
+        });
+
+    }
+
+}
+
+
+/* Common menu IDs */
+
+const jusMenuMap = {
+
+    dashboard: "dashboard",
+    branch: "branch",
+    members: "members",
+    loans: "loans",
+    payments: "payments",
+    reports: "reports",
+    users: "users",
+    settings: "settings",
+    backup: "backup",
+    login: "login"
+
+};
+
+
+document.addEventListener(
+    "click",
+    function(event){
+
+        const item =
+            event.target.closest(
+                "[data-section]"
+            );
+
+
+        if(!item){
+            return;
+        }
+
+
+        const section =
+            item.getAttribute(
+                "data-section"
+            );
+
+
+        if(section){
+
+            event.preventDefault();
+
+            jusOpenSection(section);
+
+        }
+
+    }
+);
+
+</script>
+<!-- ============================= -->
+<!-- JUS-FEB FINAL SYSTEM CHECK -->
+<!-- ============================= -->
+
+<script>
+
+function jusSystemCheck(){
+
+    const checks = {
+
+        Members:
+            typeof members !== "undefined",
+
+        Loans:
+            typeof loans !== "undefined",
+
+        Payments:
+            typeof payments !== "undefined",
+
+        Users:
+            typeof jusUsers !== "undefined",
+
+        LocalStorage:
+            typeof localStorage !== "undefined"
+
+    };
+
+
+    console.log(
+        "===== JUS-FEB SYSTEM CHECK ====="
+    );
+
+
+    Object.keys(checks).forEach(function(name){
+
+        console.log(
+            name + ": " +
+            (checks[name] ? "OK" : "ERROR")
+        );
+
+    });
+
+
+    const failed =
+        Object.keys(checks).filter(function(name){
+
+            return !checks[name];
+
+        });
+
+
+    if(failed.length === 0){
+
+        console.log(
+            "JUS-FEB System Check: ALL OK"
+        );
+
+    }else{
+
+        console.warn(
+            "JUS-FEB Check Failed:",
+            failed
+        );
+
+    }
+
+}
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        setTimeout(function(){
+
+            jusSystemCheck();
+
+            if(typeof updateJUSFinalDashboard === "function"){
+                updateJUSFinalDashboard();
+            }
+
+        },1500);
+
+    }
+);
+
+</script>
+index.html
+│
+├── Dashboard
+├── Branch
+├── Members
+├── Loans / Accounts
+├── Payments
+├── Reports
+├── Users & Roles
+├── Settings
+├── Backup
+├── Navigation
+├── Login
+├── Branch Access
+├── Member → Account
+├── Payment Validation
+├── Advanced Reports
+├── Mobile Responsive
+├── Final Dashboard
+├── Final Menu
+└── Final System Check
+│
+└── </body>
+    </html>
