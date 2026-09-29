@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>JUS-FEB Admin Panel</title>
 
   <style>
@@ -15,361 +14,422 @@
     }
 
     body {
-      background: #f3f4f6;
+      background: #f4f7fb;
       color: #222;
     }
 
-    .header {
-      background: #166534;
+    header {
+      background: linear-gradient(135deg, #073b8c, #0b5ed7);
       color: white;
-      text-align: center;
       padding: 22px 15px;
+      text-align: center;
     }
 
-    .header h1 {
+    header h1 {
       font-size: 28px;
       margin-bottom: 5px;
     }
 
-    .header p {
+    header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .topbar {
+      background: white;
+      padding: 12px 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .user-info {
+      color: #333;
       font-size: 14px;
     }
 
-    .container {
-      max-width: 1100px;
-      margin: auto;
-      padding: 20px 15px;
-    }
-
-    .welcome {
-      background: white;
-      padding: 20px;
-      border-radius: 14px;
-      margin-bottom: 20px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-    }
-
-    .welcome h2 {
-      color: #166534;
-      margin-bottom: 8px;
-    }
-
-    .welcome p {
-      margin-top: 5px;
-      color: #555;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 14px;
-    }
-
-    .card {
-      background: white;
-      border: none;
-      border-radius: 14px;
-      padding: 20px 10px;
-      min-height: 125px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-      cursor: pointer;
-      text-align: center;
-      transition: 0.2s;
-    }
-
-    .card:active {
-      transform: scale(0.97);
-    }
-
-    .icon {
-      font-size: 30px;
-      margin-bottom: 10px;
-    }
-
-    .card h3 {
-      font-size: 15px;
-      color: #222;
-    }
-
-    .section {
-      display: none;
-      background: white;
-      margin-top: 20px;
-      padding: 22px;
-      border-radius: 14px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-    }
-
-    .section.active {
-      display: block;
-    }
-
-    .section h2 {
-      color: #166534;
-      margin-bottom: 12px;
-    }
-
-    .section p {
-      color: #555;
-      line-height: 1.6;
-    }
-
-    .back-btn {
-      margin-top: 18px;
-      padding: 11px 18px;
-      border: none;
-      border-radius: 8px;
-      background: #166534;
-      color: white;
-      cursor: pointer;
-      font-weight: bold;
+    .user-info strong {
+      color: #0b5ed7;
     }
 
     .logout {
-      width: 100%;
-      margin-top: 25px;
-      padding: 14px;
       border: none;
-      border-radius: 9px;
-      background: #b91c1c;
+      background: #dc3545;
       color: white;
-      font-size: 16px;
-      font-weight: bold;
+      padding: 9px 16px;
+      border-radius: 7px;
       cursor: pointer;
+      font-weight: bold;
     }
 
-    .footer {
+    .container {
+      width: 95%;
+      max-width: 1150px;
+      margin: 22px auto;
+    }
+
+    .dashboard-title {
+      margin-bottom: 18px;
+      color: #073b8c;
+    }
+
+    .modules {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .module {
+      background: white;
+      border-radius: 13px;
+      padding: 20px 15px;
       text-align: center;
-      padding: 25px 10px;
-      color: #777;
-      font-size: 12px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      transition: 0.2s;
+    }
+
+    .module:hover {
+      transform: translateY(-3px);
+    }
+
+    .icon {
+      font-size: 34px;
+      margin-bottom: 8px;
+    }
+
+    .module h3 {
+      color: #073b8c;
+      margin-bottom: 8px;
+    }
+
+    .module p {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+      min-height: 40px;
+      margin-bottom: 13px;
+    }
+
+    .open-btn {
+      display: inline-block;
+      text-decoration: none;
+      background: #0b5ed7;
+      color: white;
+      padding: 9px 17px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .open-btn:hover {
+      background: #073b8c;
+    }
+
+    .coming {
+      background: #6c757d;
+      cursor: default;
+    }
+
+    .section {
+      background: white;
+      margin-top: 22px;
+      padding: 20px;
+      border-radius: 13px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .section h2 {
+      color: #073b8c;
+      margin-bottom: 12px;
+      font-size: 20px;
+    }
+
+    .quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .quick-links a {
+      text-decoration: none;
+      background: #e9f2ff;
+      color: #073b8c;
+      padding: 10px 14px;
+      border-radius: 7px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .status {
+      line-height: 1.8;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .status span {
+      color: #198754;
+      font-weight: bold;
+    }
+
+    footer {
+      margin-top: 30px;
+      background: #073b8c;
+      color: white;
+      text-align: center;
+      padding: 18px 10px;
       line-height: 1.6;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 24px;
+      }
+
+      .topbar {
+        justify-content: center;
+        text-align: center;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="header">
-    <h1>JUS-FEB</h1>
-    <p>Admin Panel</p>
-  </div>
+  <header>
+    <h1>⚙️ JUS-FEB Admin Panel</h1>
+    <p>Management & Accounting System</p>
+  </header>
 
-  <div class="container">
+  <div class="topbar">
 
-    <div class="welcome">
-      <h2>Welcome, Main Admin</h2>
-      <p>Janakalyan Unnayan Sohayok - (JUS)</p>
-      <p>Family Enterprise Business - (FEB)</p>
-    </div>
-
-    <div class="grid">
-
-      <button class="card" onclick="showSection('members')">
-        <div class="icon">👥</div>
-        <h3>Members</h3>
-      </button>
-
-      <button class="card" onclick="showSection('branches')">
-        <div class="icon">🏢</div>
-        <h3>Branches</h3>
-      </button>
-
-      <button class="card" onclick="showSection('shops')">
-        <div class="icon">🏪</div>
-        <h3>Shops</h3>
-      </button>
-
-      <button class="card" onclick="showSection('users')">
-        <div class="icon">👤</div>
-        <h3>User Management</h3>
-      </button>
-
-      <button class="card" onclick="showSection('accounting')">
-        <div class="icon">💰</div>
-        <h3>Accounting</h3>
-      </button>
-
-      <button class="card" onclick="showSection('loans')">
-        <div class="icon">💳</div>
-        <h3>Loans & Finance</h3>
-      </button>
-
-      <button class="card" onclick="showSection('products')">
-        <div class="icon">📦</div>
-        <h3>Products & Stock</h3>
-      </button>
-
-      <button class="card" onclick="showSection('cash')">
-        <div class="icon">💵</div>
-        <h3>Cash In / Cash Out</h3>
-      </button>
-
-      <button class="card" onclick="showSection('reports')">
-        <div class="icon">📊</div>
-        <h3>Reports</h3>
-      </button>
-
-      <button class="card" onclick="showSection('transport')">
-        <div class="icon">🚍</div>
-        <h3>Transport</h3>
-      </button>
-
-      <button class="card" onclick="showSection('settings')">
-        <div class="icon">⚙️</div>
-        <h3>Settings</h3>
-      </button>
-
-    </div>
-
-    <div id="members" class="section">
-      <h2>👥 Members</h2>
-      <p>
-        Member and customer information will be managed here.
-        NID, name, mobile number, address and other information
-        can be added in the next development stage.
-      </p>
-      <button class="back-btn" onclick="hideSections()">← Back</button>
-    </div>
-
-    <div id="branches" class="section">
-      <h2>🏢 Branch Management</h2>
-      <p>
-        Main Admin can create and manage branches.
-        Each branch can have its own users and shops.
-      </p>
-      <button class="back-btn" onclick="hideSections()">← Back</button>
-    </div>
-
-    <div id="shops" class="section">
-      <h2>🏪 Shop Management</h2>
-      <p>
-        Shops can be managed under each branch.
-        CCTV, Electronics, Electrical and other shops can be added.
-      </p>
-      <button class="back-btn" onclick="hideSections()">← Back</button>
-    </div>
-
-    <div id="users" class="section">
-      <h2>👤 User Management</h2>
-      <p>
-        User roles include Main Owner, Main Admin,
-        Branch Admin, Branch User and Shop User.
-      </p>
-      <button class="back-btn" onclick="hideSections()">← Back</button>
-    </div>
-
-    <div id="accounting" class="section">
-      <h2>💰 Accounting</h2>
-      <p>
-        Original amount, service charge, interest,
-        paid amount, due amount and total paid
-        will be managed here.
-      </p>
-      <button class="back-btn" onclick="hideSections()">← Back</button>
-    </div>
-
-    <div id="loans" class="section">
-      <h2>💳 Loans & Finance</h2>
-      <p>
-        Loan records, repayment, interest,
-        service charge and due information
-        will be managed here.
-      </p>
-      <button class="back-btn" onclick="hideSections()">← Back</button>
-    </div>
-
-    <div id="products" class="section">
-      <h2>📦 Products & Stock</h2>
-      <p>
-        Products, purchase, sales, stock quantity
-        and product information will be managed here.
-      </p>
-      <button class="back-btn" onclick="hideSections()">← Back</button>
-    </div>
-
-    <div id="cash" class="section">
-      <h2>💵 Cash In / Cash Out</h2>
-      <p>
-        Cash income, cash expense and transaction
-        records will be managed here.
-      </p>
-      <button class="back-btn" onclick="hideSections()">← Back</button>
-    </div>
-
-    <div id="reports" class="section">
-      <h2>📊 Reports</h2>
-      <p>
-        Branch reports, shop reports, accounting reports,
-        loan reports and financial reports will be available here.
-      </p>
-      <button class="back-btn" onclick="hideSections()">← Back</button>
-    </div>
-
-    <div id="transport" class="section">
-      <h2>🚍 Transport</h2>
-      <p>
-        Transport and travel-related business
-        information will be managed here.
-      </p>
-      <button class="back-btn" onclick="hideSections()">← Back</button>
-    </div>
-
-    <div id="settings" class="section">
-      <h2>⚙️ Settings</h2>
-      <p>
-        System settings, organization information,
-        permissions and other configurations
-        will be managed here.
-      </p>
-      <button class="back-btn" onclick="hideSections()">← Back</button>
+    <div class="user-info">
+      Logged in as:
+      <strong id="currentUser">Admin</strong>
+      |
+      Role:
+      <strong id="currentRole">Main Admin</strong>
     </div>
 
     <button class="logout" onclick="logout()">
-      LOGOUT
+      🚪 Logout
     </button>
 
   </div>
 
-  <div class="footer">
-    JUS-FEB Management & Accounting System<br>
+  <div class="container">
+
+    <h2 class="dashboard-title">
+      Admin Dashboard
+    </h2>
+
+    <div class="modules">
+
+      <div class="module">
+        <div class="icon">👤</div>
+        <h3>Members</h3>
+        <p>Manage member information, NID, mobile and accounts.</p>
+        <a class="open-btn" href="member.html">Open</a>
+      </div>
+
+      <div class="module">
+        <div class="icon">🏢</div>
+        <h3>Branches</h3>
+        <p>Manage branches, branch users and permissions.</p>
+        <a class="open-btn" href="branch.html">Open</a>
+      </div>
+
+      <div class="module">
+        <div class="icon">💰</div>
+        <h3>Loans & Finance</h3>
+        <p>Manage original, interest, service charge and due.</p>
+        <a class="open-btn" href="loan.html">Open</a>
+      </div>
+
+      <div class="module">
+        <div class="icon">💳</div>
+        <h3>Payments</h3>
+        <p>Manage payments, approval and payment history.</p>
+        <a class="open-btn" href="payment.html">Open</a>
+      </div>
+
+      <div class="module">
+        <div class="icon">📊</div>
+        <h3>Accounting</h3>
+        <p>Manage cash, income, expense and branch funds.</p>
+        <a class="open-btn" href="accounting.html">Open</a>
+      </div>
+
+      <div class="module">
+        <div class="icon">📋</div>
+        <h3>Reports</h3>
+        <p>View financial, member, loan and branch reports.</p>
+        <a class="open-btn" href="report.html">Open</a>
+      </div>
+
+      <div class="module">
+        <div class="icon">🛒</div>
+        <h3>Shop</h3>
+        <p>Shop, product, sales and stock module will be added.</p>
+        <span class="open-btn coming">Coming Soon</span>
+      </div>
+
+      <div class="module">
+        <div class="icon">🚐</div>
+        <h3>Travels</h3>
+        <p>Transport and travel management will be added.</p>
+        <span class="open-btn coming">Coming Soon</span>
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <h2>🔗 Quick Access</h2>
+
+      <div class="quick-links">
+        <a href="index.html">🏠 Home</a>
+        <a href="member.html">👤 Members</a>
+        <a href="branch.html">🏢 Branches</a>
+        <a href="loan.html">💰 Loans</a>
+        <a href="payment.html">💳 Payments</a>
+        <a href="accounting.html">📊 Accounting</a>
+        <a href="report.html">📋 Reports</a>
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <h2>📌 System Status</h2>
+
+      <div class="status">
+
+        <p>
+          Member Management:
+          <span>Available</span>
+        </p>
+
+        <p>
+          Branch Management:
+          <span>Available</span>
+        </p>
+
+        <p>
+          Loan Management:
+          <span>Available</span>
+        </p>
+
+        <p>
+          Payment Management:
+          <span>Available</span>
+        </p>
+
+        <p>
+          Accounting:
+          <span>Available</span>
+        </p>
+
+        <p>
+          Reports:
+          <span>Available</span>
+        </p>
+
+        <p>
+          Shop:
+          <strong>Coming Soon</strong>
+        </p>
+
+        <p>
+          Travels:
+          <strong>Coming Soon</strong>
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <h2>🔐 Admin Responsibilities</h2>
+
+      <div class="status">
+
+        <p>• Manage members and branch information.</p>
+        <p>• Review branch user postings.</p>
+        <p>• Correct incorrect postings.</p>
+        <p>• Review payment records.</p>
+        <p>• Manage accounting transactions.</p>
+        <p>• Monitor loans and outstanding amounts.</p>
+        <p>• Generate system reports.</p>
+        <p>• Manage future modules and integrations.</p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer>
+    <strong>JUS-FEB</strong><br>
     Janakalyan Unnayan Sohayok - (JUS)<br>
     Family Enterprise Business - (FEB)
-  </div>
+  </footer>
+
 
   <script>
 
-    function showSection(id) {
+    /*
+      ADMIN LOGIN CHECK
+    */
 
-      hideSections();
+    const loggedIn =
+      localStorage.getItem("jus_login");
 
-      const section = document.getElementById(id);
+    const role =
+      localStorage.getItem("jus_role");
 
-      if (section) {
-        section.classList.add("active");
+    const username =
+      localStorage.getItem("jus_username");
 
-        section.scrollIntoView({
-          behavior: "smooth"
-        });
-      }
+
+    if (
+      loggedIn !== "true" ||
+      role !== "Main Admin"
+    ) {
+
+      window.location.href = "login.html";
+
     }
 
-    function hideSections() {
 
-      const sections =
-        document.querySelectorAll(".section");
+    /*
+      SHOW CURRENT USER
+    */
 
-      sections.forEach(function(section) {
-        section.classList.remove("active");
-      });
-    }
+    document.getElementById("currentUser").innerText =
+      username || "Admin";
+
+    document.getElementById("currentRole").innerText =
+      role || "Main Admin";
+
+
+    /*
+      LOGOUT
+    */
 
     function logout() {
 
       localStorage.removeItem("jus_login");
       localStorage.removeItem("jus_role");
+      localStorage.removeItem("jus_username");
+      localStorage.removeItem("jus_login_time");
 
       window.location.href = "login.html";
+
     }
 
   </script>
