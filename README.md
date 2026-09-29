@@ -1,16 +1,27 @@
-## Hi there 👋
+Janakalyan Unnayan Sohayok - (JUS)
 
-<!--
-**JUS-MLA/jus-mla** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+JUS Management & Accounting System
 
-Here are some ideas to get you started:
+A complete web and Android-based management system for branches, shops, accounting, finance, members, products, documents, reports, and travel/transport booking.
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+Modules
+
+- Admin & Branch Management
+- User Login & Access Control
+- Member Management
+- Accounting & Transactions
+- Loan Management
+- Interest & Service Charge
+- Payment & Due Management
+- Shop & Product Management
+- Stock Management
+- Discount Management
+- Documents & Receipts
+- Reports & History
+- Travel & Transport Booking
+- Vehicle & Passenger Management
+- Android APK Integration
+
+Project Status
+
+🚧 Development in progress.
