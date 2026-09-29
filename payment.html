@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Payment Management - JUS-FEB</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    header {
+      background: #0b5ed7;
+      color: white;
+      text-align: center;
+      padding: 18px;
+    }
+
+    header h1 {
+      font-size: 24px;
+    }
+
+    header p {
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1250px;
+      margin: 20px auto;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .primary {
+      background: #0b5ed7;
+      color: white;
+    }
+
+    .success {
+      background: #198754;
+      color: white;
+    }
+
+    .warning {
+      background: #ffc107;
+      color: #000;
+    }
+
+    .danger {
+      background: #dc3545;
+      color: white;
+    }
+
+    .dark {
+      background: #212529;
+      color: white;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 18px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+
+    .card h3 {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .section {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+
+    .section h2 {
+      color: #0b5ed7;
+      font-size: 19px;
+      margin-bottom: 15px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #0b5ed7;
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .search-box {
+      margin-bottom: 15px;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 1150px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    th {
+      background: #eef4ff;
+    }
+
+    .status {
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .approved {
+      background: #d1e7dd;
+      color: #0f5132;
+    }
+
+    .pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .correction {
+      background: #f8d7da;
+      color: #842029;
+    }
+
+    .rejected {
+      background: #dc3545;
+      color: white;
+    }
+
+    .receipt {
+      border: 1px dashed #999;
+      padding: 15px;
+      margin-top: 15px;
+      display: none;
+      background: #fff;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      color: #777;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        width: 93%;
+      }
+
+      header h1 {
+        font-size: 20px;
+      }
+
+      .section {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>💳 JUS-FEB Payment Management</h1>
+  <p>Janakalyan Unnayan Sohayok - (JUS)</p>
+  <p>Family Enterprise Business - (FEB)</p>
+</header>
+
+<div class="container">
+
+  <!-- Quick Actions -->
+  <div class="actions">
+
+    <button class="primary" onclick="scrollToPayment()">
+      ➕ New Payment
+    </button>
+
+    <button class="primary" onclick="scrollToSearch()">
+      🔍 Search Payment
+    </button>
+
+    <button class="success" onclick="paymentReport()">
+      📊 Payment Report
+    </button>
+
+    <button class="dark" onclick="paymentHistory()">
+      📜 Payment History
+    </button>
+
+    <button class="warning" onclick="window.print()">
+      🖨️ Print
+    </button>
+
+  </div>
+
+  <!-- Dashboard -->
+  <div class="cards">
+
+    <div class="card">
+      <h3>💳 Total Payments</h3>
+      <p id="totalPayments">0</p>
+    </div>
+
+    <div class="card">
+      <h3>💰 Total Collected</h3>
+      <p>৳ <span id="totalCollected">0</span></p>
+    </div>
+
+    <div class="card">
+      <h3>⏳ Pending Review</h3>
+      <p id="pendingPayments">0</p>
+    </div>
+
+    <div class="card">
+      <h3>✅ Approved</h3>
+      <p id="approvedPayments">0</p>
+    </div>
+
+    <div class="card">
+      <h3>❌ Rejected</h3>
+      <p id="rejectedPayments">0</p>
+    </div>
+
+  </div>
+
+  <!-- New Payment -->
+  <div class="section" id="paymentSection">
+
+    <h2>➕ New Payment</h2>
+
+    <div class="form-grid">
+
+      <input
+        type="text"
+        id="paymentID"
+        placeholder="Payment ID"
+      >
+
+      <input
+        type="text"
+        id="memberID"
+        placeholder="Member ID"
+      >
+
+      <input
+        type="text"
+        id="memberName"
+        placeholder="Member Name"
+      >
+
+      <input
+        type="text"
+        id="loanID"
+        placeholder="Loan / Account ID"
+      >
+
+      <select id="branch">
+        <option value="">Select Branch</option>
+        <option>Main Branch</option>
+      </select>
+
+      <input
+        type="number"
+        id="paymentAmount"
+        placeholder="Payment Amount"
+      >
+
+      <input
+        type="date"
+        id="paymentDate"
+      >
+
+      <select id="paymentMethod">
+        <option value="">Payment Method</option>
+        <option>Cash</option>
+        <option>Bank</option>
+        <option>Mobile Banking</option>
+        <option>Other</option>
+      </select>
+
+      <input
+        type="number"
+        id="dueBefore"
+        placeholder="Due Before Payment"
+      >
+
+      <input
+        type="number"
+        id="dueAfter"
+        placeholder="Due After Payment"
+      >
+
+      <input
+        type="text"
+        id="reference"
+        placeholder="Reference / Transaction ID"
+      >
+
+      <input
+        type="text"
+        id="createdBy"
+        placeholder="Created By"
+        value="Branch User"
+      >
+
+      <textarea
+        id="paymentNote"
+        placeholder="Payment Note">
+      </textarea>
+
+      <button class="success" onclick="createPayment()">
+        💳 Save Payment
+      </button>
+
+    </div>
+
+    <!-- Receipt -->
+    <div class="receipt" id="receipt">
+
+      <h3>🧾 PAYMENT RECEIPT</h3>
+
+      <br>
+
+      <p>
+        Payment ID:
+        <strong id="rPaymentID"></strong>
+      </p>
+
+      <p>
+        Member:
+        <strong id="rMember"></strong>
+      </p>
+
+      <p>
+        Amount:
+        <strong>৳ <span id="rAmount"></span></strong>
+      </p>
+
+      <p>
+        Method:
+        <strong id="rMethod"></strong>
+      </p>
+
+      <p>
+        Date:
+        <strong id="rDate"></strong>
+      </p>
+
+      <br>
+
+      <button class="dark" onclick="window.print()">
+        🖨️ Print Receipt
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- Search -->
+  <div class="section" id="searchSection">
+
+    <h2>🔍 Search Payment</h2>
+
+    <div class="search-box">
+
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search by Payment ID, Member ID, Name or Reference..."
+        onkeyup="searchPayment()"
+      >
+
+    </div>
+
+  </div>
+
+  <!-- Payment History -->
+  <div class="section">
+
+    <h2>📜 Payment History</h2>
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Payment ID</th>
+            <th>Member ID</th>
+            <th>Member Name</th>
+            <th>Loan / Account</th>
+            <th>Branch</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Method</th>
+            <th>Reference</th>
+            <th>Created By</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="paymentTable">
+
+          <tr>
+            <td colspan="12" style="text-align:center;">
+              No payment available
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+  <!-- Admin Review -->
+  <div class="section">
+
+    <h2>👑 Admin Review</h2>
+
+    <div class="form-grid">
+
+      <button class="success" onclick="approveSelected()">
+        ✅ Approve
+      </button>
+
+      <button class="warning" onclick="correctionSelected()">
+        ✏️ Correction Needed
+      </button>
+
+      <button class="danger" onclick="rejectSelected()">
+        ❌ Reject
+      </button>
+
+      <button class="dark" onclick="submitToAdmin()">
+        📤 Submit to Admin
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- Report -->
+  <div class="section">
+
+    <h2>📊 Payment Report</h2>
+
+    <div class="form-grid">
+
+      <button class="primary" onclick="paymentReport()">
+        📊 Generate Report
+      </button>
+
+      <button class="success" onclick="cashReport()">
+        💰 Cash Report
+      </button>
+
+      <button class="dark" onclick="paymentHistory()">
+        📜 Payment History
+      </button>
+
+      <button class="warning" onclick="window.print()">
+        🖨️ Print Report
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="footer">
+
+  JUS-FEB Management & Accounting System
+  <br>
+  Janakalyan Unnayan Sohayok - (JUS)
+
+</div>
+
+<script>
+
+  let payments = [];
+
+  let selectedPayment = null;
+
+
+  /* Create Payment */
+
+  function createPayment() {
+
+    const paymentID =
+      document.getElementById("paymentID").value.trim();
+
+    const memberID =
+      document.getElementById("memberID").value.trim();
+
+    const memberName =
+      document.getElementById("memberName").value.trim();
+
+    const loanID =
+      document.getElementById("loanID").value.trim();
+
+    const branch =
+      document.getElementById("branch").value;
+
+    const amount =
+      Number(
+        document.getElementById("paymentAmount").value || 0
+      );
+
+    const date =
+      document.getElementById("paymentDate").value;
+
+    const method =
+      document.getElementById("paymentMethod").value;
+
+    const dueBefore =
+      Number(
+        document.getElementById("dueBefore").value || 0
+      );
+
+    const dueAfter =
+      Number(
+        document.getElementById("dueAfter").value || 0
+      );
+
+    const reference =
+      document.getElementById("reference").value.trim();
+
+    const createdBy =
+      document.getElementById("createdBy").value.trim();
+
+    const note =
+      document.getElementById("paymentNote").value.trim();
+
+
+    if (
+      !paymentID ||
+      !memberID ||
+      !memberName ||
+      amount <= 0
+    ) {
+
+      alert(
+        "Please enter Payment ID, Member ID, Member Name and Payment Amount."
+      );
+
+      return;
+
+    }
+
+
+    const payment = {
+
+      paymentID: paymentID,
+
+      memberID: memberID,
+
+      memberName: memberName,
+
+      loanID: loanID,
+
+      branch: branch || "Main Branch",
+
+      amount: amount,
+
+      date: date || new Date().toISOString().split("T")[0],
+
+      method: method || "Cash",
+
+      dueBefore: dueBefore,
+
+      dueAfter: dueAfter,
+
+      reference: reference,
+
+      createdBy: createdBy || "Branch User",
+
+      note: note,
+
+      status: "Pending",
+
+      createdAt: new Date().toLocaleString()
+
+    };
+
+
+    payments.push(payment);
+
+    selectedPayment = payments.length - 1;
+
+
+    updateTable();
+
+    updateDashboard();
+
+    showReceipt(payment);
+
+
+    alert(
+      "Payment saved successfully and submitted for Admin review."
+    );
+
+
+    clearForm();
+
+  }
+
+
+  /* Update Table */
+
+  function updateTable(list = payments) {
+
+    const table =
+      document.getElementById("paymentTable");
+
+    table.innerHTML = "";
+
+
+    if (list.length === 0) {
+
+      table.innerHTML =
+        '<tr>' +
+        '<td colspan="12" style="text-align:center;">' +
+        'No payment available' +
+        '</td>' +
+        '</tr>';
+
+      return;
+
+    }
+
+
+    list.forEach((p, index) => {
+
+      let statusClass = "pending";
+
+
+      if (p.status === "Approved") {
+        statusClass = "approved";
+      }
+
+      if (p.status === "Correction Needed") {
+        statusClass = "correction";
+      }
+
+      if (p.status === "Rejected") {
+        statusClass = "rejected";
+      }
+
+
+      table.innerHTML += `
+
+        <tr>
+
+          <td>${p.paymentID}</td>
+
+          <td>${p.memberID}</td>
+
+          <td>${p.memberName}</td>
+
+          <td>${p.loanID}</td>
+
+          <td>${p.branch}</td>
+
+          <td>৳ ${p.amount.toLocaleString()}</td>
+
+          <td>${p.date}</td>
+
+          <td>${p.method}</td>
+
+          <td>${p.reference || "-"}</td>
+
+          <td>${p.createdBy}</td>
+
+          <td>
+
+            <span class="status ${statusClass}">
+              ${p.status}
+            </span>
+
+          </td>
+
+          <td>
+
+            <button
+              class="primary"
+              onclick="selectPayment(${index})">
+              👁️ Select
+            </button>
+
+            <button
+              class="warning"
+              onclick="editPayment(${index})">
+              ✏️ Edit
+            </button>
+
+            <button
+              class="danger"
+              onclick="deletePayment(${index})">
+              🗑️ Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      `;
+
+    });
+
+  }
+
+
+  /* Select */
+
+  function selectPayment(index) {
+
+    selectedPayment = index;
+
+    const p = payments[index];
+
+    showReceipt(p);
+
+    alert(
+      "Selected Payment: " +
+      p.paymentID
+    );
+
+  }
+
+
+  /* Search */
+
+  function searchPayment() {
+
+    const search =
+      document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    const result =
+      payments.filter(p =>
+
+        p.paymentID.toLowerCase().includes(search) ||
+
+        p.memberID.toLowerCase().includes(search) ||
+
+        p.memberName.toLowerCase().includes(search) ||
+
+        p.reference.toLowerCase().includes(search)
+
+      );
+
+
+    updateTable(result);
+
+  }
+
+
+  /* Edit */
+
+  function editPayment(index) {
+
+    const p = payments[index];
+
+
+    const newAmount =
+      prompt(
+        "Enter new Payment Amount:",
+        p.amount
+      );
+
+
+    if (newAmount === null) {
+      return;
+    }
+
+
+    const amount =
+      Number(newAmount);
+
+
+    if (amount <= 0) {
+
+      alert(
+        "Invalid payment amount."
+      );
+
+      return;
+
+    }
+
+
+    p.amount = amount;
+
+    p.status = "Correction Needed";
+
+
+    updateTable();
+
+    updateDashboard();
+
+
+    alert(
+      "Payment corrected and sent for review."
+    );
+
+  }
+
+
+  /* Delete */
+
+  function deletePayment(index) {
+
+    if (
+      !confirm(
+        "Are you sure you want to delete this payment?"
+      )
+    ) {
+      return;
+    }
+
+
+    payments.splice(index, 1);
+
+    selectedPayment = null;
+
+
+    updateTable();
+
+    updateDashboard();
+
+
+    alert(
+      "Payment deleted."
+    );
+
+  }
+
+
+  /* Approve */
+
+  function approveSelected() {
+
+    if (selectedPayment === null) {
+
+      alert(
+        "Please select a payment first."
+      );
+
+      return;
+
+    }
+
+
+    payments[selectedPayment].status =
+      "Approved";
+
+
+    updateTable();
+
+    updateDashboard();
+
+
+    alert(
+      "Payment approved successfully."
+    );
+
+  }
+
+
+  /* Correction */
+
+  function correctionSelected() {
+
+    if (selectedPayment === null) {
+
+      alert(
+        "Please select a payment first."
+      );
+
+      return;
+
+    }
+
+
+    payments[selectedPayment].status =
+      "Correction Needed";
+
+
+    updateTable();
+
+    updateDashboard();
+
+
+    alert(
+      "Correction requested."
+    );
+
+  }
+
+
+  /* Reject */
+
+  function rejectSelected() {
+
+    if (selectedPayment === null) {
+
+      alert(
+        "Please select a payment first."
+      );
+
+      return;
+
+    }
+
+
+    payments[selectedPayment].status =
+      "Rejected";
+
+
+    updateTable();
+
+    updateDashboard();
+
+
+    alert(
+      "Payment rejected."
+    );
+
+  }
+
+
+  /* Submit */
+
+  function submitToAdmin() {
+
+    if (selectedPayment === null) {
+
+      alert(
+        "Please select a payment first."
+      );
+
+      return;
+
+    }
+
+
+    payments[selectedPayment].status =
+      "Pending";
+
+
+    updateTable();
+
+    updateDashboard();
+
+
+    alert(
+      "Payment submitted to Admin."
+    );
+
+  }
+
+
+  /* Dashboard */
+
+  function updateDashboard() {
+
+    document.getElementById(
+      "totalPayments"
+    ).innerText =
+      payments.length;
+
+
+    const total =
+      payments.reduce(
+        (sum, p) => sum + p.amount,
+        0
+      );
+
+
+    document.getElementById(
+      "totalCollected"
+    ).innerText =
+      total.toLocaleString();
+
+
+    document.getElementById(
+      "pendingPayments"
+    ).innerText =
+      payments.filter(
+        p => p.status === "Pending"
+      ).length;
+
+
+    document.getElementById(
+      "approvedPayments"
+    ).innerText =
+      payments.filter(
+        p => p.status === "Approved"
+      ).length;
+
+
+    document.getElementById(
+      "rejectedPayments"
+    ).innerText =
+      payments.filter(
+        p => p.status === "Rejected"
+      ).length;
+
+  }
+
+
+  /* Receipt */
+
+  function showReceipt(p) {
+
+    document.getElementById(
+      "receipt"
+    ).style.display = "block";
+
+
+    document.getElementById(
+      "rPaymentID"
+    ).innerText =
+      p.paymentID;
+
+
+    document.getElementById(
+      "rMember"
+    ).innerText =
+      p.memberName +
+      " (" +
+      p.memberID +
+      ")";
+
+
+    document.getElementById(
+      "rAmount"
+    ).innerText =
+      p.amount.toLocaleString();
+
+
+    document.getElementById(
+      "rMethod"
+    ).innerText =
+      p.method;
+
+
+    document.getElementById(
+      "rDate"
+    ).innerText =
+      p.date;
+
+  }
+
+
+  /* Payment Report */
+
+  function paymentReport() {
+
+    const total =
+      payments.reduce(
+        (sum, p) => sum + p.amount,
+        0
+      );
+
+
+    alert(
+
+      "PAYMENT REPORT\n\n" +
+
+      "Total Payments: " +
+      payments.length +
+
+      "\nTotal Collected: ৳ " +
+      total.toLocaleString() +
+
+      "\nPending: " +
+      payments.filter(
+        p => p.status === "Pending"
+      ).length +
+
+      "\nApproved: " +
+      payments.filter(
+        p => p.status === "Approved"
+      ).length +
+
+      "\nRejected: " +
+      payments.filter(
+        p => p.status === "Rejected"
+      ).length
+
+    );
+
+  }
+
+
+  /* Cash Report */
+
+  function cashReport() {
+
+    const total =
+      payments
+        .filter(
+          p => p.method === "Cash"
+        )
+        .reduce(
+          (sum, p) => sum + p.amount,
+          0
+        );
+
+
+    alert(
+      "CASH PAYMENT REPORT\n\n" +
+      "Cash Collected: ৳ " +
+      total.toLocaleString()
+    );
+
+  }
+
+
+  /* History */
+
+  function paymentHistory() {
+
+    if (payments.length === 0) {
+
+      alert(
+        "No payment history available."
+      );
+
+      return;
+
+    }
+
+
+    let history =
+      "PAYMENT HISTORY\n\n";
+
+
+    payments.forEach((p, i) => {
+
+      history +=
+
+        (i + 1) +
+        ". " +
+
+        p.paymentID +
+
+        " | " +
+
+        p.memberName +
+
+        " | ৳ " +
+
+        p.amount.toLocaleString() +
+
+        " | " +
+
+        p.status +
+
+        "\n";
+
+    });
+
+
+    alert(history);
+
+  }
+
+
+  /* Clear Form */
+
+  function clearForm() {
+
+    document.getElementById(
+      "paymentID"
+    ).value = "";
+
+    document.getElementById(
+      "memberID"
+    ).value = "";
+
+    document.getElementById(
+      "memberName"
+    ).value = "";
+
+    document.getElementById(
+      "loanID"
+    ).value = "";
+
+    document.getElementById(
+      "paymentAmount"
+    ).value = "";
+
+    document.getElementById(
+      "dueBefore"
+    ).value = "";
+
+    document.getElementById(
+      "dueAfter"
+    ).value = "";
+
+    document.getElementById(
+      "reference"
+    ).value = "";
+
+    document.getElementById(
+      "paymentNote"
+    ).value = "";
+
+  }
+
+
+  /* Scroll */
+
+  function scrollToPayment() {
+
+    document
+      .getElementById("paymentSection")
+      .scrollIntoView({
+        behavior: "smooth"
+      });
+
+  }
+
+
+  function scrollToSearch() {
+
+    document
+      .getElementById("searchSection")
+      .scrollIntoView({
+        behavior: "smooth"
+      });
+
+    document
+      .getElementById("searchInput")
+      .focus();
+
+  }
+
+</script>
+
+</body>
+</html>
