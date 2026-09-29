@@ -17,18 +17,18 @@
     body {
       background: #f3f4f6;
       color: #222;
-      text-align: center;
     }
 
     .header {
       background: #166534;
       color: white;
+      text-align: center;
       padding: 35px 20px;
     }
 
     .header h1 {
-      font-size: 32px;
-      margin-bottom: 10px;
+      font-size: 34px;
+      margin-bottom: 8px;
     }
 
     .header p {
@@ -47,16 +47,23 @@
       margin-bottom: 20px;
       border-radius: 15px;
       box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      text-align: center;
     }
 
     .card h2 {
+      color: #166534;
       margin-bottom: 10px;
     }
 
-    .button {
+    .card p {
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .login-btn {
       display: inline-block;
-      margin-top: 15px;
-      padding: 12px 25px;
+      margin-top: 18px;
+      padding: 13px 30px;
       background: #166534;
       color: white;
       text-decoration: none;
@@ -64,14 +71,39 @@
       font-weight: bold;
     }
 
-    .button:hover {
+    .login-btn:hover {
       background: #14532d;
     }
 
+    .modules {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .module {
+      background: #f9fafb;
+      padding: 18px 8px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .module .icon {
+      font-size: 28px;
+      margin-bottom: 7px;
+    }
+
+    .module h3 {
+      font-size: 14px;
+    }
+
     .footer {
-      padding: 25px;
+      text-align: center;
+      padding: 25px 10px;
       color: #777;
-      font-size: 13px;
+      font-size: 12px;
+      line-height: 1.6;
     }
   </style>
 </head>
@@ -79,4 +111,93 @@
 <body>
 
   <div class="header">
-    <h1>J
+    <h1>JUS-FEB</h1>
+    <p>Management & Accounting System</p>
+  </div>
+
+  <div class="container">
+
+    <div class="card">
+      <h2>Janakalyan Unnayan Sohayok - (JUS)</h2>
+      <p>Family Enterprise Business - (FEB)</p>
+    </div>
+
+    <div class="card">
+      <h2>JUS-FEB Management & Accounting System</h2>
+
+      <p>
+        A management system for family enterprise business
+        operations, branches, shops, members, accounting,
+        finance, products, reports and transport services.
+      </p>
+
+      <a class="login-btn" href="login.html">
+        LOGIN
+      </a>
+    </div>
+
+    <div class="card">
+      <h2>Core Modules</h2>
+
+      <div class="modules">
+
+        <div class="module">
+          <div class="icon">👥</div>
+          <h3>Members</h3>
+        </div>
+
+        <div class="module">
+          <div class="icon">🏢</div>
+          <h3>Branches</h3>
+        </div>
+
+        <div class="module">
+          <div class="icon">🏪</div>
+          <h3>Shops</h3>
+        </div>
+
+        <div class="module">
+          <div class="icon">💰</div>
+          <h3>Accounting</h3>
+        </div>
+
+        <div class="module">
+          <div class="icon">💳</div>
+          <h3>Loans & Finance</h3>
+        </div>
+
+        <div class="module">
+          <div class="icon">📦</div>
+          <h3>Products & Stock</h3>
+        </div>
+
+        <div class="module">
+          <div class="icon">💵</div>
+          <h3>Cash In / Cash Out</h3>
+        </div>
+
+        <div class="module">
+          <div class="icon">📊</div>
+          <h3>Reports</h3>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Development in Progress...</h2>
+      <p>
+        JUS-FEB system development is currently in progress.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    JUS-FEB Management & Accounting System<br>
+    Janakalyan Unnayan Sohayok - (JUS)<br>
+    Family Enterprise Business - (FEB)
+  </div>
+
+</body>
+</html>
