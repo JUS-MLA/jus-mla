@@ -1283,3 +1283,192 @@ document.addEventListener(
 );
 
 </script>
+<!-- ============================= -->
+<!-- JUS-FEB NAVIGATION INTEGRATION -->
+<!-- ============================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    /* ============================= */
+    /* ALL MENU ITEMS */
+    /* ============================= */
+
+    const menuItems = document.querySelectorAll(
+        '[data-section]'
+    );
+
+
+    menuItems.forEach(function(item){
+
+        item.addEventListener("click", function(){
+
+            const target =
+                this.getAttribute("data-section");
+
+
+            if(!target){
+                return;
+            }
+
+
+            /* Hide all sections */
+
+            document
+                .querySelectorAll(".content-section")
+                .forEach(function(section){
+
+                    section.style.display = "none";
+
+                });
+
+
+            /* Show selected section */
+
+            const selected =
+                document.getElementById(target);
+
+
+            if(selected){
+
+                selected.style.display = "block";
+
+            }
+
+
+            /* Active menu */
+
+            menuItems.forEach(function(menu){
+
+                menu.classList.remove("active");
+
+            });
+
+
+            this.classList.add("active");
+
+
+            /* Refresh section data */
+
+            if(target === "members" &&
+               typeof renderMembers === "function"){
+
+                renderMembers();
+
+            }
+
+
+            if(target === "loans" &&
+               typeof renderLoans === "function"){
+
+                renderLoans();
+
+            }
+
+
+            if(target === "payments" &&
+               typeof renderPayments === "function"){
+
+                renderPayments();
+
+            }
+
+
+            if(target === "reports" &&
+               typeof refreshReport === "function"){
+
+                refreshReport();
+
+            }
+
+
+            if(target === "users" &&
+               typeof renderUsers === "function"){
+
+                renderUsers();
+
+            }
+
+
+            if(target === "backup" &&
+               typeof updateBackupStats === "function"){
+
+                updateBackupStats();
+
+            }
+
+        });
+
+    });
+
+
+    /* ============================= */
+    /* DEFAULT SECTION */
+    /* ============================= */
+
+    const sections =
+        document.querySelectorAll(
+            ".content-section"
+        );
+
+
+    let firstSection = null;
+
+
+    sections.forEach(function(section){
+
+        if(!firstSection){
+
+            firstSection = section;
+
+        }
+
+        section.style.display = "none";
+
+    });
+
+
+    if(firstSection){
+
+        firstSection.style.display = "block";
+
+    }
+
+
+});
+
+
+/* ============================= */
+/* OPEN SECTION FUNCTION */
+/* ============================= */
+
+function openJUSSection(sectionId){
+
+    document
+        .querySelectorAll(".content-section")
+        .forEach(function(section){
+
+            section.style.display = "none";
+
+        });
+
+
+    const section =
+        document.getElementById(sectionId);
+
+
+    if(section){
+
+        section.style.display = "block";
+
+        section.scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+        });
+
+    }
+
+}
+
+</script>
