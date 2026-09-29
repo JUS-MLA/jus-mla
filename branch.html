@@ -1,825 +1,1084 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Branch Management - JUS-FEB</title>
+<title>JUS-FEB Branch Panel</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
 
-    body {
-      background: #f4f7fb;
-      color: #222;
-    }
+body{
+  background:#f4f6f8;
+  color:#222;
+}
 
-    header {
-      background: #0b5ed7;
-      color: white;
-      padding: 18px;
-      text-align: center;
-    }
+.header{
+  background:#0b5ed7;
+  color:white;
+  padding:18px;
+  text-align:center;
+}
 
-    header h1 {
-      font-size: 24px;
-    }
+.header h1{
+  font-size:25px;
+}
 
-    header p {
-      margin-top: 5px;
-      font-size: 14px;
-    }
+.header p{
+  margin-top:5px;
+  font-size:14px;
+}
 
-    .container {
-      width: 95%;
-      max-width: 1200px;
-      margin: 20px auto;
-    }
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+}
 
-    .top-actions {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 12px;
-      margin-bottom: 20px;
-    }
+.topbar{
+  background:white;
+  padding:15px;
+  border-radius:10px;
+  margin-bottom:20px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
 
-    button {
-      border: none;
-      padding: 13px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: bold;
-    }
+.topbar h2{
+  color:#0b5ed7;
+  margin-bottom:8px;
+}
 
-    .primary {
-      background: #0b5ed7;
-      color: white;
-    }
+.topbar p{
+  font-size:14px;
+  color:#555;
+}
 
-    .success {
-      background: #198754;
-      color: white;
-    }
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:15px;
+  margin-bottom:20px;
+}
 
-    .warning {
-      background: #ffc107;
-      color: #000;
-    }
+.card{
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+  text-align:center;
+}
 
-    .danger {
-      background: #dc3545;
-      color: white;
-    }
+.card h3{
+  font-size:15px;
+  color:#555;
+  margin-bottom:10px;
+}
 
-    .dark {
-      background: #212529;
-      color: white;
-    }
+.card strong{
+  font-size:25px;
+  color:#0b5ed7;
+}
 
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 15px;
-      margin-bottom: 25px;
-    }
+.menu{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;
+  margin-bottom:20px;
+}
 
-    .card {
-      background: white;
-      padding: 18px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
+button{
+  border:none;
+  padding:14px;
+  border-radius:8px;
+  background:#0b5ed7;
+  color:white;
+  font-size:15px;
+  cursor:pointer;
+}
 
-    .card h3 {
-      font-size: 15px;
-      margin-bottom: 8px;
-    }
+button:hover{
+  opacity:.9;
+}
 
-    .card p {
-      font-size: 22px;
-      font-weight: bold;
-    }
+.btn-green{
+  background:#198754;
+}
 
-    .section {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
+.btn-orange{
+  background:#fd7e14;
+}
 
-    .section h2 {
-      margin-bottom: 15px;
-      color: #0b5ed7;
-      font-size: 19px;
-    }
+.btn-red{
+  background:#dc3545;
+}
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-    }
+.btn-dark{
+  background:#343a40;
+}
 
-    input,
-    select {
-      width: 100%;
-      padding: 11px;
-      border: 1px solid #ccc;
-      border-radius: 7px;
-      outline: none;
-    }
+.section{
+  display:none;
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  margin-bottom:20px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
 
-    input:focus,
-    select:focus {
-      border-color: #0b5ed7;
-    }
+.section.active{
+  display:block;
+}
 
-    .table-wrapper {
-      overflow-x: auto;
-    }
+.section h2{
+  color:#0b5ed7;
+  margin-bottom:15px;
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 850px;
-    }
+input,select,textarea{
+  width:100%;
+  padding:11px;
+  margin:7px 0;
+  border:1px solid #ccc;
+  border-radius:6px;
+}
 
-    th,
-    td {
-      border-bottom: 1px solid #ddd;
-      padding: 11px;
-      text-align: left;
-      font-size: 13px;
-    }
+textarea{
+  min-height:100px;
+}
 
-    th {
-      background: #eef4ff;
-      color: #333;
-    }
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:10px;
+}
 
-    .status {
-      padding: 5px 9px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-    }
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:15px;
+}
 
-    .pending {
-      background: #fff3cd;
-      color: #856404;
-    }
+th,td{
+  border:1px solid #ddd;
+  padding:10px;
+  text-align:left;
+  font-size:14px;
+}
 
-    .approved {
-      background: #d1e7dd;
-      color: #0f5132;
-    }
+th{
+  background:#0b5ed7;
+  color:white;
+}
 
-    .correction {
-      background: #f8d7da;
-      color: #842029;
-    }
+.notice{
+  background:#fff3cd;
+  border:1px solid #ffe69c;
+  padding:12px;
+  border-radius:7px;
+  margin-bottom:15px;
+}
 
-    .rejected {
-      background: #dc3545;
-      color: white;
-    }
+.footer{
+  text-align:center;
+  padding:20px;
+  color:#777;
+  font-size:13px;
+}
 
-    .footer {
-      text-align: center;
-      padding: 20px;
-      color: #777;
-      font-size: 13px;
-    }
+.small-btn{
+  padding:7px 10px;
+  font-size:12px;
+}
 
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 20px;
-      }
+@media(max-width:600px){
+  .container{
+    padding:10px;
+  }
 
-      .container {
-        width: 93%;
-      }
+  .header h1{
+    font-size:21px;
+  }
 
-      .section {
-        padding: 15px;
-      }
-    }
-  </style>
+  table{
+    display:block;
+    overflow-x:auto;
+    white-space:nowrap;
+  }
+}
+</style>
 </head>
 
 <body>
 
-<header>
-  <h1>🏢 JUS-FEB Branch Management</h1>
+<div class="header">
+  <h1>JUS-FEB Branch Panel</h1>
   <p>Janakalyan Unnayan Sohayok - (JUS)</p>
   <p>Family Enterprise Business - (FEB)</p>
-</header>
+</div>
 
 <div class="container">
 
-  <!-- Quick Actions -->
-  <div class="top-actions">
-    <button class="primary" onclick="showCreateBranch()">➕ Create Branch</button>
-    <button class="primary" onclick="showBranchUsers()">👤 Branch User</button>
-    <button class="dark" onclick="showPermissions()">🔐 User Permission</button>
-    <button class="success" onclick="showPosting()">📋 Branch Posting</button>
-    <button class="warning" onclick="submitToAdmin()">📤 Submit to Admin</button>
-    <button class="dark" onclick="adminReview()">👑 Admin Review</button>
+  <div class="topbar">
+    <h2 id="branchTitle">Branch Dashboard</h2>
+    <p id="userInfo">Branch User</p>
   </div>
 
-  <!-- Dashboard -->
-  <div class="card-grid">
+  <!-- Dashboard Cards -->
+
+  <div class="cards">
 
     <div class="card">
-      <h3>🏢 Total Branch</h3>
-      <p id="totalBranch">0</p>
+      <h3>Total Members</h3>
+      <strong id="memberCount">0</strong>
     </div>
 
     <div class="card">
-      <h3>👤 Branch Users</h3>
-      <p id="totalUsers">0</p>
+      <h3>Total Users</h3>
+      <strong id="userCount">0</strong>
     </div>
 
     <div class="card">
-      <h3>🏦 Branch Fund</h3>
-      <p>৳ <span id="branchFund">0</span></p>
+      <h3>Branch Fund</h3>
+      <strong id="fundAmount">৳ 0</strong>
     </div>
 
     <div class="card">
-      <h3>💰 Branch Cash</h3>
-      <p>৳ <span id="branchCash">0</span></p>
+      <h3>Branch Cash</h3>
+      <strong id="cashAmount">৳ 0</strong>
     </div>
 
-    <div class="card">
-      <h3>📋 Pending Posting</h3>
-      <p id="pendingPosting">0</p>
-    </div>
+  </div>
 
-    <div class="card">
-      <h3>✅ Approved</h3>
-      <p id="approvedPosting">0</p>
-    </div>
+  <!-- Menu -->
+
+  <div class="menu">
+
+    <button onclick="showCreateBranch()">
+      Create Branch
+    </button>
+
+    <button onclick="showBranchUsers()" class="btn-green">
+      Branch Users
+    </button>
+
+    <button onclick="showPermissions()" class="btn-orange">
+      User Permission
+    </button>
+
+    <button onclick="showPosting()" class="btn-dark">
+      Member Posting
+    </button>
+
+    <button onclick="branchReport()" class="btn-green">
+      Branch Report
+    </button>
+
+    <button onclick="postingHistory()" class="btn-orange">
+      Posting History
+    </button>
+
+    <button onclick="goAdmin()" class="btn-dark">
+      Admin Panel
+    </button>
+
+    <button onclick="logout()" class="btn-red">
+      Logout
+    </button>
 
   </div>
 
   <!-- Create Branch -->
-  <div class="section" id="createBranchSection">
-    <h2>➕ Create Branch</h2>
+
+  <div id="createBranch" class="section">
+
+    <h2>Create Branch</h2>
 
     <div class="form-grid">
 
-      <input type="text" id="branchName" placeholder="Branch Name">
+      <div>
+        <label>Branch Name</label>
+        <input id="branchName" placeholder="Enter branch name">
+      </div>
 
-      <input type="text" id="branchCode" placeholder="Branch Code">
+      <div>
+        <label>Branch Code</label>
+        <input id="branchCode" placeholder="Enter branch code">
+      </div>
 
-      <input type="text" id="branchLocation" placeholder="Branch Location">
+      <div>
+        <label>Branch Location</label>
+        <input id="branchLocation" placeholder="Enter location">
+      </div>
 
-      <input type="text" id="branchManager" placeholder="Branch Manager">
-
-      <input type="text" id="branchPhone" placeholder="Branch Phone">
-
-      <button class="success" onclick="createBranch()">
-        Create Branch
-      </button>
+      <div>
+        <label>Branch Manager</label>
+        <input id="branchManager" placeholder="Manager name">
+      </div>
 
     </div>
+
+    <button onclick="createBranch()" class="btn-green">
+      Save Branch
+    </button>
+
   </div>
 
-  <!-- Branch User -->
-  <div class="section">
-    <h2>👤 Branch User</h2>
+  <!-- Branch Users -->
+
+  <div id="branchUsers" class="section">
+
+    <h2>Branch Users</h2>
 
     <div class="form-grid">
 
-      <input type="text" id="userName" placeholder="User Name">
+      <div>
+        <label>User Name</label>
+        <input id="newUserName" placeholder="User name">
+      </div>
 
-      <input type="text" id="userID" placeholder="User ID">
+      <div>
+        <label>Username</label>
+        <input id="newUsername" placeholder="Login username">
+      </div>
 
-      <input type="text" id="userPhone" placeholder="Phone Number">
+      <div>
+        <label>Password</label>
+        <input id="newPassword" placeholder="Password">
+      </div>
 
-      <select id="userBranch">
-        <option value="">Select Branch</option>
-      </select>
+      <div>
+        <label>Role</label>
 
-      <select id="userRole">
-        <option value="">Select Role</option>
-        <option>Branch Manager</option>
-        <option>Account User</option>
-        <option>Posting User</option>
-        <option>Data Entry User</option>
-      </select>
+        <select id="newUserRole">
+          <option>Branch User</option>
+          <option>Branch Manager</option>
+          <option>Account User</option>
+          <option>Member User</option>
+        </select>
 
-      <button class="primary" onclick="createUser()">
-        Create User
-      </button>
+      </div>
 
     </div>
+
+    <button onclick="createUser()" class="btn-green">
+      Create User
+    </button>
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Username</th>
+          <th>Role</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody id="userTable"></tbody>
+
+    </table>
+
   </div>
 
-  <!-- Permission -->
-  <div class="section">
-    <h2>🔐 User Permission</h2>
+  <!-- Permissions -->
+
+  <div id="permissions" class="section">
+
+    <h2>User Permissions</h2>
+
+    <div class="notice">
+      Branch users can be given different permissions from this section.
+    </div>
 
     <div class="form-grid">
-
-      <select id="permissionUser">
-        <option value="">Select User</option>
-      </select>
 
       <label>
-        <input type="checkbox" id="postingPermission">
-        📋 Branch Posting
+        <input type="checkbox" id="pMember">
+        Member Management
       </label>
 
       <label>
-        <input type="checkbox" id="editPermission">
-        ✏️ Edit Posting
+        <input type="checkbox" id="pLoan">
+        Loan Management
       </label>
 
       <label>
-        <input type="checkbox" id="reportPermission">
-        📊 View Report
+        <input type="checkbox" id="pPayment">
+        Payment Entry
       </label>
 
       <label>
-        <input type="checkbox" id="fundPermission">
-        🏦 Branch Fund
+        <input type="checkbox" id="pAccounting">
+        Accounting
       </label>
 
-      <button class="success" onclick="savePermission()">
-        Save Permission
-      </button>
+      <label>
+        <input type="checkbox" id="pReport">
+        Reports
+      </label>
+
+      <label>
+        <input type="checkbox" id="pShop">
+        Shop
+      </label>
+
+      <label>
+        <input type="checkbox" id="pTravels">
+        Travels
+      </label>
 
     </div>
+
+    <button onclick="savePermissions()" class="btn-green">
+      Save Permissions
+    </button>
+
   </div>
 
-  <!-- Branch Posting -->
-  <div class="section">
-    <h2>📋 Branch Posting</h2>
+  <!-- Member Posting -->
+
+  <div id="posting" class="section">
+
+    <h2>Member Posting</h2>
 
     <div class="form-grid">
 
-      <input type="text" id="memberName" placeholder="Member Name">
+      <div>
+        <label>Member ID</label>
+        <input id="postMemberId" placeholder="Member ID">
+      </div>
 
-      <input type="text" id="memberNID" placeholder="NID Number">
+      <div>
+        <label>Member Name</label>
+        <input id="postMemberName" placeholder="Member name">
+      </div>
 
-      <input type="number" id="originalAmount" placeholder="Original Amount">
+      <div>
+        <label>Original / Loan</label>
+        <input id="postOriginal" type="number" placeholder="Original amount">
+      </div>
 
-      <input type="number" id="serviceCharge" placeholder="Service Charge">
+      <div>
+        <label>Service Charge</label>
+        <input id="postService" type="number" placeholder="Service charge">
+      </div>
 
-      <input type="number" id="interest" placeholder="Interest">
+      <div>
+        <label>Interest</label>
+        <input id="postInterest" type="number" placeholder="Interest">
+      </div>
 
-      <input type="number" id="paidAmount" placeholder="Paid Amount">
+      <div>
+        <label>Paid</label>
+        <input id="postPaid" type="number" placeholder="Paid amount">
+      </div>
 
-      <input type="number" id="cashAmount" placeholder="Cash Amount">
+      <div>
+        <label>Total Paid</label>
+        <input id="postTotalPaid" type="number" placeholder="Total paid">
+      </div>
 
-      <button class="primary" onclick="createPosting()">
-        Create Posting
-      </button>
-
-    </div>
-  </div>
-
-  <!-- Admin Review -->
-  <div class="section">
-    <h2>👑 Admin Review</h2>
-
-    <div class="table-wrapper">
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Date & Time</th>
-            <th>Branch</th>
-            <th>Member</th>
-            <th>NID</th>
-            <th>Original</th>
-            <th>Paid</th>
-            <th>Created By</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-
-        <tbody id="postingTable">
-
-          <tr>
-            <td colspan="9" style="text-align:center;">
-              No posting available
-            </td>
-          </tr>
-
-        </tbody>
-
-      </table>
+      <div>
+        <label>Date</label>
+        <input id="postDate" type="date">
+      </div>
 
     </div>
-  </div>
 
-  <!-- Branch Fund & Cash -->
-  <div class="section">
+    <br>
 
-    <h2>🏦 Branch Fund & 💰 Branch Cash</h2>
-
-    <div class="form-grid">
-
-      <input type="number" id="fundInput" placeholder="Add Branch Fund">
-
-      <button class="success" onclick="addFund()">
-        Add Fund
-      </button>
-
-      <input type="number" id="cashInput" placeholder="Add Branch Cash">
-
-      <button class="success" onclick="addCash()">
-        Add Cash
-      </button>
-
-    </div>
+    <button onclick="savePosting()" class="btn-green">
+      Save Posting
+    </button>
 
   </div>
 
-  <!-- Branch Report -->
-  <div class="section">
+  <!-- Report -->
 
-    <h2>📊 Branch Report</h2>
+  <div id="report" class="section">
 
-    <div class="form-grid">
+    <h2>Branch Report</h2>
 
-      <button class="primary" onclick="branchReport()">
-        📊 Branch Report
-      </button>
+    <div class="cards">
 
-      <button class="dark" onclick="postingHistory()">
-        📜 Posting History
-      </button>
+      <div class="card">
+        <h3>Total Branch</h3>
+        <strong id="reportBranch">0</strong>
+      </div>
 
-      <button class="warning" onclick="window.print()">
-        🖨️ Print Report
-      </button>
+      <div class="card">
+        <h3>Total Users</h3>
+        <strong id="reportUsers">0</strong>
+      </div>
+
+      <div class="card">
+        <h3>Branch Fund</h3>
+        <strong id="reportFund">৳ 0</strong>
+      </div>
+
+      <div class="card">
+        <h3>Branch Cash</h3>
+        <strong id="reportCash">৳ 0</strong>
+      </div>
 
     </div>
+
+  </div>
+
+  <!-- Posting History -->
+
+  <div id="history" class="section">
+
+    <h2>Posting History</h2>
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Member ID</th>
+          <th>Member Name</th>
+          <th>Original</th>
+          <th>Service</th>
+          <th>Interest</th>
+          <th>Paid</th>
+          <th>Date</th>
+          <th>Created By</th>
+        </tr>
+      </thead>
+
+      <tbody id="postingTable"></tbody>
+
+    </table>
 
   </div>
 
 </div>
 
 <div class="footer">
-  JUS-FEB Management & Accounting System
-  <br>
-  Janakalyan Unnayan Sohayok - (JUS)
+  JUS-FEB Management & Accounting System<br>
+  Janakalyan Unnayan Sohayok - (JUS) | Family Enterprise Business - (FEB)
 </div>
 
 <script>
 
-  let branches = [];
-  let users = [];
-  let postings = [];
+/* =========================
+   DATA
+========================= */
 
-  let fund = 0;
-  let cash = 0;
+let branches =
+JSON.parse(localStorage.getItem("jus_branches")) || [];
 
-  // Create Branch
-  function createBranch() {
+let users =
+JSON.parse(localStorage.getItem("jus_branch_users")) || [];
 
-    const name = document.getElementById("branchName").value;
-    const code = document.getElementById("branchCode").value;
-    const location = document.getElementById("branchLocation").value;
-    const manager = document.getElementById("branchManager").value;
-    const phone = document.getElementById("branchPhone").value;
+let postings =
+JSON.parse(localStorage.getItem("jus_postings")) || [];
 
-    if (!name || !code) {
-      alert("Please enter Branch Name and Branch Code.");
-      return;
-    }
+let fund =
+Number(localStorage.getItem("jus_branch_fund")) || 0;
 
-    branches.push({
-      name,
-      code,
-      location,
-      manager,
-      phone,
-      createdAt: new Date().toLocaleString()
-    });
+let cash =
+Number(localStorage.getItem("jus_branch_cash")) || 0;
 
-    document.getElementById("totalBranch").innerText = branches.length;
 
-    updateBranchList();
+/* =========================
+   LOGIN CHECK
+========================= */
 
-    alert("Branch created successfully.");
+let loggedIn =
+localStorage.getItem("jus_login");
 
-    document.getElementById("branchName").value = "";
-    document.getElementById("branchCode").value = "";
-    document.getElementById("branchLocation").value = "";
-    document.getElementById("branchManager").value = "";
-    document.getElementById("branchPhone").value = "";
-  }
+if(loggedIn !== "true"){
+  window.location.href = "login.html";
+}
 
-  // Update Branch List
-  function updateBranchList() {
 
-    const select = document.getElementById("userBranch");
+/* =========================
+   USER INFO
+========================= */
 
-    select.innerHTML = '<option value="">Select Branch</option>';
+let role =
+localStorage.getItem("jus_role") || "Branch User";
 
-    branches.forEach(branch => {
+document.getElementById("userInfo").innerText =
+"Logged in as: " + role;
 
-      const option = document.createElement("option");
 
-      option.value = branch.code;
-      option.textContent = branch.name + " (" + branch.code + ")";
+/* =========================
+   DASHBOARD
+========================= */
 
-      select.appendChild(option);
+function updateDashboard(){
 
-    });
+  document.getElementById("memberCount").innerText =
+  postings.length;
 
-  }
+  document.getElementById("userCount").innerText =
+  users.length;
 
-  // Create User
-  function createUser() {
+  document.getElementById("fundAmount").innerText =
+  "৳ " + fund.toLocaleString();
 
-    const name = document.getElementById("userName").value;
-    const id = document.getElementById("userID").value;
-    const phone = document.getElementById("userPhone").value;
-    const branch = document.getElementById("userBranch").value;
-    const role = document.getElementById("userRole").value;
+  document.getElementById("cashAmount").innerText =
+  "৳ " + cash.toLocaleString();
 
-    if (!name || !id || !branch) {
-      alert("Please complete user information.");
-      return;
-    }
+}
 
-    users.push({
-      name,
-      id,
-      phone,
-      branch,
-      role,
-      createdAt: new Date().toLocaleString()
-    });
+updateDashboard();
 
-    document.getElementById("totalUsers").innerText = users.length;
 
-    alert("Branch user created successfully.");
+/* =========================
+   SECTION CONTROL
+========================= */
 
-    document.getElementById("userName").value = "";
-    document.getElementById("userID").value = "";
-    document.getElementById("userPhone").value = "";
-  }
+function hideAll(){
 
-  // Permission
-  function savePermission() {
+  document
+  .querySelectorAll(".section")
+  .forEach(function(section){
 
-    alert("User permission saved successfully.");
+    section.classList.remove("active");
 
-  }
+  });
 
-  // Create Posting
-  function createPosting() {
+}
 
-    const member = document.getElementById("memberName").value;
-    const nid = document.getElementById("memberNID").value;
-    const original = Number(document.getElementById("originalAmount").value || 0);
-    const service = Number(document.getElementById("serviceCharge").value || 0);
-    const interest = Number(document.getElementById("interest").value || 0);
-    const paid = Number(document.getElementById("paidAmount").value || 0);
+function showSection(id){
 
-    if (!member) {
-      alert("Please enter Member Name.");
-      return;
-    }
+  hideAll();
 
-    const posting = {
+  document
+  .getElementById(id)
+  .classList.add("active");
 
-      date: new Date().toLocaleString(),
+}
 
-      branch:
-        branches.length > 0
-          ? branches[0].name
-          : "Main Branch",
 
-      member: member,
+/* =========================
+   CREATE BRANCH
+========================= */
 
-      nid: nid,
+function showCreateBranch(){
 
-      original: original,
+  showSection("createBranch");
 
-      service: service,
+}
 
-      interest: interest,
+function createBranch(){
 
-      paid: paid,
+  let name =
+  document.getElementById("branchName").value.trim();
 
-      createdBy: "Branch User",
+  let code =
+  document.getElementById("branchCode").value.trim();
 
-      status: "Pending"
+  let location =
+  document.getElementById("branchLocation").value.trim();
 
-    };
+  let manager =
+  document.getElementById("branchManager").value.trim();
 
-    postings.push(posting);
+  if(!name || !code){
 
-    updatePostingTable();
+    alert("Branch Name and Branch Code are required.");
 
-    document.getElementById("pendingPosting").innerText =
-      postings.filter(p => p.status === "Pending").length;
-
-    alert("Posting created and ready for Admin submission.");
+    return;
 
   }
 
-  // Posting Table
-  function updatePostingTable() {
+  let branch = {
 
-    const table = document.getElementById("postingTable");
+    id:Date.now(),
 
-    table.innerHTML = "";
+    name:name,
 
-    if (postings.length === 0) {
+    code:code,
 
-      table.innerHTML =
-        '<tr><td colspan="9" style="text-align:center;">No posting available</td></tr>';
+    location:location,
 
-      return;
-    }
+    manager:manager,
 
-    postings.forEach((p, index) => {
+    createdAt:new Date().toLocaleString()
 
-      let statusClass = "pending";
+  };
 
-      if (p.status === "Approved") {
-        statusClass = "approved";
-      }
+  branches.push(branch);
 
-      if (p.status === "Correction Needed") {
-        statusClass = "correction";
-      }
+  localStorage.setItem(
+    "jus_branches",
+    JSON.stringify(branches)
+  );
 
-      if (p.status === "Rejected") {
-        statusClass = "rejected";
-      }
+  alert("Branch created successfully.");
 
-      table.innerHTML += `
+  document.getElementById("branchName").value="";
+  document.getElementById("branchCode").value="";
+  document.getElementById("branchLocation").value="";
+  document.getElementById("branchManager").value="";
 
-        <tr>
+}
 
-          <td>${p.date}</td>
 
-          <td>${p.branch}</td>
+/* =========================
+   BRANCH USERS
+========================= */
 
-          <td>${p.member}</td>
+function showBranchUsers(){
 
-          <td>${p.nid}</td>
+  showSection("branchUsers");
 
-          <td>৳ ${p.original}</td>
+  loadUsers();
 
-          <td>৳ ${p.paid}</td>
+}
 
-          <td>${p.createdBy}</td>
+function createUser(){
 
-          <td>
-            <span class="status ${statusClass}">
-              ${p.status}
-            </span>
-          </td>
+  let name =
+  document.getElementById("newUserName").value.trim();
 
-          <td>
+  let username =
+  document.getElementById("newUsername").value.trim();
 
-            <button class="success"
-              onclick="approvePosting(${index})">
-              ✅ Approve
-            </button>
+  let password =
+  document.getElementById("newPassword").value.trim();
 
-            <button class="warning"
-              onclick="correctionPosting(${index})">
-              ✏️ Correction
-            </button>
+  let role =
+  document.getElementById("newUserRole").value;
 
-            <button class="danger"
-              onclick="rejectPosting(${index})">
-              ❌ Reject
-            </button>
+  if(!name || !username || !password){
 
-          </td>
+    alert("Please fill all required fields.");
 
-        </tr>
-
-      `;
-
-    });
+    return;
 
   }
 
-  // Approve
-  function approvePosting(index) {
+  let user = {
 
-    postings[index].status = "Approved";
+    id:Date.now(),
 
-    updatePostingTable();
+    name:name,
 
-    updateCounters();
+    username:username,
 
-    alert("Posting approved.");
+    password:password,
+
+    role:role,
+
+    status:"Active",
+
+    createdAt:new Date().toLocaleString()
+
+  };
+
+  users.push(user);
+
+  localStorage.setItem(
+    "jus_branch_users",
+    JSON.stringify(users)
+  );
+
+  alert("User created successfully.");
+
+  document.getElementById("newUserName").value="";
+  document.getElementById("newUsername").value="";
+  document.getElementById("newPassword").value="";
+
+  loadUsers();
+
+  updateDashboard();
+
+}
+
+function loadUsers(){
+
+  let table =
+  document.getElementById("userTable");
+
+  table.innerHTML="";
+
+  users.forEach(function(user,index){
+
+    let row = document.createElement("tr");
+
+    row.innerHTML =
+
+    "<td>" + (index+1) + "</td>" +
+
+    "<td>" + user.name + "</td>" +
+
+    "<td>" + user.username + "</td>" +
+
+    "<td>" + user.role + "</td>" +
+
+    "<td>" + user.status + "</td>";
+
+    table.appendChild(row);
+
+  });
+
+}
+
+
+/* =========================
+   PERMISSIONS
+========================= */
+
+function showPermissions(){
+
+  showSection("permissions");
+
+}
+
+function savePermissions(){
+
+  let permissions = {
+
+    member:
+    document.getElementById("pMember").checked,
+
+    loan:
+    document.getElementById("pLoan").checked,
+
+    payment:
+    document.getElementById("pPayment").checked,
+
+    accounting:
+    document.getElementById("pAccounting").checked,
+
+    report:
+    document.getElementById("pReport").checked,
+
+    shop:
+    document.getElementById("pShop").checked,
+
+    travels:
+    document.getElementById("pTravels").checked
+
+  };
+
+  localStorage.setItem(
+    "jus_permissions",
+    JSON.stringify(permissions)
+  );
+
+  alert("Permissions saved successfully.");
+
+}
+
+
+/* =========================
+   MEMBER POSTING
+========================= */
+
+function showPosting(){
+
+  showSection("posting");
+
+  let today =
+  new Date().toISOString().split("T")[0];
+
+  document.getElementById("postDate").value =
+  today;
+
+}
+
+function savePosting(){
+
+  let memberId =
+  document.getElementById("postMemberId").value.trim();
+
+  let memberName =
+  document.getElementById("postMemberName").value.trim();
+
+  let original =
+  Number(document.getElementById("postOriginal").value) || 0;
+
+  let service =
+  Number(document.getElementById("postService").value) || 0;
+
+  let interest =
+  Number(document.getElementById("postInterest").value) || 0;
+
+  let paid =
+  Number(document.getElementById("postPaid").value) || 0;
+
+  let totalPaid =
+  Number(document.getElementById("postTotalPaid").value) || 0;
+
+  let date =
+  document.getElementById("postDate").value;
+
+  if(!memberId || !memberName){
+
+    alert("Member ID and Member Name are required.");
+
+    return;
 
   }
 
-  // Correction
-  function correctionPosting(index) {
+  let posting = {
 
-    postings[index].status = "Correction Needed";
+    id:Date.now(),
 
-    updatePostingTable();
+    memberId:memberId,
 
-    updateCounters();
+    memberName:memberName,
 
-    alert("Correction requested.");
+    original:original,
 
-  }
+    service:service,
 
-  // Reject
-  function rejectPosting(index) {
+    interest:interest,
 
-    postings[index].status = "Rejected";
+    paid:paid,
 
-    updatePostingTable();
+    totalPaid:totalPaid,
 
-    updateCounters();
+    date:date,
 
-    alert("Posting rejected.");
+    createdBy:
+    localStorage.getItem("jus_role") || "Branch User",
 
-  }
+    createdAt:
+    new Date().toLocaleString()
 
-  // Counters
-  function updateCounters() {
+  };
 
-    document.getElementById("pendingPosting").innerText =
-      postings.filter(p => p.status === "Pending").length;
+  postings.push(posting);
 
-    document.getElementById("approvedPosting").innerText =
-      postings.filter(p => p.status === "Approved").length;
+  localStorage.setItem(
+    "jus_postings",
+    JSON.stringify(postings)
+  );
 
-  }
+  cash += paid;
 
-  // Fund
-  function addFund() {
+  localStorage.setItem(
+    "jus_branch_cash",
+    cash
+  );
 
-    const amount =
-      Number(document.getElementById("fundInput").value || 0);
+  alert("Member posting saved successfully.");
 
-    fund += amount;
+  document.getElementById("postMemberId").value="";
+  document.getElementById("postMemberName").value="";
+  document.getElementById("postOriginal").value="";
+  document.getElementById("postService").value="";
+  document.getElementById("postInterest").value="";
+  document.getElementById("postPaid").value="";
+  document.getElementById("postTotalPaid").value="";
 
-    document.getElementById("branchFund").innerText =
-      fund.toLocaleString();
+  updateDashboard();
 
-    document.getElementById("fundInput").value = "";
+}
 
-  }
 
-  // Cash
-  function addCash() {
+/* =========================
+   BRANCH REPORT
+========================= */
 
-    const amount =
-      Number(document.getElementById("cashInput").value || 0);
+function branchReport(){
 
-    cash += amount;
+  showSection("report");
 
-    document.getElementById("branchCash").innerText =
-      cash.toLocaleString();
+  document.getElementById("reportBranch").innerText =
+  branches.length;
 
-    document.getElementById("cashInput").value = "";
+  document.getElementById("reportUsers").innerText =
+  users.length;
 
-  }
+  document.getElementById("reportFund").innerText =
+  "৳ " + fund.toLocaleString();
 
-  // Submit
-  function submitToAdmin() {
+  document.getElementById("reportCash").innerText =
+  "৳ " + cash.toLocaleString();
 
-    alert("Posting submitted to Admin for review.");
+}
 
-  }
 
-  // Admin Review
-  function adminReview() {
+/* =========================
+   POSTING HISTORY
+========================= */
 
-    document
-      .getElementById("postingTable")
-      .scrollIntoView({
-        behavior: "smooth"
-      });
+function postingHistory(){
 
-  }
+  showSection("history");
 
-  // Branch Report
-  function branchReport() {
+  let table =
+  document.getElementById("postingTable");
 
-    alert(
-      "Branch Report\n\n" +
-      "Total Branch: " + branches.length + "\n" +
-      "Total Users: " + users.length + "\n" +
-      "Branch Fund: ৳ " + fund + "\n" +
-      "Branch Cash: ৳ " + cash + "\
+  table.innerHTML="";
+
+  postings.forEach(function(post,index){
+
+    let row =
+    document.createElement("tr");
+
+    row.innerHTML =
+
+    "<td>" + (index+1) + "</td>" +
+
+    "<td>" + post.memberId + "</td>" +
+
+    "<td>" + post.memberName + "</td>" +
+
+    "<td>৳ " + post.original.toLocaleString() + "</td>" +
+
+    "<td>৳ " + post.service.toLocaleString() + "</td>" +
+
+    "<td>৳ " + post.interest.toLocaleString() + "</td>" +
+
+    "<td>৳ " + post.paid.toLocaleString() + "</td>" +
+
+    "<td>" + post.date + "</td>" +
+
+    "<td>" + post.createdBy + "</td>";
+
+    table.appendChild(row);
+
+  });
+
+}
+
+
+/* =========================
+   ADMIN PANEL
+========================= */
+
+function goAdmin(){
+
+  window.location.href =
+  "admin.html";
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+function logout(){
+
+  localStorage.removeItem("jus_login");
+
+  localStorage.removeItem("jus_role");
+
+  window.location.href =
+  "login.html";
+
+}
+
+</script>
+
+</body>
+</html>
