@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>JUS-FEB Reports</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+    color:#222;
+}
+
+.header{
+    background:linear-gradient(135deg,#198754,#0f5132);
+    color:white;
+    padding:24px 15px;
+    text-align:center;
+}
+
+.header h1{
+    font-size:26px;
+    margin-bottom:7px;
+}
+
+.header p{
+    font-size:14px;
+}
+
+.container{
+    width:95%;
+    max-width:1250px;
+    margin:20px auto;
+}
+
+.actions{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.actions button{
+    border:0;
+    background:white;
+    padding:13px 8px;
+    border-radius:8px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.actions button:hover{
+    background:#e9f7ef;
+}
+
+.dashboard{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.card{
+    background:white;
+    padding:18px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.card h3{
+    font-size:14px;
+    color:#666;
+    margin-bottom:8px;
+}
+
+.card strong{
+    font-size:23px;
+    color:#198754;
+}
+
+.section{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    margin-bottom:20px;
+}
+
+.section h2{
+    color:#0f5132;
+    margin-bottom:15px;
+    font-size:20px;
+}
+
+.filter-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:12px;
+}
+
+.group{
+    display:flex;
+    flex-direction:column;
+}
+
+.group label{
+    font-weight:bold;
+    margin-bottom:5px;
+    font-size:14px;
+}
+
+input,select{
+    padding:11px;
+    border:1px solid #ccc;
+    border-radius:7px;
+    outline:none;
+}
+
+input:focus,select:focus{
+    border-color:#198754;
+}
+
+.btn{
+    border:0;
+    padding:11px 16px;
+    border-radius:7px;
+    cursor:pointer;
+    font-weight:bold;
+    margin:8px 5px 0 0;
+}
+
+.btn-success{
+    background:#198754;
+    color:white;
+}
+
+.btn-primary{
+    background:#0d6efd;
+    color:white;
+}
+
+.btn-info{
+    background:#0dcaf0;
+    color:#111;
+}
+
+.btn-warning{
+    background:#ffc107;
+    color:#111;
+}
+
+.btn-dark{
+    background:#212529;
+    color:white;
+}
+
+.btn-danger{
+    background:#dc3545;
+    color:white;
+}
+
+.report-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+}
+
+.report-card{
+    background:#f8f9fa;
+    padding:18px;
+    border-radius:10px;
+    border-left:5px solid #198754;
+}
+
+.report-card h3{
+    font-size:14px;
+    color:#666;
+    margin-bottom:8px;
+}
+
+.report-card strong{
+    font-size:22px;
+}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:950px;
+}
+
+th,td{
+    padding:10px;
+    border-bottom:1px solid #ddd;
+    text-align:left;
+    font-size:13px;
+}
+
+th{
+    background:#0f5132;
+    color:white;
+}
+
+.empty{
+    text-align:center;
+    padding:25px;
+    color:#777;
+}
+
+.footer{
+    text-align:center;
+    padding:25px;
+    color:#777;
+    font-size:13px;
+}
+
+@media(max-width:600px){
+    .header h1{
+        font-size:21px;
+    }
+
+    .section{
+        padding:14px;
+    }
+}
+
+@media print{
+    .actions,
+    .filter-section,
+    .no-print{
+        display:none!important;
+    }
+
+    body{
+        background:white;
+    }
+
+    .section,
+    .card{
+        box-shadow:none;
+        border:1px solid #ddd;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+
+    <h1>📊 JUS-FEB Reports</h1>
+
+    <p>
+        Janakalyan Unnayan Sohayok - (JUS)
+        |
+        Family Enterprise Business - (FEB)
+    </p>
+
+</div>
+
+
+<div class="container">
+
+
+<!-- QUICK ACTIONS -->
+
+<div class="actions">
+
+    <button onclick="generateReport()">
+        📊 Generate Report
+    </button>
+
+    <button onclick="dailyReport()">
+        📅 Daily Report
+    </button>
+
+    <button onclick="monthlyReport()">
+        📆 Monthly Report
+    </button>
+
+    <button onclick="yearlyReport()">
+        🗓️ Yearly Report
+    </button>
+
+    <button onclick="window.print()">
+        🖨️ Print Report
+    </button>
+
+</div>
+
+
+<!-- DASHBOARD -->
+
+<div class="dashboard">
+
+    <div class="card">
+        <h3>👥 Total Members</h3>
+        <strong id="totalMembers">0</strong>
+    </div>
+
+    <div class="card">
+        <h3>💰 Total Loan</h3>
+        <strong id="totalLoan">৳ 0.00</strong>
+    </div>
+
+    <div class="card">
+        <h3>💳 Total Paid</h3>
+        <strong id="totalPaid">৳ 0.00</strong>
+    </div>
+
+    <div class="card">
+        <h3>📥 Total Income</h3>
+        <strong id="totalIncome">৳ 0.00</strong>
+    </div>
+
+    <div class="card">
+        <h3>📤 Total Expense</h3>
+        <strong id="totalExpense">৳ 0.00</strong>
+    </div>
+
+    <div class="card">
+        <h3>💵 Current Balance</h3>
+        <strong id="currentBalance">৳ 0.00</strong>
+    </div>
+
+</div>
+
+
+<!-- FILTER -->
+
+<div class="section filter-section">
+
+    <h2>🔍 Report Filter</h2>
+
+    <div class="filter-grid">
+
+        <div class="group">
+
+            <label>Report Type</label>
+
+            <select id="reportType">
+
+                <option value="all">
+                    All Report
+                </option>
+
+                <option value="member">
+                    Member Report
+                </option>
+
+                <option value="loan">
+                    Loan Report
+                </option>
+
+                <option value="payment">
+                    Payment Report
+                </option>
+
+                <option value="branch">
+                    Branch Report
+                </option>
+
+                <option value="cash">
+                    Cash Report
+                </option>
+
+                <option value="income">
+                    Income Report
+                </option>
+
+                <option value="expense">
+                    Expense Report
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="group">
+
+            <label>Branch</label>
+
+            <select id="branch">
+
+                <option value="">
+                    All Branch
+                </option>
+
+                <option>Main Branch</option>
+                <option>Branch-01</option>
+                <option>Branch-02</option>
+                <option>Branch-03</option>
+                <option>Branch-04</option>
+
+            </select>
+
+        </div>
+
+
+        <div class="group">
+
+            <label>From Date</label>
+
+            <input
+                type="date"
+                id="fromDate"
+            >
+
+        </div>
+
+
+        <div class="group">
+
+            <label>To Date</label>
+
+            <input
+                type="date"
+                id="toDate"
+            >
+
+        </div>
+
+
+        <div class="group">
+
+            <label>Search</label>
+
+            <input
+                type="text"
+                id="search"
+                placeholder="Search..."
+            >
+
+        </div>
+
+    </div>
+
+
+    <button
+        class="btn btn-success"
+        onclick="generateReport()">
+
+        🔍 Apply Filter
+
+    </button>
+
+
+    <button
+        class="btn btn-dark"
+        onclick="resetFilter()">
+
+        🔄 Reset
+
+    </button>
+
+</div>
+
+
+<!-- REPORT SUMMARY -->
+
+<div class="section">
+
+    <h2>📊 Report Summary</h2>
+
+    <div class="report-grid">
+
+        <div class="report-card">
+
+            <h3>👥 Members</h3>
+
+            <strong id="reportMembers">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="report-card">
+
+            <h3>💰 Loan / Original</h3>
+
+            <strong id="reportLoan">
+                ৳ 0.00
+            </strong>
+
+        </div>
+
+
+        <div class="report-card">
+
+            <h3>💵 Paid Amount</h3>
+
+            <strong id="reportPaid">
+                ৳ 0.00
+            </strong>
+
+        </div>
+
+
+        <div class="report-card">
+
+            <h3>📥 Income</h3>
+
+            <strong id="reportIncome">
+                ৳ 0.00
+            </strong>
+
+        </div>
+
+
+        <div class="report-card">
+
+            <h3>📤 Expense</h3>
+
+            <strong id="reportExpense">
+                ৳ 0.00
+            </strong>
+
+        </div>
+
+
+        <div class="report-card">
+
+            <h3>💳 Balance</h3>
+
+            <strong id="reportBalance">
+                ৳ 0.00
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- REPORT TABLE -->
+
+<div class="section">
+
+    <h2>📋 Detailed Report</h2>
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Date</th>
+
+                    <th>Type</th>
+
+                    <th>Member</th>
+
+                    <th>Branch</th>
+
+                    <th>Amount</th>
+
+                    <th>Paid</th>
+
+                    <th>Status</th>
+
+                    <th>Created By</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="reportTable">
+
+                <tr>
+
+                    <td
+                        colspan="9"
+                        class="empty">
+
+                        No report data available.
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- ADMIN REPORT -->
+
+<div class="section">
+
+    <h2>👑 Admin Report</h2>
+
+    <div class="report-grid">
+
+        <div class="report-card">
+
+            <h3>✅ Approved</h3>
+
+            <strong id="approved">
+                0
+            </strong>
+
+        </div>
+
+        <div class="report-card">
+
+            <h3>🕐 Pending</h3>
+
+            <strong id="pending">
+                0
+            </strong>
+
+        </div>
+
+        <div class="report-card">
+
+            <h3>✏️ Correction</h3>
+
+            <strong id="correction">
+                0
+            </strong>
+
+        </div>
+
+        <div class="report-card">
+
+            <h3>❌ Rejected</h3>
+
+            <strong id="rejected">
+                0
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- EXPORT -->
+
+<div class="section no-print">
+
+    <h2>📥 Report Export</h2>
+
+    <button
+        class="btn btn-primary"
+        onclick="downloadCSV()">
+
+        📥 Download CSV
+
+    </button>
+
+
+    <button
+        class="btn btn-warning"
+        onclick="window.print()">
+
+        🖨️ Print / Save PDF
+
+    </button>
+
+</div>
+
+
+</div>
+
+
+<div class="footer">
+
+    © 2026 JUS-FEB Management & Accounting System
+
+</div>
+
+
+<script>
+
+
+/* DEMO REPORT DATA */
+
+let reportData = [
+
+    {
+        id:"MEM-1001",
+        date:"2026-09-30",
+        type:"Member",
+        member:"Member-001",
+        branch:"Main Branch",
+        amount:50000,
+        paid:10000,
+        status:"Approved",
+        createdBy:"Admin"
+    },
+
+    {
+        id:"MEM-1002",
+        date:"2026-09-30",
+        type:"Member",
+        member:"Member-002",
+        branch:"Branch-01",
+        amount:75000,
+        paid:15000,
+        status:"Approved",
+        createdBy:"Branch User"
+    },
+
+    {
+        id:"PAY-1001",
+        date:"2026-09-30",
+        type:"Payment",
+        member:"Member-001",
+        branch:"Main Branch",
+        amount:5000,
+        paid:5000,
+        status:"Approved",
+        createdBy:"Branch User"
+    },
+
+    {
+        id:"PAY-1002",
+        date:"2026-09-30",
+        type:"Payment",
+        member:"Member-002",
+        branch:"Branch-01",
+        amount:7000,
+        paid:7000,
+        status:"Pending",
+        createdBy:"Branch User"
+    },
+
+    {
+        id:"INC-1001",
+        date:"2026-09-30",
+        type:"Income",
+        member:"-",
+        branch:"Main Branch",
+        amount:2500,
+        paid:2500,
+        status:"Approved",
+        createdBy:"Admin"
+    },
+
+    {
+        id:"EXP-1001",
+        date:"2026-09-30",
+        type:"Expense",
+        member:"-",
+        branch:"Main Branch",
+        amount:1200,
+        paid:1200,
+        status:"Approved",
+        createdBy:"Admin"
+    }
+
+];
+
+
+let filteredData = [...reportData];
+
+
+/* FORMAT MONEY */
+
+function money(value){
+
+    return "৳ " +
+        Number(value).toLocaleString(
+            "en-BD",
+            {
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
+            }
+        );
+
+}
+
+
+/* GENERATE REPORT */
+
+function generateReport(){
+
+    let branch =
+        document.getElementById("branch").value;
+
+    let from =
+        document.getElementById("fromDate").value;
+
+    let to =
+        document.getElementById("toDate").value;
+
+    let search =
+        document.getElementById("search")
+        .value
+        .toLowerCase();
+
+
+    filteredData = reportData.filter(item=>{
+
+        let ok = true;
+
+
+        if(branch &&
+            item.branch !== branch){
+
+            ok = false;
+
+        }
+
+
+        if(from &&
+            item.date < from){
+
+            ok = false;
+
+        }
+
+
+        if(to &&
+            item.date > to){
+
+            ok = false;
+
+        }
+
+
+        if(search){
+
+            let text =
+                (
+                    item.id +
+                    " " +
+                    item.type +
+                    " " +
+                    item.member +
+                    " " +
+                    item.branch +
+                    " " +
+                    item.createdBy
+                ).toLowerCase();
+
+            if(!text.includes(search)){
+
+                ok = false;
+
+            }
+
+        }
+
+
+        return ok;
+
+    });
+
+
+    renderReport();
+
+    updateSummary();
+
+}
+
+
+/* RENDER */
+
+function renderReport(){
+
+    let table =
+        document.getElementById("reportTable");
+
+    table.innerHTML = "";
+
+
+    if(filteredData.length === 0){
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="9"
+                    class="empty">
+
+                    No matching report data found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    filteredData.forEach(item=>{
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${item.id}</td>
+
+                <td>${item.date}</td>
+
+                <td>${item.type}</td>
+
+                <td>${item.member}</td>
+
+                <td>${item.branch}</td>
+
+                <td>${money(item.amount)}</td>
+
+                <td>${money(item.paid)}</td>
+
+                <td>${item.status}</td>
+
+                <td>${item.createdBy}</td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* SUMMARY */
+
+function updateSummary(){
+
+    let members =
+        filteredData.filter(
+            x=>x.type==="Member"
+        ).length;
+
+
+    let loan =
+        filteredData
+        .filter(x=>x.type==="Member")
+        .reduce(
+            (sum,x)=>sum+Number(x.amount),
+            0
+        );
+
+
+    let paid =
+        filteredData
+        .reduce(
+            (sum,x)=>sum+Number(x.paid),
+            0
+        );
+
+
+    let income =
+        filteredData
+        .filter(x=>x.type==="Income")
+        .reduce(
+            (sum,x)=>sum+Number(x.amount),
+            0
+        );
+
+
+    let expense =
+        filteredData
+        .filter(x=>x.type==="Expense")
+        .reduce(
+            (sum,x)=>sum+Number(x.amount),
+            0
+        );
+
+
+    let balance =
+        paid +
+        income -
+        expense;
+
+
+    document.getElementById("reportMembers")
+        .innerText = members;
+
+
+    document.getElementById("reportLoan")
+        .innerText = money(loan);
+
+
+    document.getElementById("reportPaid")
+        .innerText = money(paid);
+
+
+    document.getElementById("reportIncome")
+        .innerText = money(income);
+
+
+    document.getElementById("reportExpense")
+        .innerText = money(expense);
+
+
+    document.getElementById("reportBalance")
+        .innerText = money(balance);
+
+
+    updateAdminStatus();
+
+}
+
+
+/* ADMIN STATUS */
+
+function updateAdminStatus(){
+
+    document.getElementById("approved")
+        .innerText =
+        filteredData.filter(
+            x=>x.status==="Approved"
+        ).length;
+
+
+    document.getElementById("pending")
+        .innerText =
+        filteredData.filter(
+            x=>x.status==="Pending"
+        ).length;
+
+
+    document.getElementById("correction")
+        .innerText =
+        filteredData.filter(
+            x=>x.status==="Correction Needed"
+        ).length;
+
+
+    document.getElementById("rejected")
+        .innerText =
+        filteredData.filter(
+            x=>x.status==="Rejected"
+        ).length;
+
+}
+
+
+/* DASHBOARD */
+
+function updateDashboard(){
+
+    let members =
+        reportData.filter(
+            x=>x.type==="Member"
+        ).length;
+
+
+    let loan =
+        reportData
+        .filter(x=>x.type==="Member")
+        .reduce(
+            (sum,x)=>sum+x.amount,
+            0
+        );
+
+
+    let paid =
+        reportData
+        .reduce(
+            (sum,x)=>sum+x.paid,
+            0
+        );
+
+
+    let income =
+        reportData
+        .filter(x=>x.type==="Income")
+        .reduce(
+            (sum,x)=>sum+x.amount,
+            0
+        );
+
+
+    let expense =
+        reportData
+        .filter(x=>x.type==="Expense")
+        .reduce(
+            (sum,x)=>sum+x.amount,
+            0
+        );
+
+
+    let balance =
+        paid +
+        income -
+        expense;
+
+
+    document.getElementById("totalMembers")
+        .innerText = members;
+
+
+    document.getElementById("totalLoan")
+        .innerText = money(loan);
+
+
+    document.getElementById("totalPaid")
+        .innerText = money(paid);
+
+
+    document.getElementById("totalIncome")
+        .innerText = money(income);
+
+
+    document.getElementById("totalExpense")
+        .innerText = money(expense);
+
+
+    document.getElementById("currentBalance")
+        .innerText = money(balance);
+
+}
+
+
+/* DAILY REPORT */
+
+function dailyReport(){
+
+    let today =
+        new Date()
+        .toISOString()
+        .split("T")[0];
+
+
+    document.getElementById("fromDate")
+        .value = today;
+
+    document.getElementById("toDate")
+        .value = today;
+
+
+    generateReport();
+
+}
+
+
+/* MONTHLY REPORT */
+
+function monthlyReport(){
+
+    let date = new Date();
+
+    let year =
+        date.getFullYear();
+
+    let month =
+        String(date.getMonth()+1)
+        .padStart(2,"0");
+
+
+    let firstDay =
+        year + "-" + month + "-01";
+
+
+    let lastDay =
+        new Date(
+            year,
+            date.getMonth()+1,
+            0
+        )
+        .toISOString()
+        .split("T")[0];
+
+
+    document.getElementById("fromDate")
+        .value = firstDay;
+
+    document.getElementById("toDate")
+        .value = lastDay;
+
+
+    generateReport();
+
+}
+
+
+/* YEARLY REPORT */
+
+function yearlyReport(){
+
+    let year =
+        new Date().getFullYear();
+
+
+    document.getElementById("fromDate")
+        .value = year + "-01-01";
+
+
+    document.getElementById("toDate")
+        .value = year + "-12-31";
+
+
+    generateReport();
+
+}
+
+
+/* RESET */
+
+function resetFilter(){
+
+    document.getElementById("branch").value = "";
+
+    document.getElementById("fromDate").value = "";
+
+    document.getElementById("toDate").value = "";
+
+    document.getElementById("search").value = "";
+
+    document.getElementById("reportType").value = "all";
+
+
+    filteredData = [...reportData];
+
+    renderReport();
+
+    updateSummary();
+
+}
+
+
+/* CSV DOWNLOAD */
+
+function downloadCSV(){
+
+    if(filteredData.length === 0){
+
+        alert("No report data to download.");
+
+        return;
+
+    }
+
+
+    let csv =
+        "ID,Date,Type,Member,Branch,Amount,Paid,Status,Created By\n";
+
+
+    filteredData.forEach(item=>{
+
+        csv +=
+            `"${item.id}",` +
+            `"${item.date}",` +
+            `"${item.type}",` +
+            `"${item.member}",` +
+            `"${item.branch}",` +
+            `"${item.amount}",` +
+            `"${item.paid}",` +
+            `"${item.status}",` +
+            `"${item.createdBy}"\n`;
+
+    });
+
+
+    let blob =
+        new Blob(
+            [csv],
+            {type:"text/csv;charset=utf-8;"}
+        );
+
+
+    let url =
+        URL.createObjectURL(blob);
+
+
+    let link =
+        document.createElement("a");
+
+
+    link.href = url;
+
+    link.download =
+        "JUS-FEB-Report.csv";
+
+
+    link.click();
+
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+/* INITIAL */
+
+updateDashboard();
+
+renderReport();
+
+updateSummary();
+
+
+</script>
+
+</body>
+</html>
