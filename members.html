@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JUS-FEB | Members</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+    color:#222;
+}
+
+header{
+    background:#0b5ed7;
+    color:white;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+header h1{
+    font-size:20px;
+}
+
+header small{
+    display:block;
+    margin-top:4px;
+    opacity:.9;
+}
+
+.back{
+    background:white;
+    color:#0b5ed7;
+    border:0;
+    padding:8px 12px;
+    border-radius:7px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:15px;
+}
+
+.title{
+    background:white;
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.title h2{
+    color:#0b5ed7;
+    margin-bottom:5px;
+}
+
+.form-box{
+    background:white;
+    padding:18px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    margin-bottom:20px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:12px;
+}
+
+.field label{
+    display:block;
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:5px;
+}
+
+.field input,
+.field select,
+.field textarea{
+    width:100%;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:7px;
+    outline:none;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+    border-color:#0b5ed7;
+}
+
+.field textarea{
+    resize:vertical;
+    min-height:80px;
+}
+
+.full{
+    grid-column:1/-1;
+}
+
+.buttons{
+    margin-top:15px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.btn{
+    border:0;
+    padding:10px 15px;
+    border-radius:7px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.primary{
+    background:#0b5ed7;
+    color:white;
+}
+
+.success{
+    background:#198754;
+    color:white;
+}
+
+.warning{
+    background:#ffc107;
+    color:#222;
+}
+
+.danger{
+    background:#dc3545;
+    color:white;
+}
+
+.search-box{
+    background:white;
+    padding:15px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    margin-bottom:15px;
+}
+
+.search-box input{
+    width:100%;
+    padding:11px;
+    border:1px solid #ccc;
+    border-radius:7px;
+}
+
+.table-box{
+    background:white;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:850px;
+}
+
+th,td{
+    padding:11px;
+    border-bottom:1px solid #eee;
+    text-align:left;
+    font-size:13px;
+}
+
+th{
+    background:#0b5ed7;
+    color:white;
+}
+
+.status{
+    padding:5px 8px;
+    border-radius:15px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.active{
+    background:#d1e7dd;
+    color:#0f5132;
+}
+
+.pending{
+    background:#fff3cd;
+    color:#664d03;
+}
+
+.action-btn{
+    border:0;
+    padding:6px 8px;
+    border-radius:5px;
+    cursor:pointer;
+    margin:2px;
+}
+
+.view{
+    background:#0dcaf0;
+}
+
+.edit{
+    background:#ffc107;
+}
+
+.remove{
+    background:#dc3545;
+    color:white;
+}
+
+footer{
+    text-align:center;
+    padding:25px;
+    color:#777;
+    font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div>
+        <h1>👥 JUS-FEB Members</h1>
+        <small>Member Management System</small>
+    </div>
+
+    <button class="back" onclick="goDashboard()">🏠 Dashboard</button>
+</header>
+
+<div class="container">
+
+    <div class="title">
+        <h2>👤 Member Management</h2>
+        <p>Create, manage and track member information.</p>
+    </div>
+
+    <!-- MEMBER FORM -->
+
+    <div class="form-box">
+
+        <h3>➕ Create New Member</h3>
+
+        <br>
+
+        <div class="form-grid">
+
+            <div class="field">
+                <label>Member ID</label>
+                <input type="text" id="memberId" placeholder="Auto / Manual ID">
+            </div>
+
+            <div class="field">
+                <label>Member Name</label>
+                <input type="text" id="memberName" placeholder="Enter member name">
+            </div>
+
+            <div class="field">
+                <label>NID Number</label>
+                <input type="text" id="nid" placeholder="Enter NID number">
+            </div>
+
+            <div class="field">
+                <label>Mobile Number</label>
+                <input type="tel" id="mobile" placeholder="01XXXXXXXXX">
+            </div>
+
+            <div class="field">
+                <label>Date of Birth</label>
+                <input type="date" id="dob">
+            </div>
+
+            <div class="field">
+                <label>Gender</label>
+                <select id="gender">
+                    <option value="">Select Gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Branch</label>
+                <select id="branch">
+                    <option value="">Select Branch</option>
+                    <option>Main Branch</option>
+                    <option>Branch 01</option>
+                    <option>Branch 02</option>
+                    <option>Branch 03</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Member Type</label>
+                <select id="memberType">
+                    <option value="">Select Type</option>
+                    <option>General Member</option>
+                    <option>Customer</option>
+                    <option>Borrower</option>
+                    <option>Business Member</option>
+                    <option>Other</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Initial Deposit</label>
+                <input type="number" id="deposit" placeholder="0.00">
+            </div>
+
+            <div class="field">
+                <label>Initial Loan</label>
+                <input type="number" id="loan" placeholder="0.00">
+            </div>
+
+            <div class="field">
+                <label>Interest Rate (%)</label>
+                <input type="number" id="interest" placeholder="0">
+            </div>
+
+            <div class="field">
+                <label>Service Charge</label>
+                <input type="number" id="serviceCharge" placeholder="0.00">
+            </div>
+
+            <div class="field full">
+                <label>Address</label>
+                <textarea id="address" placeholder="Enter full address"></textarea>
+            </div>
+
+        </div>
+
+        <div class="buttons">
+            <button class="btn primary" onclick="saveMember()">💾 Save Member</button>
+            <button class="btn success" onclick="clearForm()">🔄 Reset</button>
+        </div>
+
+    </div>
+
+    <!-- SEARCH -->
+
+    <div class="search-box">
+        <h3>🔍 Search Members</h3>
+        <br>
+        <input
+            type="text"
+            id="search"
+            placeholder="Search by Member ID, Name, NID or Mobile..."
+            onkeyup="searchMembers()"
+        >
+    </div>
+
+    <!-- MEMBER TABLE -->
+
+    <div class="table-box">
+
+        <table id="memberTable">
+
+            <thead>
+                <tr>
+                    <th>Member ID</th>
+                    <th>Name</th>
+                    <th>NID</th>
+                    <th>Mobile</th>
+                    <th>Branch</th>
+                    <th>Deposit</th>
+                    <th>Loan</th>
+                    <th>Due</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="memberList">
+
+                <tr>
+                    <td>M-0001</td>
+                    <td>Demo Member</td>
+                    <td>0000000000</td>
+                    <td>01000000000</td>
+                    <td>Main Branch</td>
+                    <td>৳ 0</td>
+                    <td>৳ 0</td>
+                    <td>৳ 0</td>
+                    <td>
+                        <span class="status active">Active</span>
+                    </td>
+                    <td>
+                        <button class="action-btn view" onclick="viewMember('M-0001')">👁️</button>
+                        <button class="action-btn edit" onclick="editMember('M-0001')">✏️</button>
+                        <button class="action-btn remove" onclick="removeMember('M-0001')">🗑️</button>
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<footer>
+    JUS-FEB Management & Accounting System<br>
+    Janakalyan Unnayan Sohayok - (JUS)
+</footer>
+
+<script>
+
+function goDashboard(){
+    window.location.href = "dashboard.html";
+}
+
+function saveMember(){
+
+    const name = document.getElementById("memberName").value.trim();
+    const nid = document.getElementById("nid").value.trim();
+    const mobile = document.getElementById("mobile").value.trim();
+
+    if(name === ""){
+        alert("Please enter Member Name.");
+        return;
+    }
+
+    if(nid === ""){
+        alert("Please enter NID Number.");
+        return;
+    }
+
+    if(mobile === ""){
+        alert("Please enter Mobile Number.");
+        return;
+    }
+
+    alert("Member saved successfully.");
+
+    clearForm();
+}
+
+function clearForm(){
+
+    document.querySelectorAll(
+        "input, textarea, select"
+    ).forEach(function(element){
+
+        if(element.id !== "search"){
+            element.value = "";
+        }
+
+    });
+}
+
+function searchMembers(){
+
+    const input =
+        document.getElementById("search").value.toLowerCase();
+
+    const rows =
+        document.querySelectorAll("#memberList tr");
+
+    rows.forEach(function(row){
+
+        const text =
+            row.innerText.toLowerCase();
+
+        row.style.display =
+            text.includes(input) ? "" : "none";
+
+    });
+}
+
+function viewMember(id){
+
+    alert(
+        "👁️ Member Profile\\n\\n" +
+        "Member ID: " + id +
+        "\\n\\nDetailed Member Statement will be connected later."
+    );
+}
+
+function editMember(id){
+
+    alert(
+        "✏️ Edit Member\\n\\n" +
+        "Member ID: " + id +
+        "\\n\\nAdmin correction and editing system will be connected later."
+    );
+}
+
+function removeMember(id){
+
+    const confirmDelete =
+        confirm(
+            "Are you sure you want to remove Member " +
+            id + "?"
+        );
+
+    if(confirmDelete){
+
+        alert(
+            "🗑️ Member removal request created.\\n\\n" +
+            "Final removal will require Admin permission."
+        );
+
+    }
+}
+
+</script>
+
+</body>
+</html>
