@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>JUS-FEB Accounting Management</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+    color:#222;
+}
+
+.header{
+    background:linear-gradient(135deg,#0d6efd,#084298);
+    color:white;
+    padding:22px 15px;
+    text-align:center;
+}
+
+.header h1{
+    font-size:25px;
+    margin-bottom:6px;
+}
+
+.header p{
+    font-size:14px;
+    opacity:.9;
+}
+
+.container{
+    width:95%;
+    max-width:1200px;
+    margin:20px auto;
+}
+
+.actions{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.actions button{
+    border:none;
+    padding:13px 8px;
+    border-radius:8px;
+    background:white;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.actions button:hover{
+    background:#eaf2ff;
+}
+
+.dashboard{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.card{
+    background:white;
+    padding:18px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.card h3{
+    font-size:14px;
+    color:#666;
+    margin-bottom:8px;
+}
+
+.card strong{
+    font-size:24px;
+}
+
+.section{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    margin-bottom:20px;
+}
+
+.section h2{
+    margin-bottom:15px;
+    color:#084298;
+    font-size:20px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:12px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.form-group label{
+    font-weight:bold;
+    margin-bottom:5px;
+    font-size:14px;
+}
+
+input,select,textarea{
+    padding:11px;
+    border:1px solid #ccc;
+    border-radius:7px;
+    outline:none;
+}
+
+input:focus,select:focus,textarea:focus{
+    border-color:#0d6efd;
+}
+
+textarea{
+    min-height:80px;
+    resize:vertical;
+}
+
+.full{
+    grid-column:1/-1;
+}
+
+.btn{
+    border:none;
+    padding:11px 16px;
+    border-radius:7px;
+    cursor:pointer;
+    font-weight:bold;
+    margin:5px 3px 0 0;
+}
+
+.btn-primary{
+    background:#0d6efd;
+    color:white;
+}
+
+.btn-success{
+    background:#198754;
+    color:white;
+}
+
+.btn-warning{
+    background:#ffc107;
+    color:#111;
+}
+
+.btn-danger{
+    background:#dc3545;
+    color:white;
+}
+
+.btn-info{
+    background:#0dcaf0;
+    color:#111;
+}
+
+.btn-dark{
+    background:#212529;
+    color:white;
+}
+
+.search-box{
+    display:flex;
+    gap:8px;
+    margin-bottom:15px;
+}
+
+.search-box input{
+    flex:1;
+}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:1050px;
+}
+
+th,td{
+    padding:10px;
+    border-bottom:1px solid #ddd;
+    text-align:left;
+    font-size:13px;
+}
+
+th{
+    background:#084298;
+    color:white;
+}
+
+.status{
+    padding:5px 8px;
+    border-radius:15px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.pending{
+    background:#fff3cd;
+    color:#856404;
+}
+
+.approved{
+    background:#d1e7dd;
+    color:#0f5132;
+}
+
+.rejected{
+    background:#f8d7da;
+    color:#842029;
+}
+
+.correction{
+    background:#cff4fc;
+    color:#055160;
+}
+
+.report-box{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:12px;
+}
+
+.report{
+    background:#f8f9fa;
+    padding:15px;
+    border-left:5px solid #0d6efd;
+    border-radius:7px;
+}
+
+.report h3{
+    font-size:14px;
+    margin-bottom:6px;
+}
+
+.report strong{
+    font-size:20px;
+}
+
+.footer{
+    text-align:center;
+    padding:25px;
+    color:#777;
+    font-size:13px;
+}
+
+@media(max-width:600px){
+    .header h1{
+        font-size:20px;
+    }
+
+    .section{
+        padding:14px;
+    }
+
+    .search-box{
+        flex-direction:column;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>📊 JUS-FEB Accounting Management</h1>
+    <p>Janakalyan Unnayan Sohayok - (JUS) | Family Enterprise Business - (FEB)</p>
+</div>
+
+<div class="container">
+
+<!-- QUICK ACTIONS -->
+<div class="actions">
+    <button onclick="newTransaction()">➕ New Transaction</button>
+    <button onclick="showDailyReport()">📊 Daily হিসাব</button>
+    <button onclick="showMonthlyReport()">📅 Monthly হিসাব</button>
+    <button onclick="window.print()">🖨️ Print</button>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard">
+
+    <div class="card">
+        <h3>💰 Total Cash In</h3>
+        <strong id="cashIn">৳ 0.00</strong>
+    </div>
+
+    <div class="card">
+        <h3>💸 Total Cash Out</h3>
+        <strong id="cashOut">৳ 0.00</strong>
+    </div>
+
+    <div class="card">
+        <h3>📥 Total Income</h3>
+        <strong id="income">৳ 0.00</strong>
+    </div>
+
+    <div class="card">
+        <h3>📤 Total Expense</h3>
+        <strong id="expense">৳ 0.00</strong>
+    </div>
+
+    <div class="card">
+        <h3>🏦 Branch Fund</h3>
+        <strong id="branchFund">৳ 0.00</strong>
+    </div>
+
+    <div class="card">
+        <h3>💵 Current Balance</h3>
+        <strong id="balance">৳ 0.00</strong>
+    </div>
+
+</div>
+
+<!-- TRANSACTION ENTRY -->
+<div class="section" id="transactionSection">
+
+    <h2>🧾 Transaction Entry</h2>
+
+    <form id="transactionForm">
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Transaction ID</label>
+                <input type="text" id="transactionId" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Branch</label>
+                <select id="branch" required>
+                    <option value="">Select Branch</option>
+                    <option>Main Branch</option>
+                    <option>Branch-01</option>
+                    <option>Branch-02</option>
+                    <option>Branch-03</option>
+                    <option>Branch-04</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Transaction Type</label>
+                <select id="type" required>
+                    <option value="">Select Type</option>
+                    <option value="Cash In">💰 Cash In</option>
+                    <option value="Cash Out">💸 Cash Out</option>
+                    <option value="Income">📥 Income</option>
+                    <option value="Expense">📤 Expense</option>
+                    <option value="Branch Fund">🏦 Branch Fund</option>
+                    <option value="Branch Cash">💵 Branch Cash</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Category</label>
+                <select id="category">
+                    <option>General</option>
+                    <option>Member Payment</option>
+                    <option>Loan</option>
+                    <option>Service Charge</option>
+                    <option>Interest</option>
+                    <option>Office Expense</option>
+                    <option>Salary</option>
+                    <option>Transport</option>
+                    <option>Electricity</option>
+                    <option>Internet</option>
+                    <option>Branch Fund</option>
+                    <option>Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Amount (৳)</label>
+                <input type="number" id="amount" min="0" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" id="date" required>
+            </div>
+
+            <div class="form-group">
+                <label>Created By</label>
+                <input type="text" id="createdBy" placeholder="User/Admin" required>
+            </div>
+
+            <div class="form-group">
+                <label>Reference</label>
+                <input type="text" id="reference" placeholder="Reference Number">
+            </div>
+
+            <div class="form-group full">
+                <label>Description</label>
+                <textarea id="description" placeholder="Transaction details..."></textarea>
+            </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            💾 Save Transaction
+        </button>
+
+        <button type="button" class="btn btn-dark" onclick="resetForm()">
+            🔄 Reset
+        </button>
+
+    </form>
+
+</div>
+
+<!-- SEARCH -->
+<div class="section">
+
+    <h2>🔍 Search Transaction</h2>
+
+    <div class="search-box">
+        <input
+            type="text"
+            id="search"
+            placeholder="Search by ID, branch, category, type..."
+            onkeyup="searchTransactions()"
+        >
+        <button class="btn btn-info" onclick="searchTransactions()">
+            🔍 Search
+        </button>
+    </div>
+
+</div>
+
+<!-- TRANSACTION HISTORY -->
+<div class="section">
+
+    <h2>📋 Transaction History</h2>
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date & Time</th>
+                    <th>Branch</th>
+                    <th>Type</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Description</th>
+                    <th>Created By</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="transactionTable"></tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- ADMIN REVIEW -->
+<div class="section">
+
+    <h2>👑 Admin Review</h2>
+
+    <button class="btn btn-success" onclick="approveSelected()">
+        ✅ Approve
+    </button>
+
+    <button class="btn btn-info" onclick="correctionSelected()">
+        ✏️ Correction Needed
+    </button>
+
+    <button class="btn btn-danger" onclick="rejectSelected()">
+        ❌ Reject
+    </button>
+
+    <p style="margin-top:10px;color:#666;">
+        Branch users can submit transactions to Admin.
+        Admin can review, correct, approve or reject postings.
+    </p>
+
+</div>
+
+<!-- REPORT -->
+<div class="section">
+
+    <h2>📊 Accounting Report</h2>
+
+    <div class="report-box">
+
+        <div class="report">
+            <h3>Total Transactions</h3>
+            <strong id="totalTransactions">0</strong>
+        </div>
+
+        <div class="report">
+            <h3>Approved</h3>
+            <strong id="approvedTransactions">0</strong>
+        </div>
+
+        <div class="report">
+            <h3>Pending</h3>
+            <strong id="pendingTransactions">0</strong>
+        </div>
+
+        <div class="report">
+            <h3>Rejected</h3>
+            <strong id="rejectedTransactions">0</strong>
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+<div class="footer">
+    © 2026 JUS-FEB Management & Accounting System
+</div>
+
+<script>
+
+let transactions = [];
+
+let transactionCounter = 1001;
+
+let selectedTransaction = null;
+
+
+/* DATE */
+document.getElementById("date").value =
+    new Date().toISOString().split("T")[0];
+
+
+/* NEW TRANSACTION */
+function newTransaction(){
+
+    document.getElementById("transactionSection")
+        .scrollIntoView({behavior:"smooth"});
+
+    resetForm();
+
+}
+
+
+/* GENERATE ID */
+function generateID(){
+
+    return "TXN-" + transactionCounter++;
+
+}
+
+
+/* RESET */
+function resetForm(){
+
+    document.getElementById("transactionForm").reset();
+
+    document.getElementById("transactionId").value =
+        generateID();
+
+    document.getElementById("date").value =
+        new Date().toISOString().split("T")[0];
+
+}
+
+
+/* SAVE TRANSACTION */
+document.getElementById("transactionForm")
+.addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    let transaction = {
+
+        id:document.getElementById("transactionId").value,
+
+        branch:document.getElementById("branch").value,
+
+        type:document.getElementById("type").value,
+
+        category:document.getElementById("category").value,
+
+        amount:Number(document.getElementById("amount").value),
+
+        date:document.getElementById("date").value,
+
+        createdBy:document.getElementById("createdBy").value,
+
+        reference:document.getElementById("reference").value,
+
+        description:document.getElementById("description").value,
+
+        status:"Pending",
+
+        createdAt:new Date().toLocaleString()
+
+    };
+
+    transactions.push(transaction);
+
+    alert("✅ Transaction Saved Successfully");
+
+    renderTransactions();
+
+    updateDashboard();
+
+    resetForm();
+
+});
+
+
+/* RENDER TABLE */
+function renderTransactions(data = transactions){
+
+    let table = document.getElementById("transactionTable");
+
+    table.innerHTML = "";
+
+    data.forEach((t,index)=>{
+
+        let statusClass =
+            t.status === "Approved" ? "approved" :
+            t.status === "Rejected" ? "rejected" :
+            t.status === "Correction Needed" ? "correction" :
+            "pending";
+
+        table.innerHTML += `
+
+        <tr>
+
+            <td>${t.id}</td>
+
+            <td>${t.createdAt}</td>
+
+            <td>${t.branch}</td>
+
+            <td>${t.type}</td>
+
+            <td>${t.category}</td>
+
+            <td>৳ ${t.amount.toFixed(2)}</td>
+
+            <td>${t.description || "-"}</td>
+
+            <td>${t.createdBy}</td>
+
+            <td>
+                <span class="status ${statusClass}">
+                    ${t.status}
+                </span>
+            </td>
+
+            <td>
+
+                <button
+                    class="btn btn-info"
+                    onclick="selectTransaction(${index})">
+                    Select
+                </button>
+
+                <button
+                    class="btn btn-warning"
+                    onclick="editTransaction(${index})">
+                    Edit
+                </button>
+
+                <button
+                    class="btn btn-danger"
+                    onclick="deleteTransaction(${index})">
+                    Delete
+                </button>
+
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+    updateReport();
+
+}
+
+
+/* SELECT */
+function selectTransaction(index){
+
+    selectedTransaction = index;
+
+    alert(
+        "Selected Transaction: " +
+        transactions[index].id
+    );
+
+}
+
+
+/* EDIT */
+function editTransaction(index){
+
+    let t = transactions[index];
+
+    document.getElementById("transactionId").value = t.id;
+    document.getElementById("branch").value = t.branch;
+    document.getElementById("type").value = t.type;
+    document.getElementById("category").value = t.category;
+    document.getElementById("amount").value = t.amount;
+    document.getElementById("date").value = t.date;
+    document.getElementById("createdBy").value = t.createdBy;
+    document.getElementById("reference").value = t.reference;
+    document.getElementById("description").value = t.description;
+
+    transactions.splice(index,1);
+
+    document.getElementById("transactionSection")
+        .scrollIntoView({behavior:"smooth"});
+
+}
+
+
+/* DELETE */
+function deleteTransaction(index){
+
+    if(confirm("Delete this transaction?")){
+
+        transactions.splice(index,1);
+
+        renderTransactions();
+
+        updateDashboard();
+
+    }
+
+}
+
+
+/* SEARCH */
+function searchTransactions(){
+
+    let keyword =
+        document.getElementById("search")
+        .value.toLowerCase();
+
+    let filtered = transactions.filter(t =>
+
+        t.id.toLowerCase().includes(keyword) ||
+
+        t.branch.toLowerCase().includes(keyword) ||
+
+        t.type.toLowerCase().includes(keyword) ||
+
+        t.category.toLowerCase().includes(keyword) ||
+
+        t.createdBy.toLowerCase().includes(keyword)
+
+    );
+
+    renderTransactions(filtered);
+
+}
+
+
+/* ADMIN APPROVE */
+function approveSelected(){
+
+    if(selectedTransaction === null){
+
+        alert("⚠️ Select a transaction first.");
+
+        return;
+
+    }
+
+    transactions[selectedTransaction].status =
+        "Approved";
+
+    alert("✅ Transaction Approved");
+
+    renderTransactions();
+
+    selectedTransaction = null;
+
+}
+
+
+/* CORRECTION */
+function correctionSelected(){
+
+    if(selectedTransaction === null){
+
+        alert("⚠️ Select a transaction first.");
+
+        return;
+
+    }
+
+    transactions[selectedTransaction].status =
+        "Correction Needed";
+
+    alert("✏️ Correction Needed");
+
+    renderTransactions();
+
+    selectedTransaction = null;
+
+}
+
+
+/* REJECT */
+function rejectSelected(){
+
+    if(selectedTransaction === null){
+
+        alert("⚠️ Select a transaction first.");
+
+        return;
+
+    }
+
+    transactions[selectedTransaction].status =
+        "Rejected";
+
+    alert("❌ Transaction Rejected");
+
+    renderTransactions();
+
+    selectedTransaction = null;
+
+}
+
+
+/* DASHBOARD */
+function updateDashboard(){
+
+    let cashIn = 0;
+    let cashOut = 0;
+    let income = 0;
+    let expense = 0;
+    let branchFund = 0;
+
+    transactions.forEach(t=>{
+
+        if(t.type === "Cash In")
+            cashIn += t.amount;
+
+        if(t.type === "Cash Out")
+            cashOut += t.amount;
+
+        if(t.type === "Income")
+            income += t.amount;
+
+        if(t.type === "Expense")
+            expense += t.amount;
+
+        if(t.type === "Branch Fund")
+            branchFund += t.amount;
+
+    });
+
+
+    let balance =
+        cashIn +
+        income +
+        branchFund -
+        cashOut -
+        expense;
+
+
+    document.getElementById("cashIn").innerText =
+        "৳ " + cashIn.toFixed(2);
+
+    document.getElementById("cashOut").innerText =
+        "৳ " + cashOut.toFixed(2);
+
+    document.getElementById("income").innerText =
+        "৳ " + income.toFixed(2);
+
+    document.getElementById("expense").innerText =
+        "৳ " + expense.toFixed(2);
+
+    document.getElementById("branchFund").innerText =
+        "৳ " + branchFund.toFixed(2);
+
+    document.getElementById("balance").innerText =
+        "৳ " + balance.toFixed(2);
+
+}
+
+
+/* REPORT */
+function updateReport(){
+
+    document.getElementById("totalTransactions")
+        .innerText = transactions.length;
+
+    document.getElementById("approvedTransactions")
+        .innerText =
+        transactions.filter(t=>t.status==="Approved").length;
+
+    document.getElementById("pendingTransactions")
+        .innerText =
+        transactions.filter(t=>t.status==="Pending").length;
+
+    document.getElementById("rejectedTransactions")
+        .innerText =
+        transactions.filter(t=>t.status==="Rejected").length;
+
+}
+
+
+/* DAILY REPORT */
+function showDailyReport(){
+
+    let today =
+        new Date().toISOString().split("T")[0];
+
+    let todayData =
+        transactions.filter(t=>t.date===today);
+
+    let total =
+        todayData.reduce((sum,t)=>sum+t.amount,0);
+
+    alert(
+        "📊 DAILY ACCOUNTING REPORT\n\n" +
+        "Date: " + today + "\n" +
+        "Transactions: " + todayData.length + "\n" +
+        "Total Amount: ৳ " + total.toFixed(2)
+    );
+
+}
+
+
+/* MONTHLY REPORT */
+function showMonthlyReport(){
+
+    let month =
+        new Date().toISOString().slice(0,7);
+
+    let monthly =
+        transactions.filter(t=>t.date.startsWith(month));
+
+    let total =
+        monthly.reduce((sum,t)=>sum+t.amount,0);
+
+    alert(
+        "📅 MONTHLY ACCOUNTING REPORT\n\n" +
+        "Month: " + month + "\n" +
+        "Transactions: " + monthly.length + "\n" +
+        "Total Amount: ৳ " + total.toFixed(2)
+    );
+
+}
+
+
+/* INITIAL */
+resetForm();
+
+renderTransactions();
+
+updateDashboard();
+
+</script>
+
+</body>
+</html>
