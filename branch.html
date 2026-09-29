@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Branch Management - JUS-FEB</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    header {
+      background: #0b5ed7;
+      color: white;
+      padding: 18px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 24px;
+    }
+
+    header p {
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1200px;
+      margin: 20px auto;
+    }
+
+    .top-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      border: none;
+      padding: 13px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .primary {
+      background: #0b5ed7;
+      color: white;
+    }
+
+    .success {
+      background: #198754;
+      color: white;
+    }
+
+    .warning {
+      background: #ffc107;
+      color: #000;
+    }
+
+    .danger {
+      background: #dc3545;
+      color: white;
+    }
+
+    .dark {
+      background: #212529;
+      color: white;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .card {
+      background: white;
+      padding: 18px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .card h3 {
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .section {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .section h2 {
+      margin-bottom: 15px;
+      color: #0b5ed7;
+      font-size: 19px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #0b5ed7;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 850px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid #ddd;
+      padding: 11px;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    th {
+      background: #eef4ff;
+      color: #333;
+    }
+
+    .status {
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .approved {
+      background: #d1e7dd;
+      color: #0f5132;
+    }
+
+    .correction {
+      background: #f8d7da;
+      color: #842029;
+    }
+
+    .rejected {
+      background: #dc3545;
+      color: white;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      color: #777;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 20px;
+      }
+
+      .container {
+        width: 93%;
+      }
+
+      .section {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🏢 JUS-FEB Branch Management</h1>
+  <p>Janakalyan Unnayan Sohayok - (JUS)</p>
+  <p>Family Enterprise Business - (FEB)</p>
+</header>
+
+<div class="container">
+
+  <!-- Quick Actions -->
+  <div class="top-actions">
+    <button class="primary" onclick="showCreateBranch()">➕ Create Branch</button>
+    <button class="primary" onclick="showBranchUsers()">👤 Branch User</button>
+    <button class="dark" onclick="showPermissions()">🔐 User Permission</button>
+    <button class="success" onclick="showPosting()">📋 Branch Posting</button>
+    <button class="warning" onclick="submitToAdmin()">📤 Submit to Admin</button>
+    <button class="dark" onclick="adminReview()">👑 Admin Review</button>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="card-grid">
+
+    <div class="card">
+      <h3>🏢 Total Branch</h3>
+      <p id="totalBranch">0</p>
+    </div>
+
+    <div class="card">
+      <h3>👤 Branch Users</h3>
+      <p id="totalUsers">0</p>
+    </div>
+
+    <div class="card">
+      <h3>🏦 Branch Fund</h3>
+      <p>৳ <span id="branchFund">0</span></p>
+    </div>
+
+    <div class="card">
+      <h3>💰 Branch Cash</h3>
+      <p>৳ <span id="branchCash">0</span></p>
+    </div>
+
+    <div class="card">
+      <h3>📋 Pending Posting</h3>
+      <p id="pendingPosting">0</p>
+    </div>
+
+    <div class="card">
+      <h3>✅ Approved</h3>
+      <p id="approvedPosting">0</p>
+    </div>
+
+  </div>
+
+  <!-- Create Branch -->
+  <div class="section" id="createBranchSection">
+    <h2>➕ Create Branch</h2>
+
+    <div class="form-grid">
+
+      <input type="text" id="branchName" placeholder="Branch Name">
+
+      <input type="text" id="branchCode" placeholder="Branch Code">
+
+      <input type="text" id="branchLocation" placeholder="Branch Location">
+
+      <input type="text" id="branchManager" placeholder="Branch Manager">
+
+      <input type="text" id="branchPhone" placeholder="Branch Phone">
+
+      <button class="success" onclick="createBranch()">
+        Create Branch
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Branch User -->
+  <div class="section">
+    <h2>👤 Branch User</h2>
+
+    <div class="form-grid">
+
+      <input type="text" id="userName" placeholder="User Name">
+
+      <input type="text" id="userID" placeholder="User ID">
+
+      <input type="text" id="userPhone" placeholder="Phone Number">
+
+      <select id="userBranch">
+        <option value="">Select Branch</option>
+      </select>
+
+      <select id="userRole">
+        <option value="">Select Role</option>
+        <option>Branch Manager</option>
+        <option>Account User</option>
+        <option>Posting User</option>
+        <option>Data Entry User</option>
+      </select>
+
+      <button class="primary" onclick="createUser()">
+        Create User
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Permission -->
+  <div class="section">
+    <h2>🔐 User Permission</h2>
+
+    <div class="form-grid">
+
+      <select id="permissionUser">
+        <option value="">Select User</option>
+      </select>
+
+      <label>
+        <input type="checkbox" id="postingPermission">
+        📋 Branch Posting
+      </label>
+
+      <label>
+        <input type="checkbox" id="editPermission">
+        ✏️ Edit Posting
+      </label>
+
+      <label>
+        <input type="checkbox" id="reportPermission">
+        📊 View Report
+      </label>
+
+      <label>
+        <input type="checkbox" id="fundPermission">
+        🏦 Branch Fund
+      </label>
+
+      <button class="success" onclick="savePermission()">
+        Save Permission
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Branch Posting -->
+  <div class="section">
+    <h2>📋 Branch Posting</h2>
+
+    <div class="form-grid">
+
+      <input type="text" id="memberName" placeholder="Member Name">
+
+      <input type="text" id="memberNID" placeholder="NID Number">
+
+      <input type="number" id="originalAmount" placeholder="Original Amount">
+
+      <input type="number" id="serviceCharge" placeholder="Service Charge">
+
+      <input type="number" id="interest" placeholder="Interest">
+
+      <input type="number" id="paidAmount" placeholder="Paid Amount">
+
+      <input type="number" id="cashAmount" placeholder="Cash Amount">
+
+      <button class="primary" onclick="createPosting()">
+        Create Posting
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Admin Review -->
+  <div class="section">
+    <h2>👑 Admin Review</h2>
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Date & Time</th>
+            <th>Branch</th>
+            <th>Member</th>
+            <th>NID</th>
+            <th>Original</th>
+            <th>Paid</th>
+            <th>Created By</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody id="postingTable">
+
+          <tr>
+            <td colspan="9" style="text-align:center;">
+              No posting available
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+  </div>
+
+  <!-- Branch Fund & Cash -->
+  <div class="section">
+
+    <h2>🏦 Branch Fund & 💰 Branch Cash</h2>
+
+    <div class="form-grid">
+
+      <input type="number" id="fundInput" placeholder="Add Branch Fund">
+
+      <button class="success" onclick="addFund()">
+        Add Fund
+      </button>
+
+      <input type="number" id="cashInput" placeholder="Add Branch Cash">
+
+      <button class="success" onclick="addCash()">
+        Add Cash
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- Branch Report -->
+  <div class="section">
+
+    <h2>📊 Branch Report</h2>
+
+    <div class="form-grid">
+
+      <button class="primary" onclick="branchReport()">
+        📊 Branch Report
+      </button>
+
+      <button class="dark" onclick="postingHistory()">
+        📜 Posting History
+      </button>
+
+      <button class="warning" onclick="window.print()">
+        🖨️ Print Report
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="footer">
+  JUS-FEB Management & Accounting System
+  <br>
+  Janakalyan Unnayan Sohayok - (JUS)
+</div>
+
+<script>
+
+  let branches = [];
+  let users = [];
+  let postings = [];
+
+  let fund = 0;
+  let cash = 0;
+
+  // Create Branch
+  function createBranch() {
+
+    const name = document.getElementById("branchName").value;
+    const code = document.getElementById("branchCode").value;
+    const location = document.getElementById("branchLocation").value;
+    const manager = document.getElementById("branchManager").value;
+    const phone = document.getElementById("branchPhone").value;
+
+    if (!name || !code) {
+      alert("Please enter Branch Name and Branch Code.");
+      return;
+    }
+
+    branches.push({
+      name,
+      code,
+      location,
+      manager,
+      phone,
+      createdAt: new Date().toLocaleString()
+    });
+
+    document.getElementById("totalBranch").innerText = branches.length;
+
+    updateBranchList();
+
+    alert("Branch created successfully.");
+
+    document.getElementById("branchName").value = "";
+    document.getElementById("branchCode").value = "";
+    document.getElementById("branchLocation").value = "";
+    document.getElementById("branchManager").value = "";
+    document.getElementById("branchPhone").value = "";
+  }
+
+  // Update Branch List
+  function updateBranchList() {
+
+    const select = document.getElementById("userBranch");
+
+    select.innerHTML = '<option value="">Select Branch</option>';
+
+    branches.forEach(branch => {
+
+      const option = document.createElement("option");
+
+      option.value = branch.code;
+      option.textContent = branch.name + " (" + branch.code + ")";
+
+      select.appendChild(option);
+
+    });
+
+  }
+
+  // Create User
+  function createUser() {
+
+    const name = document.getElementById("userName").value;
+    const id = document.getElementById("userID").value;
+    const phone = document.getElementById("userPhone").value;
+    const branch = document.getElementById("userBranch").value;
+    const role = document.getElementById("userRole").value;
+
+    if (!name || !id || !branch) {
+      alert("Please complete user information.");
+      return;
+    }
+
+    users.push({
+      name,
+      id,
+      phone,
+      branch,
+      role,
+      createdAt: new Date().toLocaleString()
+    });
+
+    document.getElementById("totalUsers").innerText = users.length;
+
+    alert("Branch user created successfully.");
+
+    document.getElementById("userName").value = "";
+    document.getElementById("userID").value = "";
+    document.getElementById("userPhone").value = "";
+  }
+
+  // Permission
+  function savePermission() {
+
+    alert("User permission saved successfully.");
+
+  }
+
+  // Create Posting
+  function createPosting() {
+
+    const member = document.getElementById("memberName").value;
+    const nid = document.getElementById("memberNID").value;
+    const original = Number(document.getElementById("originalAmount").value || 0);
+    const service = Number(document.getElementById("serviceCharge").value || 0);
+    const interest = Number(document.getElementById("interest").value || 0);
+    const paid = Number(document.getElementById("paidAmount").value || 0);
+
+    if (!member) {
+      alert("Please enter Member Name.");
+      return;
+    }
+
+    const posting = {
+
+      date: new Date().toLocaleString(),
+
+      branch:
+        branches.length > 0
+          ? branches[0].name
+          : "Main Branch",
+
+      member: member,
+
+      nid: nid,
+
+      original: original,
+
+      service: service,
+
+      interest: interest,
+
+      paid: paid,
+
+      createdBy: "Branch User",
+
+      status: "Pending"
+
+    };
+
+    postings.push(posting);
+
+    updatePostingTable();
+
+    document.getElementById("pendingPosting").innerText =
+      postings.filter(p => p.status === "Pending").length;
+
+    alert("Posting created and ready for Admin submission.");
+
+  }
+
+  // Posting Table
+  function updatePostingTable() {
+
+    const table = document.getElementById("postingTable");
+
+    table.innerHTML = "";
+
+    if (postings.length === 0) {
+
+      table.innerHTML =
+        '<tr><td colspan="9" style="text-align:center;">No posting available</td></tr>';
+
+      return;
+    }
+
+    postings.forEach((p, index) => {
+
+      let statusClass = "pending";
+
+      if (p.status === "Approved") {
+        statusClass = "approved";
+      }
+
+      if (p.status === "Correction Needed") {
+        statusClass = "correction";
+      }
+
+      if (p.status === "Rejected") {
+        statusClass = "rejected";
+      }
+
+      table.innerHTML += `
+
+        <tr>
+
+          <td>${p.date}</td>
+
+          <td>${p.branch}</td>
+
+          <td>${p.member}</td>
+
+          <td>${p.nid}</td>
+
+          <td>৳ ${p.original}</td>
+
+          <td>৳ ${p.paid}</td>
+
+          <td>${p.createdBy}</td>
+
+          <td>
+            <span class="status ${statusClass}">
+              ${p.status}
+            </span>
+          </td>
+
+          <td>
+
+            <button class="success"
+              onclick="approvePosting(${index})">
+              ✅ Approve
+            </button>
+
+            <button class="warning"
+              onclick="correctionPosting(${index})">
+              ✏️ Correction
+            </button>
+
+            <button class="danger"
+              onclick="rejectPosting(${index})">
+              ❌ Reject
+            </button>
+
+          </td>
+
+        </tr>
+
+      `;
+
+    });
+
+  }
+
+  // Approve
+  function approvePosting(index) {
+
+    postings[index].status = "Approved";
+
+    updatePostingTable();
+
+    updateCounters();
+
+    alert("Posting approved.");
+
+  }
+
+  // Correction
+  function correctionPosting(index) {
+
+    postings[index].status = "Correction Needed";
+
+    updatePostingTable();
+
+    updateCounters();
+
+    alert("Correction requested.");
+
+  }
+
+  // Reject
+  function rejectPosting(index) {
+
+    postings[index].status = "Rejected";
+
+    updatePostingTable();
+
+    updateCounters();
+
+    alert("Posting rejected.");
+
+  }
+
+  // Counters
+  function updateCounters() {
+
+    document.getElementById("pendingPosting").innerText =
+      postings.filter(p => p.status === "Pending").length;
+
+    document.getElementById("approvedPosting").innerText =
+      postings.filter(p => p.status === "Approved").length;
+
+  }
+
+  // Fund
+  function addFund() {
+
+    const amount =
+      Number(document.getElementById("fundInput").value || 0);
+
+    fund += amount;
+
+    document.getElementById("branchFund").innerText =
+      fund.toLocaleString();
+
+    document.getElementById("fundInput").value = "";
+
+  }
+
+  // Cash
+  function addCash() {
+
+    const amount =
+      Number(document.getElementById("cashInput").value || 0);
+
+    cash += amount;
+
+    document.getElementById("branchCash").innerText =
+      cash.toLocaleString();
+
+    document.getElementById("cashInput").value = "";
+
+  }
+
+  // Submit
+  function submitToAdmin() {
+
+    alert("Posting submitted to Admin for review.");
+
+  }
+
+  // Admin Review
+  function adminReview() {
+
+    document
+      .getElementById("postingTable")
+      .scrollIntoView({
+        behavior: "smooth"
+      });
+
+  }
+
+  // Branch Report
+  function branchReport() {
+
+    alert(
+      "Branch Report\n\n" +
+      "Total Branch: " + branches.length + "\n" +
+      "Total Users: " + users.length + "\n" +
+      "Branch Fund: ৳ " + fund + "\n" +
+      "Branch Cash: ৳ " + cash + "\
