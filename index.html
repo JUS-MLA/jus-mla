@@ -815,3 +815,471 @@ function loadJUSData(){
         if(
             savedPayments &&
             typeof payments !== "undefined"
+<!-- ============================= -->
+<!-- JUS-FEB BACKUP & DATA SAVE -->
+<!-- ============================= -->
+
+<section id="backup" class="content-section">
+
+    <div class="section-header">
+        <div>
+            <h2>Backup & Data Save</h2>
+            <p>JUS-FEB system data backup and restore</p>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <h3>Members</h3>
+            <div class="stat-number" id="backupMembers">0</div>
+        </div>
+
+        <div class="stat-card">
+            <h3>Accounts</h3>
+            <div class="stat-number" id="backupLoans">0</div>
+        </div>
+
+        <div class="stat-card">
+            <h3>Payments</h3>
+            <div class="stat-number" id="backupPayments">0</div>
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Data Backup</h3>
+
+        <p style="margin:10px 0;">
+            Save all JUS-FEB data in your browser and download a backup file.
+        </p>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+
+            <button class="btn btn-primary" onclick="saveJUSData()">
+                💾 Save Data
+            </button>
+
+            <button class="btn btn-success" onclick="downloadJUSBackup()">
+                ⬇️ Download Backup
+            </button>
+
+            <button class="btn btn-warning" onclick="document.getElementById('restoreFile').click()">
+                ♻️ Restore Backup
+            </button>
+
+            <input
+                type="file"
+                id="restoreFile"
+                accept=".json"
+                style="display:none;"
+                onchange="restoreJUSBackup(event)"
+            >
+
+        </div>
+
+    </div>
+
+
+    <div class="card" style="margin-top:20px;">
+
+        <h3>System Storage</h3>
+
+        <p>
+            <strong>Storage:</strong>
+            Browser Local Storage
+        </p>
+
+        <p style="margin-top:8px;">
+            <strong>Status:</strong>
+            <span id="backupStatus">Ready</span>
+        </p>
+
+    </div>
+
+</section>
+
+
+<script>
+
+/* ============================= */
+/* JUS-FEB DATA SAVE */
+/* ============================= */
+
+function saveJUSData(){
+
+    try{
+
+        localStorage.setItem(
+            "JUS_FEB_MEMBERS",
+            JSON.stringify(members || [])
+        );
+
+        localStorage.setItem(
+            "JUS_FEB_LOANS",
+            JSON.stringify(loans || [])
+        );
+
+        localStorage.setItem(
+            "JUS_FEB_PAYMENTS",
+            JSON.stringify(payments || [])
+        );
+
+        localStorage.setItem(
+            "JUS_FEB_USERS",
+            JSON.stringify(jusUsers || [])
+        );
+
+        updateBackupStats();
+
+        document.getElementById("backupStatus").textContent =
+            "Data Saved Successfully";
+
+    }catch(error){
+
+        console.error(error);
+
+        document.getElementById("backupStatus").textContent =
+            "Save Failed";
+
+    }
+
+}
+
+
+/* ============================= */
+/* LOAD SAVED DATA */
+/* ============================= */
+
+function loadJUSData(){
+
+    try{
+
+        const savedMembers =
+            localStorage.getItem("JUS_FEB_MEMBERS");
+
+        const savedLoans =
+            localStorage.getItem("JUS_FEB_LOANS");
+
+        const savedPayments =
+            localStorage.getItem("JUS_FEB_PAYMENTS");
+
+        const savedUsers =
+            localStorage.getItem("JUS_FEB_USERS");
+
+
+        if(savedMembers){
+            members = JSON.parse(savedMembers);
+        }
+
+        if(savedLoans){
+            loans = JSON.parse(savedLoans);
+        }
+
+        if(savedPayments){
+            payments = JSON.parse(savedPayments);
+        }
+
+        if(savedUsers){
+            jusUsers = JSON.parse(savedUsers);
+        }
+
+
+        if(typeof renderMembers === "function"){
+            renderMembers();
+        }
+
+        if(typeof renderLoans === "function"){
+            renderLoans();
+        }
+
+        if(typeof renderPayments === "function"){
+            renderPayments();
+        }
+
+        if(typeof renderUsers === "function"){
+            renderUsers();
+        }
+
+        if(typeof updateDashboardData === "function"){
+            updateDashboardData();
+        }
+
+        updateBackupStats();
+
+        document.getElementById("backupStatus").textContent =
+            "Saved Data Loaded";
+
+    }catch(error){
+
+        console.error(error);
+
+        document.getElementById("backupStatus").textContent =
+            "Load Failed";
+
+    }
+
+}
+
+
+/* ============================= */
+/* DOWNLOAD BACKUP */
+/* ============================= */
+
+function downloadJUSBackup(){
+
+    try{
+
+        const backupData = {
+
+            system:
+                "JUS-FEB Management & Accounting System",
+
+            version:
+                "1.0",
+
+            backupDate:
+                new Date().toISOString(),
+
+            members:
+                members || [],
+
+            loans:
+                loans || [],
+
+            payments:
+                payments || [],
+
+            users:
+                jusUsers || []
+
+        };
+
+
+        const jsonData =
+            JSON.stringify(backupData, null, 2);
+
+        const blob =
+            new Blob(
+                [jsonData],
+                {type:"application/json"}
+            );
+
+
+        const url =
+            URL.createObjectURL(blob);
+
+
+        const link =
+            document.createElement("a");
+
+        link.href = url;
+
+
+        const date =
+            new Date()
+            .toISOString()
+            .slice(0,10);
+
+
+        link.download =
+            "JUS-FEB-Backup-" + date + ".json";
+
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(url);
+
+
+        document.getElementById("backupStatus").textContent =
+            "Backup Downloaded Successfully";
+
+    }catch(error){
+
+        console.error(error);
+
+        document.getElementById("backupStatus").textContent =
+            "Backup Failed";
+
+    }
+
+}
+
+
+/* ============================= */
+/* RESTORE BACKUP */
+/* ============================= */
+
+function restoreJUSBackup(event){
+
+    const file =
+        event.target.files[0];
+
+    if(!file){
+        return;
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload =
+        function(e){
+
+            try{
+
+                const backup =
+                    JSON.parse(e.target.result);
+
+
+                if(backup.members){
+                    members = backup.members;
+                }
+
+                if(backup.loans){
+                    loans = backup.loans;
+                }
+
+                if(backup.payments){
+                    payments = backup.payments;
+                }
+
+                if(backup.users){
+                    jusUsers = backup.users;
+                }
+
+
+                saveJUSData();
+
+
+                if(typeof renderMembers === "function"){
+                    renderMembers();
+                }
+
+                if(typeof renderLoans === "function"){
+                    renderLoans();
+                }
+
+                if(typeof renderPayments === "function"){
+                    renderPayments();
+                }
+
+                if(typeof renderUsers === "function"){
+                    renderUsers();
+                }
+
+
+                if(typeof updateDashboardData === "function"){
+                    updateDashboardData();
+                }
+
+
+                updateBackupStats();
+
+
+                document.getElementById("backupStatus").textContent =
+                    "Backup Restored Successfully";
+
+
+                alert(
+                    "JUS-FEB Backup Restored Successfully!"
+                );
+
+            }catch(error){
+
+                console.error(error);
+
+                document.getElementById("backupStatus").textContent =
+                    "Invalid Backup File";
+
+                alert(
+                    "Invalid JUS-FEB backup file!"
+                );
+
+            }
+
+        };
+
+
+    reader.readAsText(file);
+
+    event.target.value = "";
+
+}
+
+
+/* ============================= */
+/* BACKUP STATISTICS */
+/* ============================= */
+
+function updateBackupStats(){
+
+    const memberCount =
+        document.getElementById("backupMembers");
+
+    const loanCount =
+        document.getElementById("backupLoans");
+
+    const paymentCount =
+        document.getElementById("backupPayments");
+
+
+    if(memberCount){
+        memberCount.textContent =
+            (members || []).length;
+    }
+
+    if(loanCount){
+        loanCount.textContent =
+            (loans || []).length;
+    }
+
+    if(paymentCount){
+        paymentCount.textContent =
+            (payments || []).length;
+    }
+
+}
+
+
+/* ============================= */
+/* AUTO SAVE */
+/* ============================= */
+
+setInterval(
+    function(){
+
+        saveJUSData();
+
+    },
+    5000
+);
+
+
+/* ============================= */
+/* LOAD DATA WHEN PAGE OPENS */
+/* ============================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        setTimeout(
+            function(){
+
+                loadJUSData();
+
+            },
+            500
+        );
+
+    }
+);
+
+</script>
