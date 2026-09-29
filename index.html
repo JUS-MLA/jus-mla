@@ -590,3 +590,228 @@ function saveSystemSettings(){
 }
 
 </script>
+<!-- JUS-FEB DATA BACKUP SYSTEM -->
+
+<section id="backup" class="page-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Backup & Data</h2>
+            <p>JUS-FEB Data Backup & Restore</p>
+        </div>
+
+    </div>
+
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <h4>Members</h4>
+            <strong id="backupMembers">0</strong>
+        </div>
+
+        <div class="stat-card">
+            <h4>Accounts</h4>
+            <strong id="backupLoans">0</strong>
+        </div>
+
+        <div class="stat-card">
+            <h4>Payments</h4>
+            <strong id="backupPayments">0</strong>
+        </div>
+
+    </div>
+
+
+    <div class="table-box">
+
+        <h3>Backup Data</h3>
+
+        <p style="margin:10px 0 20px;color:#777;">
+            Save your JUS-FEB data as a backup file.
+        </p>
+
+
+        <div style="
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+        ">
+
+            <button
+                class="primary-btn"
+                onclick="downloadJUSBackup()"
+            >
+                ⬇ Download Backup
+            </button>
+
+
+            <button
+                class="secondary-btn"
+                onclick="document.getElementById('restoreFile').click()"
+            >
+                ⬆ Restore Backup
+            </button>
+
+
+            <input
+                type="file"
+                id="restoreFile"
+                accept=".json"
+                style="display:none"
+                onchange="restoreJUSBackup(event)"
+            >
+
+        </div>
+
+    </div>
+
+
+    <div class="table-box" style="margin-top:20px;">
+
+        <h3>Data Storage</h3>
+
+        <p style="margin-top:10px;">
+            <strong>Storage:</strong>
+            Browser Local Storage
+        </p>
+
+        <p style="margin-top:10px;">
+            <strong>Status:</strong>
+            <span id="backupStatus">
+                Ready
+            </span>
+        </p>
+
+    </div>
+
+</section>
+
+
+<script>
+
+/* =========================
+   SAVE DATA TO LOCAL STORAGE
+========================= */
+
+function saveJUSData(){
+
+    try{
+
+        localStorage.setItem(
+            "JUS_FEB_MEMBERS",
+            JSON.stringify(
+                typeof members !== "undefined"
+                ? members
+                : []
+            )
+        );
+
+
+        localStorage.setItem(
+            "JUS_FEB_LOANS",
+            JSON.stringify(
+                typeof loans !== "undefined"
+                ? loans
+                : []
+            )
+        );
+
+
+        localStorage.setItem(
+            "JUS_FEB_PAYMENTS",
+            JSON.stringify(
+                typeof payments !== "undefined"
+                ? payments
+                : []
+            )
+        );
+
+
+        localStorage.setItem(
+            "JUS_FEB_USERS",
+            JSON.stringify(
+                typeof jusUsers !== "undefined"
+                ? jusUsers
+                : []
+            )
+        );
+
+
+        updateBackupStatus(
+            "Data saved successfully"
+        );
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        updateBackupStatus(
+            "Data save failed"
+        );
+
+    }
+
+}
+
+
+/* =========================
+   LOAD SAVED DATA
+========================= */
+
+function loadJUSData(){
+
+    try{
+
+        const savedMembers =
+            localStorage.getItem(
+                "JUS_FEB_MEMBERS"
+            );
+
+
+        const savedLoans =
+            localStorage.getItem(
+                "JUS_FEB_LOANS"
+            );
+
+
+        const savedPayments =
+            localStorage.getItem(
+                "JUS_FEB_PAYMENTS"
+            );
+
+
+        const savedUsers =
+            localStorage.getItem(
+                "JUS_FEB_USERS"
+            );
+
+
+        if(
+            savedMembers &&
+            typeof members !== "undefined"
+        ){
+
+            members =
+                JSON.parse(savedMembers);
+
+        }
+
+
+        if(
+            savedLoans &&
+            typeof loans !== "undefined"
+        ){
+
+            loans =
+                JSON.parse(savedLoans);
+
+        }
+
+
+        if(
+            savedPayments &&
+            typeof payments !== "undefined"
