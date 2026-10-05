@@ -1,1 +1,93 @@
+<div id="ownerLoginOnly" style="max-width:400px;margin:30px auto;background:#fff;padding:25px;border-radius:18px;box-shadow:0 8px 25px rgba(0,0,0,.08);font-family:Arial;text-align:center">
 
+  <!-- 1. Logo / ছবি -->
+  <img id="logoView" src="" style="width:90px;height:90px;border-radius:50%;object-fit:cover;display:none;margin:0 auto 10px;border:3px solid #6c5ce7">
+  <div id="logoDefault" style="width:90px;height:90px;border-radius:50%;background:#f1f2f6;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:40px">🏪</div>
+  <input type="file" id="logoFile" accept="image/*" style="font-size:12px">
+  <p style="font-size:11px;color:#888;margin:5px 0 15px">Logo / ছবি আপলোড</p>
+
+  <div style="text-align:left">
+    <!-- 2. ফোন নাম্বার -->
+    <label style="font-size:13px;font-weight:bold">ফোন নাম্বার</label>
+    <div style="display:flex;gap:5px">
+      <input id="f_phone" placeholder="01XXXXXXXXX" style="flex:1;padding:12px;margin:5px 0;border:1px solid #ddd;border-radius:10px">
+      <button onclick="forgetOne('phone')" style="font-size:11px;border:none;background:#eee;border-radius:8px;padding:0 8px;cursor:pointer">Forget?</button>
+    </div>
+
+    <!-- 3. নাম -->
+    <label style="font-size:13px;font-weight:bold">নাম</label>
+    <div style="display:flex;gap:5px">
+      <input id="f_name" placeholder="আপনার নাম" style="flex:1;padding:12px;margin:5px 0;border:1px solid #ddd;border-radius:10px">
+      <button onclick="forgetOne('name')" style="font-size:11px;border:none;background:#eee;border-radius:8px;padding:0 8px">Forget?</button>
+    </div>
+
+    <!-- 4. ইউজার নাম -->
+    <label style="font-size:13px;font-weight:bold">User Name</label>
+    <div style="display:flex;gap:5px">
+      <input id="f_user" placeholder="User Name" style="flex:1;padding:12px;margin:5px 0;border:1px solid #ddd;border-radius:10px">
+      <button onclick="forgetOne('user')" style="font-size:11px;border:none;background:#eee;border-radius:8px;padding:0 8px">Forget?</button>
+    </div>
+
+    <!-- 5. পাসওয়ার্ড -->
+    <label style="font-size:13px;font-weight:bold">Password</label>
+    <div style="display:flex;gap:5px">
+      <input id="f_pass" type="password" placeholder="Password" style="flex:1;padding:12px;margin:5px 0;border:1px solid #ddd;border-radius:10px">
+      <button onclick="forgetOne('pass')" style="font-size:11px;border:none;background:#eee;border-radius:8px;padding:0 8px">Forget?</button>
+    </div>
+
+    <button onclick="doLogin()" style="width:100%;padding:13px;background:#6c5ce7;color:#fff;border:none;border-radius:10px;font-size:16px;margin-top:15px;cursor:pointer">Login</button>
+  </div>
+</div>
+
+<script>
+let logoData = localStorage.getItem('ownerLogoOnly') || "";
+let logoView = document.getElementById('logoView');
+let logoDefault = document.getElementById('logoDefault');
+let logoFile = document.getElementById('logoFile');
+
+if(logoData){ logoView.src=logoData; logoView.style.display='block'; logoDefault.style.display='none'; }
+
+logoFile.addEventListener('change', e=>{
+  let r=new FileReader();
+  r.onload=()=>{ logoData=r.result; localStorage.setItem('ownerLogoOnly', r.result); logoView.src=r.result; logoView.style.display='block'; logoDefault.style.display='none'; }
+  r.readAsDataURL(e.target.files[0]);
+});
+
+function getOwner(){ return JSON.parse(localStorage.getItem('ownerOnlyData')||'null'); }
+
+function doLogin(){
+  let phone=document.getElementById('f_phone').value;
+  let name=document.getElementById('f_name').value;
+  let user=document.getElementById('f_user').value;
+  let pass=document.getElementById('f_pass').value;
+  if(!phone||!name||!user||!pass) return alert('সব ঘর পূরণ করো');
+
+  let o=getOwner();
+  if(!o){
+    // প্রথমবার
+    localStorage.setItem('ownerOnlyData', JSON.stringify({phone,name,user,pass}));
+    alert('Owner তৈরি হয়েছে, এখন Login হলো');
+    return;
+  }
+  if(o.phone===phone && o.name===name && o.user===user && o.pass===pass){
+    alert('Login Success: '+name);
+  } else {
+    alert('তথ্য মিলছে না');
+  }
+}
+
+function forgetOne(type){
+  let o=getOwner(); if(!o) return alert('এখনো Owner তৈরি হয়নি');
+
+  if(type==='phone') alert('আপনার ফোন: '+o.phone);
+  if(type==='name') alert('আপনার নাম: '+o.name);
+  if(type==='user') alert('আপনার User Name: '+o.user);
+  if(type==='pass'){
+    let ph=prompt('ফোন নাম্বার দিন Verify করার জন্য:');
+    if(ph===o.phone){
+      let np=prompt('নতুন Password দিন:');
+      if(np){ o.pass=np; localStorage.setItem('ownerOnlyData', JSON.stringify(o)); alert('Password Change হয়েছে'); }
+    } else alert('ফোন মিলছে না');
+  }
+}
+</script>
