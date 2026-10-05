@@ -3,28 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>JUS - Owner Admin</title>
+<title>JUS - Janakalyan Unnayan Sohayok</title>
 <style>
 *{box-sizing:border-box;font-family:Arial}
-body{margin:0;background:#12307e}
-.login-wrap{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:15px}
+body{margin:0}
+.login-wrap{background:#12307e;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:15px}
 .card{background:#fff;width:100%;max-width:430px;border-radius:18px;padding:22px;box-shadow:0 10px 30px rgba(0,0,0,.3)}
-.logo{text-align:center}.logo img{height:75px;width:75px;border-radius:50%;border:2px solid #e2e8f0}
+.logo{text-align:center}.logo img{height:75px;width:75px;border-radius:50%;border:2px solid #e2e8f0;background:#fff;object-fit:cover}
 label{font-size:13px;font-weight:700;margin:11px 0 5px;display:block;color:#1e293b}
-input,select{width:100%;padding:11px 12px;border:1.5px solid #dbe2ea;border-radius:10px;font-size:14px}
-input[readonly]{background:#f1f5f9;font-weight:600}
-.pass-wrap{position:relative}.eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer}
-.btn{width:100%;background:#12307e;color:#fff;border:none;padding:13px;border-radius:12px;font-weight:bold;margin-top:16px;cursor:pointer}
-.links{display:flex;justify-content:space-between;margin-top:10px;font-size:13px}
+input,select{width:100%;padding:11px 12px;border:1.5px solid #dbe2ea;border-radius:10px;font-size:14px;outline:none}
+input[readonly]{background:#f1f5f9;font-weight:700;color:#334155}
+.pass-wrap{position:relative}.eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:#64748b}
+.btn{width:100%;background:#12307e;color:#fff;border:none;padding:13px;border-radius:12px;font-weight:bold;margin-top:16px;cursor:pointer;font-size:15px}
+.links{display:flex;justify-content:space-between;margin-top:12px;font-size:13px}
 .links a{color:#12307e;font-weight:700;text-decoration:none}
 #dashboard{display:none;background:#f1f5f9;min-height:100vh}
 .header{background:#12307e;color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center}
-.sidebar{width:250px;background:#0f255e;min-height:100vh;float:left;padding:15px}
-.sidebar a{display:block;padding:10px;color:#cbd5e1;text-decoration:none;border-radius:8px;margin-bottom:5px;font-size:14px}
-.sidebar a.active{background:#1e3a8a;color:#fff}
-.main{margin-left:250px;padding:18px}
+.sidebar{width:260px;background:#0f255e;min-height:calc(100vh - 62px);float:left;padding:15px}
+.sidebar b{color:#94a3b8;font-size:11px;display:block;margin:14px 0 8px}
+.sidebar a{display:block;padding:11px 10px;color:#cbd5e1;text-decoration:none;border-radius:8px;margin-bottom:5px;font-size:14px;cursor:pointer}
+.sidebar a.active,.sidebar a:hover{background:#1e3a8a;color:#fff}
+.main{margin-left:260px;padding:18px}
 .box{background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:15px}
-table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px;border-bottom:1px solid #eee}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px;border-bottom:1px solid #eee;text-align:left}th{background:#f8fafc}
+.tab{display:none}.tab.active{display:block}
+.create-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:768px){.sidebar{width:100%;float:none;min-height:auto}.main{margin-left:0}.create-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -32,9 +36,9 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px;bord
 <div id="loginSec" class="login-wrap">
 <div class="card">
 <div class="logo">
-<img src="logo.png" onerror="this.src='https://via.placeholder.com/75?text=JUS'">
+<img src="logo.png" id="logoImg" onerror="this.src='https://via.placeholder.com/75?text=JUS'">
 <h2 style="margin:6px 0 2px;color:#12307e">JUS</h2>
-<p style="margin:0;font-size:12px;color:#64748b">Janakalyan Unnayan Sohayok - JUS<br>Management & Accounting System</p>
+<p style="margin:0;font-size:12px;color:#64748b;line-height:1.3">Janakalyan Unnayan Sohayok - JUS<br>Management & Accounting System</p>
 </div>
 
 <label>Select Role</label>
@@ -75,30 +79,51 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px;bord
 
 <div id="dashboard">
 <div class="header">
+<div style="display:flex;align-items:center;gap:10px">
+<img src="logo.png" style="height:38px;width:38px;border-radius:50%;background:#fff">
 <div><b>Janakalyan Unnayan Sohayok - JUS</b><br><small id="uInfo"></small></div>
+</div>
 <button onclick="doLogout()" style="background:#ef4444;color:#fff;border:none;padding:8px 14px;border-radius:8px;cursor:pointer">Logout</button>
 </div>
+
 <div class="sidebar" id="sideMenu"></div>
+
 <div class="main">
-<div id="createBox" class="box" style="display:none;border-left:5px solid #12307e">
-<h3>👑 Create User (Only Owner Admin)</h3>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<div id="tab-ownerBranch" class="tab active"><div class="box"><h3>🏢 All Owner Branch</h3><table id="tblOwner"></table></div></div>
+<div id="tab-clientBranch" class="tab"><div class="box"><h3>🏦 All Client Branch</h3><table id="tblClientBranch"></table></div></div>
+<div id="tab-allClient" class="tab"><div class="box"><h3>👥 All Client</h3><table id="tblAllClient"></table></div></div>
+<div id="tab-cheating" class="tab"><div class="box" style="border-left:5px solid #ef4444"><h3 style="color:#dc2626">🚨 Cheating Option</h3><p style="font-size:12px;color:#64748b">Owner Admin can monitor fake entry</p><table><tr><th>User</th><th>Issue</th><th>Action</th></tr><tr><td>client_branch</td><td>Fake Collection</td><td><button style="background:#dc2626;color:#fff;border:none;padding:5px 10px;border-radius:6px">Block</button></td></tr></table></div></div>
+
+<div id="tab-create" class="tab">
+<div class="box" style="border-left:5px solid #12307e">
+<h3>👑 Create New User - Only Owner Admin</h3>
+<div class="create-grid">
 <select id="newRole"><option>User Control Admin User</option><option>Owner Branch User</option><option>Client Branch User</option><option>Client User</option></select>
-<input id="newName" placeholder="Name">
-<input id="newPhone" placeholder="Phone">
+<input id="newName" placeholder="Branch / Client Name">
+<input id="newPhone" placeholder="Phone Number">
 <input id="newUser" placeholder="Username">
 <input id="newPass" placeholder="Password" type="password">
-<input id="newOrg" placeholder="Organization">
+<input id="newOrg" placeholder="Organization Name">
 </div>
-<button class="btn" onclick="createUser()" style="margin-top:10px">➕ Create & Save</button>
+<button class="btn" onclick="createUser()">➕ Create & Save Safe</button>
+<p style="font-size:11px;color:#16a34a;margin-top:8px">Safe: LocalStorage এ Save থাকবে। Login করলে Auto Dashboard এ যাবে।</p>
 </div>
-<div class="box"><table id="userTable"></table></div>
+</div>
+
+<div class="box">
+<h3>📋 All Users List</h3>
+<table id="userTable"></table>
+<p style="font-size:11px;color:#64748b">Delete Button শুধু Owner Admin দেখবে</p>
+</div>
 </div>
 </div>
 
 <script>
 let users=JSON.parse(localStorage.getItem('jus_users')||'[]');
-if(users.length===0){users=[{role:'Owner Admin',name:'MD. LIMON AHAMMED',phone:'01949915225',username:'mdlimonahammed2004@mla',password:'Limon915225@',org:'Janakalyan Unnayan Sohayok - JUS'}];localStorage.setItem('jus_users',JSON.stringify(users));}
+if(users.length===0){
+users=[{role:'Owner Admin',name:'MD. LIMON AHAMMED',phone:'01949915225',username:'mdlimonahammed2004@mla',password:'Limon915225@',org:'Janakalyan Unnayan Sohayok - JUS'}];
+localStorage.setItem('jus_users',JSON.stringify(users));
+}
 let cur=null;
 function handleRole(){
 let r=document.getElementById('role').value;
@@ -114,32 +139,55 @@ org.style.background='#fff';
 org.placeholder='Enter Your Organization Name';
 }
 }
-function togglePass(){let p=document.getElementById('password');p.type=p.type==='password'?'text':'password';}
+function togglePass(){
+let p=document.getElementById('password');
+p.type = p.type==='password'? 'text' : 'password';
+}
 function doLogin(){
 let r=document.getElementById('role').value;
 let u=document.getElementById('username').value;
 let p=document.getElementById('password').value;
 let f=users.find(x=>x.username===u && x.password===p && x.role===r);
-if(!f){alert('Role / Username / Password ভুল');return;}
-cur=f;document.getElementById('loginSec').style.display='none';document.getElementById('dashboard').style.display='block';
-document.getElementById('uInfo').innerText=f.role+' | '+f.name;
+if(!f){alert('Role / Username / Password ভুল। Owner Admin দিয়ে আগে User বানাও।');return;}
+cur=f;
+document.getElementById('loginSec').style.display='none';
+document.getElementById('dashboard').style.display='block';
+document.getElementById('uInfo').innerText = f.role + ' | ' + f.name + ' | ' + f.phone;
 let menu=document.getElementById('sideMenu');
 if(f.role==='Owner Admin'){
-menu.innerHTML=`<b style="color:#94a3b8;font-size:11px">OWNER ADMIN ONLY</b><a class="active">🏢 All Owner Branch</a><a>🏦 All Client Branch</a><a>👥 All Client</a><a>🚨 Cheating Option</a>`;
-document.getElementById('createBox').style.display='block';
+menu.innerHTML=`
+<b>OWNER ADMIN ONLY</b>
+<a id="m1" class="active" onclick="openTab('ownerBranch')">🏢 All Owner Branch</a>
+<a id="m2" onclick="openTab('clientBranch')">🏦 All Client Branch</a>
+<a id="m3" onclick="openTab('allClient')">👥 All Client</a>
+<a id="m4" onclick="openTab('cheating')">🚨 Cheating Option</a>
+<b>CREATE</b>
+<a id="m5" onclick="openTab('create')" style="background:#1e40af;color:#fff;border:1px dashed #93c5fd">➕ Create User</a>
+`;
 }else{
-menu.innerHTML=`<a class="active">🏠 ${f.role} Dashboard</a>`;
-document.getElementById('createBox').style.display='none';
+menu.innerHTML=`<b>${f.role.toUpperCase()}</b><a class="active">🏠 My Dashboard</a><a>💰 My Work</a><a>📊 Reports</a>`;
 }
 render();
 }
+function openTab(id){
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));
+document.getElementById('tab-'+id).classList.add('active');
+let map={ownerBranch:'m1',clientBranch:'m2',allClient:'m3',cheating:'m4',create:'m5'};
+if(map[id] && document.getElementById(map[id])) document.getElementById(map[id]).classList.add('active');
+}
 function render(){
 let t=document.getElementById('userTable');
-t.innerHTML='<tr><th>Role</th><th>Name</th><th>Username</th><th>Action</th></tr>';
+t.innerHTML='<tr><th>Role</th><th>Name</th><th>Username</th><th>Phone</th><th>Action</th></tr>';
 users.forEach((u,i)=>{
-let del=cur.role==='Owner Admin' && u.role!=='Owner Admin'?`<button onclick="delUser(${i})" style="background:#dc2626;color:#fff;border:none;padding:5px 10px;border-radius:6px">Delete</button>`:(u.role==='Owner Admin'?'Protected':'No Permission');
-t.innerHTML+=`<tr><td>${u.role}</td><td>${u.name}</td><td>${u.username}</td><td>${del}</td></tr>`;
+let isOwner = cur.role==='Owner Admin';
+let canDelete = isOwner && u.role!=='Owner Admin';
+let del = canDelete? `<button onclick="delUser(${i})" style="background:#dc2626;color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer">Delete</button>` : (u.role==='Owner Admin'? '<span style="color:green;font-size:11px">Protected</span>' : '<span style="color:#94a3b8;font-size:11px">No Permission</span>');
+t.innerHTML+=`<tr><td>${u.role}</td><td>${u.name}</td><td>${u.username}</td><td>${u.phone}</td><td>${del}</td></tr>`;
 });
+document.getElementById('tblOwner').innerHTML='<tr><th>Branch</th><th>Manager</th><th>Phone</th></tr><tr><td>Rajshahi Sadar</td><td>MD. LIMON</td><td>01949915225</td></tr>';
+document.getElementById('tblClientBranch').innerHTML='<tr><th>Branch</th><th>Collection</th></tr><tr><td>Naogaon Branch</td><td>৳ 5,20,000</td></tr>';
+document.getElementById('tblAllClient').innerHTML='<tr><th>ID</th><th>Name</th></tr><tr><td>C-001</td><td>Morium Begum</td></tr>';
 }
 function createUser(){
 let r=document.getElementById('newRole').value;
@@ -147,14 +195,28 @@ let n=document.getElementById('newName').value;
 let ph=document.getElementById('newPhone').value;
 let un=document.getElementById('newUser').value;
 let pw=document.getElementById('newPass').value;
-let org=document.getElementById('newOrg').value || (r.includes('Client')?'Client Org - '+n:'Janakalyan Unnayan Sohayok - JUS');
-if(!n||!un||!pw){alert('Name, Username, Password দাও');return;}
+let org=document.getElementById('newOrg').value || (r.includes('Client')? 'Client Org - '+n : 'Janakalyan Unnayan Sohayok - JUS');
+if(!n ||!un ||!pw){alert('Name, Username, Password দাও');return;}
+if(users.find(x=>x.username===un)){alert('এই Username আগে আছে');return;}
 users.push({role:r,name:n,phone:ph,username:un,password:pw,org:org});
+localStorage.setItem('jus_users',JSON.stringify(users));
+alert('✅ Created! এখন '+un+' দিয়ে Login করলে Auto তার Dashboard এ যাবে');
+document.getElementById('newName').value='';document.getElementById('newUser').value='';document.getElementById('newPass').value='';
+render();
+}
+function delUser(i){
+if(cur.role!=='Owner Admin'){alert('Delete Only Owner Admin');return;}
+if(users[i].role==='Owner Admin'){alert('Owner Admin Delete হবে না');return;}
+if(confirm('Delete করবে? '+users[i].name)){
+users.splice(i,1);
 localStorage.setItem('jus_users',JSON.stringify(users));
 render();
 }
-function delUser(i){if(cur.role!=='Owner Admin')return;if(confirm('Delete?')){users.splice(i,1);localStorage.setItem('jus_users',JSON.stringify(users));render();}}
-function doLogout(){document.getElementById('dashboard').style.display='none';document.getElementById('loginSec').style.display='flex';}
+}
+function doLogout(){
+document.getElementById('dashboard').style.display='none';
+document.getElementById('loginSec').style.display='flex';
+}
 handleRole();
 </script>
 </body>
