@@ -10,16 +10,14 @@ body{margin:0;background:#12307e;min-height:100vh;display:flex;justify-content:c
 .card{background:#fff;width:100%;max-width:430px;border-radius:18px;padding:22px;box-shadow:0 12px 30px rgba(0,0,0,.3)}
 .logo{text-align:center}
 .logo img{height:70px}
-.logo h1{margin:5px 0 2px;color:#12307e}
-.logo p{margin:0;font-size:12px;color:#64748b;line-height:1.3}
+.logo h1{margin:5px 0 2px;color:#12307e;font-size:27px}
+.logo p{margin:0;font-size:12px;color:#64748b}
 label{font-size:13px;font-weight:700;margin:12px 0 5px;display:block;color:#1e293b}
 input,select{width:100%;padding:11px 13px;border:1.5px solid #dbe2ea;border-radius:10px;font-size:14px;outline:none}
 .pass{position:relative}
 .pass i{position:absolute;right:12px;top:11px;cursor:pointer}
-#bar{height:4px;background:#eee;border-radius:5px;margin-top:6px}
+#bar{height:4px;background:#eee;border-radius:5px;margin-top:6px;transition:.3s}
 .btn{width:100%;background:#12307e;color:#fff;border:none;padding:12px;border-radius:10px;font-weight:bold;margin-top:16px;cursor:pointer}
-.link{display:flex;justify-content:space-between;margin-top:10px;font-size:13px}
-.link a{color:#12307e;font-weight:700;cursor:pointer;text-decoration:none}
 .owner{display:none;background:#fff7ed;border:1.5px dashed #f59e0b;padding:10px;border-radius:10px;margin-top:12px}
 #otpModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);justify-content:center;align-items:center;z-index:999;padding:15px}
 .modal{background:#fff;padding:18px;border-radius:12px;width:100%;max-width:360px}
@@ -28,16 +26,26 @@ input,select{width:100%;padding:11px 13px;border:1.5px solid #dbe2ea;border-radi
 <body>
 <div class="card">
 <div class="logo">
-<img id="logoImg" src="logo.png" alt="JUS Logo">
+<img id="logoImg" src="logo.png" alt="JUS">
 <h1>JUS</h1>
 <p>Janakalyan Unnayan Sohayok - JUS<br>Management & Accounting System</p>
 </div>
 
-<label>Organization Name</label>
-<input type="text" value="Janakalyan Unnayan Sohayok - JUS" readonly>
+<label>Select Role</label>
+<select id="role" onchange="handleRole()">
+<option value="">-- Select Role --</option>
+<option>Owner Admin</option>
+<option>User Control Admin User</option>
+<option>Owner Branch User</option>
+<option>Client Branch User</option>
+<option>Client User</option>
+</select>
 
-<label>Owner Name</label>
-<input type="text" id="owner" placeholder="Owner Name">
+<label>Organization Name</label>
+<input type="text" id="orgName" placeholder="Enter Organization Name">
+
+<label>Owner / Client Name</label>
+<input type="text" id="owner" placeholder="Enter Name">
 
 <label>BD Phone Number</label>
 <input type="tel" id="phone" placeholder="+880 1XXXXXXXXX">
@@ -48,81 +56,85 @@ input,select{width:100%;padding:11px 13px;border:1.5px solid #dbe2ea;border-radi
 <label>Password</label>
 <div class="pass">
 <input type="password" id="pass" placeholder="Password">
-<i onclick="this.previousElementSibling.type=this.previousElementSibling.type=='password'?'text':'password'">👁️</i>
+<i onclick="togglePass()">👁️</i>
 </div>
 <div id="bar"></div>
 <div id="txt" style="font-size:11px;color:#64748b;margin-top:3px"></div>
 
-<label>Select Role</label>
-<select id="role" onchange="roleCheck()">
-<option value="">-- Select Role --</option>
-<option>Owner Admin</option>
-<option>User Control Admin User</option>
-<option>Owner Branch User</option>
-<option>Client User</option>
-</select>
-
 <div id="logoBox" class="owner">
-<b style="color:#b45309;font-size:13px">👑 Owner Admin - Logo Upload</b>
-<input type="file" id="logoFile" accept="image/*" onchange="changeLogo(event)" style="margin-top:8px">
+<b style="color:#b45309;font-size:13px">👑 Owner Admin Only - Logo Upload</b>
+<input type="file" accept="image/*" onchange="changeLogo(event)" style="margin-top:8px">
+<p style="font-size:11px;color:#666;margin:5px 0 0">Only Owner Admin can change logo</p>
 </div>
 
-<div class="link"><a onclick="openOTP()">Forgot Password?</a><a>Need Help?</a></div>
+<div style="display:flex;justify-content:space-between;margin-top:12px;font-size:13px">
+<a onclick="openOTP()" style="color:#12307e;font-weight:700;cursor:pointer">Forgot Password?</a>
+<a style="color:#12307e;font-weight:700;cursor:pointer">Need Help?</a>
+</div>
+
 <button class="btn" onclick="login()">🔐 Login</button>
-
-<div style="background:#eef4ff;padding:10px;border-radius:10px;margin-top:12px;font-size:11px;line-height:1.6">
-<b>Demo:</b><br>
-Owner Admin: owner_admin / Owner@2026<br>
-User Control: control_admin / Control@2026<br>
-Owner Branch: owner_branch / Ob@2026<br>
-Client Branch: client_branch / Cb@2026<br>
-Client User: client_user / Client@2026<br>
-OTP: 123456
-</div>
 </div>
 
 <div id="otpModal">
 <div class="modal">
-<h3 style="margin:0 0 8px;color:#12307e">Forgot Password OTP</h3>
-<input type="tel" id="fphone" placeholder="Enter BD Number +8801...">
-<button class="btn" onclick="sendOTP()">Send OTP</button>
+<h3 style="margin:0 0 8px;color:#12307e">Forgot OTP</h3>
+<input type="tel" id="fphone" placeholder="BD Number +8801...">
+<button class="btn" onclick="sendOTP()">Send OTP (123456)</button>
 <div id="otpArea" style="display:none">
-<input type="text" id="otp" placeholder="OTP 123456" style="margin-top:10px">
+<input type="text" id="otp" placeholder="OTP" style="margin-top:10px">
 <input type="password" id="newp" placeholder="New Password" style="margin-top:10px">
-<button class="btn" onclick="resetP()">Reset Password</button>
+<button class="btn" onclick="resetP()">Reset</button>
 </div>
-<p style="text-align:center"><a onclick="closeOTP()" style="cursor:pointer;color:#666">Close</a></p>
+<p style="text-align:center"><a onclick="closeOTP()" style="cursor:pointer">Close</a></p>
 </div>
 </div>
 
 <script>
+function handleRole(){
+let r=document.getElementById('role').value;
+let org=document.getElementById('orgName');
+let logoBox=document.getElementById('logoBox');
+
+// Logo only for Owner Admin
+logoBox.style.display = (r==='Owner Admin')? 'block' : 'none';
+
+// Organization Name Logic
+if(r==='Owner Admin' || r==='User Control Admin User' || r==='Owner Branch User'){
+ org.value='Janakalyan Unnayan Sohayok - JUS';
+ org.readOnly=true;
+ org.style.background='#f1f5f9';
+ org.placeholder='Janakalyan Unnayan Sohayok - JUS';
+} else if(r==='Client Branch User' || r==='Client User'){
+ org.value='';
+ org.readOnly=false;
+ org.style.background='#fff';
+ org.placeholder='Enter Your Organization / Client Name';
+} else {
+ org.value='';
+ org.readOnly=false;
+ org.style.background='#fff';
+ org.placeholder='Enter Organization Name';
+}
+}
+function togglePass(){
+let p=document.getElementById('pass');
+p.type=p.type=='password'?'text':'password';
+}
 document.getElementById('pass').addEventListener('input',function(){
-let v=this.value, b=document.getElementById('bar'), t=document.getElementById('txt');
-if(v.length==0){b.style.width='0%';t.innerText='';}
+let v=this.value,b=document.getElementById('bar'),t=document.getElementById('txt');
+if(!v){b.style.width='0%';t.innerText='';}
 else if(v.length<6){b.style.width='30%';b.style.background='red';t.innerText='Weak';}
 else if(v.length<8){b.style.width='60%';b.style.background='orange';t.innerText='Medium';}
 else{b.style.width='100%';b.style.background='green';t.innerText='Strong';}
 });
-function roleCheck(){
-let r=document.getElementById('role').value;
-document.getElementById('logoBox').style.display=r==='Owner Admin'?'block':'none';
-}
 function changeLogo(e){
-let url=URL.createObjectURL(e.target.files[0]);
-document.getElementById('logoImg').src=url;
+document.getElementById('logoImg').src=URL.createObjectURL(e.target.files[0]);
 }
-function login(){
-let r=document.getElementById('role').value;
-if(!r){alert('Role select koro');return;}
-alert('Login as: '+r);
-}
+function login(){alert('Login as: '+document.getElementById('role').value);}
 function openOTP(){document.getElementById('otpModal').style.display='flex';}
 function closeOTP(){document.getElementById('otpModal').style.display='none';}
-function sendOTP(){alert('OTP: 123456 Sent');document.getElementById('otpArea').style.display='block';}
-function resetP(){
-if(document.getElementById('otp').value=='123456'){alert('Password Reset Done');closeOTP();}
-else{alert('Wrong OTP');}
-}
+function sendOTP(){alert('OTP 123456');document.getElementById('otpArea').style.display='block';}
+function resetP(){if(document.getElementById('otp').value=='123456'){alert('Reset Done');closeOTP();}else{alert('Wrong OTP');}}
 </script>
 </body>
 </html>
