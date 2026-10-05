@@ -1,33 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JUS-FEB - Login</title>
+<title>NEW NAME - Management System</title>
 <style>
-body{margin:0;font-family:Arial;background:#eef2f7}
-.header{background:#0b4da1;color:#fff;text-align:center;padding:25px 15px}
-.card{max-width:400px;background:#fff;margin:80px auto;padding:25px;border-radius:15px;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
-.btn{background:#0b4da1;color:#fff;border:none;padding:12px 25px;border-radius:8px;font-weight:bold;font-size:15px;cursor:pointer}
-.btn:hover{background:#083a7a}
+body{margin:0;background:#f1f5f9;font-family:Arial}
+.header{background:#0b4da1;color:#fff;text-align:center;padding:18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
+@media(min-width:600px){.grid{grid-template-columns:1fr 1fr 1fr 1fr}}
+.card{background:#fff;border-radius:12px;padding:15px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+.card b{display:block;color:#0b4da1;margin:5px 0}
+.card p{font-size:11px;color:#666;margin:0 0 10px 0;min-height:32px}
+.btn-coming{background:#6b7280;color:#fff;border:none;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:bold}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h2 style="margin:0">JUS-FEB</h2>
-  <span style="font-size:13px;opacity:0.9">Management & Accounting System</span>
+  <h2 style="margin:0">JUS-FEB</h2> <!-- 👉 এখানে নতুন নাম লিখবা -->
+  <div style="font-size:12px;opacity:0.9">Management & Accounting System</div> <!-- 👉 এটাও চেঞ্জ করতে পারো -->
 </div>
 
-<div class="card">
-  <h3 style="color:#0b4da1;margin-top:0">Janakalyan Unnayan Sohayok - (JUS)</h3>
-  <p style="font-size:13px;color:#555">Family Enterprise Business - (FEB)</p>
-  <p style="font-size:12px;color:#777;line-height:18px">
-    JUS-FEB is a management and accounting system designed to manage members, branches, loans, payments, and cash flow and reports in one system.
-  </p>
-  <br>
-  <button class="btn" onclick="window.location.href='login.html'">👉 Login to System</button>
+<div style="background:#fff;margin:10px;border-radius:12px;padding:15px;text-align:center">
+  <b style="color:#0b4da1;font-size:16px">Janakalyan Unnayan Sohayok - (JUS)</b>
+  <p style="font-size:12px;color:#666">System is under development. All modules coming soon.</p>
+  <button class="btn-coming" style="background:#0b4da1">🔒 Login to System</button>
 </div>
 
-</body>
-</html>
+<h3 style="text-align:center;color:#0b4da1;margin:10px 0">Core Modules</h3>
+
+<div class="grid">
+  <div class="card">👤<b>Members</b><p>Member management</p><button class="btn-coming">Coming Soon</button></div>
+  <div class="card">🏢<b>Branches</b><p>Branch management</p><button class="btn-coming">Coming Soon</button></div>
+  <div class="card">💰<b>Loans & Finance</b><p>Loan management
