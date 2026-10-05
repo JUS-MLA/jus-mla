@@ -3,205 +3,159 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>JUS - Owner Admin Control</title>
+<title>JUS - Owner Admin</title>
 <style>
 *{box-sizing:border-box;font-family:Arial}
-body{margin:0;background:#f1f5f9}
-.login-wrap{background:#12307e;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:15px}
-.card{background:#fff;width:100%;max-width:440px;border-radius:18px;padding:22px;box-shadow:0 10px 25px rgba(0,0,0,.2)}
-label{font-size:13px;font-weight:700;margin:10px 0 5px;display:block}
-input,select{width:100%;padding:11px;border:1.5px solid #dbe2ea;border-radius:10px}
-.btn{width:100%;background:#12307e;color:#fff;border:none;padding:12px;border-radius:10px;font-weight:bold;margin-top:12px;cursor:pointer}
-.btn-red{background:#dc2626}
-#dashboard{display:none}
+body{margin:0;background:#12307e}
+.login-wrap{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:15px}
+.card{background:#fff;width:100%;max-width:430px;border-radius:18px;padding:22px;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.logo{text-align:center}.logo img{height:75px;width:75px;border-radius:50%;border:2px solid #e2e8f0}
+label{font-size:13px;font-weight:700;margin:11px 0 5px;display:block;color:#1e293b}
+input,select{width:100%;padding:11px 12px;border:1.5px solid #dbe2ea;border-radius:10px;font-size:14px}
+input[readonly]{background:#f1f5f9;font-weight:600}
+.pass-wrap{position:relative}.eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer}
+.btn{width:100%;background:#12307e;color:#fff;border:none;padding:13px;border-radius:12px;font-weight:bold;margin-top:16px;cursor:pointer}
+.links{display:flex;justify-content:space-between;margin-top:10px;font-size:13px}
+.links a{color:#12307e;font-weight:700;text-decoration:none}
+#dashboard{display:none;background:#f1f5f9;min-height:100vh}
 .header{background:#12307e;color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center}
-.sidebar{width:250px;background:#0f255e;min-height:100vh;float:left;padding:15px;color:#fff}
-.sidebar a{display:block;padding:10px;color:#cbd5e1;text-decoration:none;border-radius:8px;margin-bottom:5px;cursor:pointer;font-size:14px}
-.sidebar a.active,.sidebar a:hover{background:#1e3a8a;color:#fff}
+.sidebar{width:250px;background:#0f255e;min-height:100vh;float:left;padding:15px}
+.sidebar a{display:block;padding:10px;color:#cbd5e1;text-decoration:none;border-radius:8px;margin-bottom:5px;font-size:14px}
+.sidebar a.active{background:#1e3a8a;color:#fff}
 .main{margin-left:250px;padding:18px}
 .box{background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:15px}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{padding:10px;border-bottom:1px solid #eee;text-align:left}
-.badge{padding:3px 8px;border-radius:12px;font-size:11px;color:#fff}
-.createBox{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:700px){.sidebar{width:100%;float:none;min-height:auto}.main{margin-left:0}.createBox{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px;border-bottom:1px solid #eee}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="loginSec" class="login-wrap">
 <div class="card">
-<center><img src="logo.png" style="height:70px;width:70px;border-radius:50%"><h2 style="color:#12307e;margin:5px">JUS</h2><p style="font-size:12px;color:#64748b">Janakalyan Unnayan Sohayok - JUS</p></center>
+<div class="logo">
+<img src="logo.png" onerror="this.src='https://via.placeholder.com/75?text=JUS'">
+<h2 style="margin:6px 0 2px;color:#12307e">JUS</h2>
+<p style="margin:0;font-size:12px;color:#64748b">Janakalyan Unnayan Sohayok - JUS<br>Management & Accounting System</p>
+</div>
+
 <label>Select Role</label>
-<select id="loginRole">
+<select id="role" onchange="handleRole()">
 <option>Owner Admin</option>
 <option>User Control Admin User</option>
 <option>Owner Branch User</option>
 <option>Client Branch User</option>
 <option>Client User</option>
 </select>
+
+<label>Organization Name</label>
+<input type="text" id="orgName" value="Janakalyan Unnayan Sohayok - JUS" readonly>
+
+<label>Owner / Client Name</label>
+<input type="text" id="ownerName" value="MD. LIMON AHAMMED">
+
+<label>BD Phone Number</label>
+<input type="tel" id="phone" value="01949915225">
+
 <label>Username</label>
-<input id="loginUser" value="mdlimonahammed2004@mla">
+<input type="text" id="username" value="mdlimonahammed2004@mla">
+
 <label>Password</label>
-<input id="loginPass" value="Limon915225@">
+<div class="pass-wrap">
+<input type="password" id="password" value="Limon915225@">
+<span class="eye" onclick="togglePass()">👁️</span>
+</div>
+
+<div class="links">
+<a>Forgot Password?</a>
+<a>Need Help?</a>
+</div>
+
 <button class="btn" onclick="doLogin()">🔐 Login</button>
-<p style="font-size:11px;text-align:center;color:#64748b;margin-top:8px">Default Owner: mdlimonahammed2004@mla / Limon915225@</p>
 </div>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard">
 <div class="header">
-<div><b id="orgTitle">Janakalyan Unnayan Sohayok - JUS</b><br><small id="userInfo"></small></div>
+<div><b>Janakalyan Unnayan Sohayok - JUS</b><br><small id="uInfo"></small></div>
 <button onclick="doLogout()" style="background:#ef4444;color:#fff;border:none;padding:8px 14px;border-radius:8px;cursor:pointer">Logout</button>
 </div>
-
 <div class="sidebar" id="sideMenu"></div>
-
 <div class="main">
-<!-- Owner Admin Only Create Section -->
-<div id="createSection" class="box" style="display:none;border-left:5px solid #12307e">
-<h3 style="margin:0 0 10px;color:#12307e">👑 Create New User (Only Owner Admin)</h3>
-<div class="createBox">
-<div><label>Select Role to Create</label><select id="newRole"><option>User Control Admin User</option><option>Owner Branch User</option><option>Client Branch User</option><option>Client User</option></select></div>
-<div><label>Branch / Client Name</label><input id="newName" placeholder="Ex: Rajshahi Branch"></div>
-<div><label>Phone</label><input id="newPhone" placeholder="01XXXXXXXXX"></div>
-<div><label>Username</label><input id="newUsername" placeholder="username"></div>
-<div><label>Password</label><input id="newPassword" placeholder="password"></div>
-<div><label>Organization</label><input id="newOrg" placeholder="Auto"></div>
+<div id="createBox" class="box" style="display:none;border-left:5px solid #12307e">
+<h3>👑 Create User (Only Owner Admin)</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<select id="newRole"><option>User Control Admin User</option><option>Owner Branch User</option><option>Client Branch User</option><option>Client User</option></select>
+<input id="newName" placeholder="Name">
+<input id="newPhone" placeholder="Phone">
+<input id="newUser" placeholder="Username">
+<input id="newPass" placeholder="Password" type="password">
+<input id="newOrg" placeholder="Organization">
 </div>
-<button class="btn" onclick="createUser()">➕ Create User & Save</button>
-<p style="font-size:11px;color:green">Safe: Local Storage এ Save থাকবে</p>
+<button class="btn" onclick="createUser()" style="margin-top:10px">➕ Create & Save</button>
 </div>
-
-<div class="box">
-<h3 id="tableTitle">All Users</h3>
-<table id="userTable">
-<tr><th>Role</th><th>Name</th><th>Username</th><th>Org</th><th>Action</th></tr>
-</table>
-</div>
-
-<div class="box" id="roleInfoBox"></div>
+<div class="box"><table id="userTable"></table></div>
 </div>
 </div>
 
 <script>
-let currentUser = null;
-let users = JSON.parse(localStorage.getItem('jus_users') || '[]');
-
-// Default Owner Admin if not exist
-if(users.length===0){
-users.push({role:'Owner Admin', name:'MD. LIMON AHAMMED', phone:'01949915225', username:'mdlimonahammed2004@mla', password:'Limon915225@', org:'Janakalyan Unnayan Sohayok - JUS'});
-localStorage.setItem('jus_users', JSON.stringify(users));
-}
-
-function doLogin(){
-let r=document.getElementById('loginRole').value;
-let u=document.getElementById('loginUser').value;
-let p=document.getElementById('loginPass').value;
-let found = users.find(x=>x.username===u && x.password===p && x.role===r);
-if(!found){alert('User পাওয়া যায়নি! Role, Username, Password ঠিক দাও। Owner Admin দিয়ে আগে User Create করো।');return;}
-currentUser=found;
-localStorage.setItem('jus_current', JSON.stringify(found));
-showDashboard();
-}
-
-function showDashboard(){
-document.getElementById('loginSec').style.display='none';
-document.getElementById('dashboard').style.display='block';
-let cu = currentUser;
-document.getElementById('userInfo').innerText = cu.role + ' | ' + cu.name + ' | ' + cu.username;
-document.getElementById('orgTitle').innerText = cu.org;
-
-let menu = document.getElementById('sideMenu');
-let createSec = document.getElementById('createSection');
-
-if(cu.role==='Owner Admin'){
-menu.innerHTML = `<b style="font-size:11px;color:#94a3b8">OWNER ADMIN MENU</b>
-<a class="active">🏠 Dashboard</a>
-<a>🏢 All Owner Branch (${users.filter(x=>x.role==='Owner Branch User').length})</a>
-<a>🏦 All Client Branch (${users.filter(x=>x.role==='Client Branch User').length})</a>
-<a>👥 All Client (${users.filter(x=>x.role==='Client User').length})</a>
-<a>🚨 Cheating Option</a>
-<a>👑 User Create Control</a>`;
-createSec.style.display='block';
-document.getElementById('roleInfoBox').innerHTML = `<h3>👑 Owner Admin Power</h3><p style="font-size:13px">তুমি সবাইকে Create / Delete করতে পারবে। Delete বাটন শুধু তোমার জন্য আসবে।</p>`;
-}else if(cu.role==='User Control Admin User'){
-menu.innerHTML = `<b>CONTROL ADMIN</b><a class="active">🏢 Branch Control</a><a>👥 Client Control</a><a>📊 Reports</a>`;
-createSec.style.display='none';
-document.getElementById('roleInfoBox').innerHTML = `<h3>User Control Admin Dashboard</h3><p>তুমি Branch গুলো Control করতে পারবে। Delete করতে পারবে না।</p>`;
-}else if(cu.role==='Owner Branch User'){
-menu.innerHTML = `<b>OWNER BRANCH</b><a class="active">🏦 My Client Branches</a><a>👥 My Clients</a><a>💰 Collection</a>`;
-createSec.style.display='none';
-document.getElementById('roleInfoBox').innerHTML = `<h3>Owner Branch Dashboard</h3><p>তোমার আন্ডারে থাকা Client Branch গুলো দেখতে পারবে।</p>`;
-}else if(cu.role==='Client Branch User'){
-menu.innerHTML = `<b>CLIENT BRANCH</b><a class="active">👥 My Clients</a><a>💰 My Collection</a><a>📊 My Reports</a>`;
-createSec.style.display='none';
-document.getElementById('roleInfoBox').innerHTML = `<h3>Client Branch Dashboard</h3><p>তুমি তোমার Client গুলো Manage করবে।</p>`;
+let users=JSON.parse(localStorage.getItem('jus_users')||'[]');
+if(users.length===0){users=[{role:'Owner Admin',name:'MD. LIMON AHAMMED',phone:'01949915225',username:'mdlimonahammed2004@mla',password:'Limon915225@',org:'Janakalyan Unnayan Sohayok - JUS'}];localStorage.setItem('jus_users',JSON.stringify(users));}
+let cur=null;
+function handleRole(){
+let r=document.getElementById('role').value;
+let org=document.getElementById('orgName');
+if(r==='Owner Admin' || r==='User Control Admin User' || r==='Owner Branch User'){
+org.value='Janakalyan Unnayan Sohayok - JUS';
+org.readOnly=true;
+org.style.background='#f1f5f9';
 }else{
-menu.innerHTML = `<b>CLIENT USER</b><a class="active">💰 My Loan</a><a>📊 My Payments</a>`;
-createSec.style.display='none';
-document.getElementById('roleInfoBox').innerHTML = `<h3>Client Dashboard</h3><p>তুমি তোমার Loan Info দেখতে পারবে।</p>`;
+org.value='';
+org.readOnly=false;
+org.style.background='#fff';
+org.placeholder='Enter Your Organization Name';
 }
-renderTable();
 }
-
-function renderTable(){
-let tbl=document.getElementById('userTable');
-tbl.innerHTML='<tr><th>Role</th><th>Name</th><th>Username</th><th>Org</th><th>Action</th></tr>';
-let list = users;
-if(currentUser.role!=='Owner Admin'){
-// অন্যরা শুধু নিজের রোলের নিচের গুলো দেখবে
-if(currentUser.role==='Owner Branch User') list = users.filter(x=>x.role.includes('Client'));
-if(currentUser.role==='Client Branch User') list = users.filter(x=>x.role==='Client User');
-if(currentUser.role==='Client User') list = [currentUser];
-if(currentUser.role==='User Control Admin User') list = users.filter(x=>x.role!=='Owner Admin');
+function togglePass(){let p=document.getElementById('password');p.type=p.type==='password'?'text':'password';}
+function doLogin(){
+let r=document.getElementById('role').value;
+let u=document.getElementById('username').value;
+let p=document.getElementById('password').value;
+let f=users.find(x=>x.username===u && x.password===p && x.role===r);
+if(!f){alert('Role / Username / Password ভুল');return;}
+cur=f;document.getElementById('loginSec').style.display='none';document.getElementById('dashboard').style.display='block';
+document.getElementById('uInfo').innerText=f.role+' | '+f.name;
+let menu=document.getElementById('sideMenu');
+if(f.role==='Owner Admin'){
+menu.innerHTML=`<b style="color:#94a3b8;font-size:11px">OWNER ADMIN ONLY</b><a class="active">🏢 All Owner Branch</a><a>🏦 All Client Branch</a><a>👥 All Client</a><a>🚨 Cheating Option</a>`;
+document.getElementById('createBox').style.display='block';
+}else{
+menu.innerHTML=`<a class="active">🏠 ${f.role} Dashboard</a>`;
+document.getElementById('createBox').style.display='none';
 }
-list.forEach((u,i)=>{
-let realIndex = users.indexOf(u);
-let delBtn = (currentUser.role==='Owner Admin')? `<button onclick="deleteUser(${realIndex})" style="background:#dc2626;color:#fff;border:none;padding:5px 10px;border-radius:6px;cursor:pointer">Delete</button>` : `<span style="color:#94a3b8;font-size:11px">No Permission</span>`;
-if(u.role==='Owner Admin' && currentUser.role==='Owner Admin') delBtn = `<span style="color:green;font-size:11px">Owner (Protected)</span>`;
-tbl.innerHTML+=`<tr><td>${u.role}</td><td>${u.name}</td><td>${u.username}</td><td>${u.org}</td><td>${delBtn}</td></tr>`;
+render();
+}
+function render(){
+let t=document.getElementById('userTable');
+t.innerHTML='<tr><th>Role</th><th>Name</th><th>Username</th><th>Action</th></tr>';
+users.forEach((u,i)=>{
+let del=cur.role==='Owner Admin' && u.role!=='Owner Admin'?`<button onclick="delUser(${i})" style="background:#dc2626;color:#fff;border:none;padding:5px 10px;border-radius:6px">Delete</button>`:(u.role==='Owner Admin'?'Protected':'No Permission');
+t.innerHTML+=`<tr><td>${u.role}</td><td>${u.name}</td><td>${u.username}</td><td>${del}</td></tr>`;
 });
 }
-
 function createUser(){
 let r=document.getElementById('newRole').value;
 let n=document.getElementById('newName').value;
 let ph=document.getElementById('newPhone').value;
-let un=document.getElementById('newUsername').value;
-let pw=document.getElementById('newPassword').value;
-let org=document.getElementById('newOrg').value || (r.includes('Client')? 'Client Org - '+n : 'Janakalyan Unnayan Sohayok - JUS');
+let un=document.getElementById('newUser').value;
+let pw=document.getElementById('newPass').value;
+let org=document.getElementById('newOrg').value || (r.includes('Client')?'Client Org - '+n:'Janakalyan Unnayan Sohayok - JUS');
 if(!n||!un||!pw){alert('Name, Username, Password দাও');return;}
 users.push({role:r,name:n,phone:ph,username:un,password:pw,org:org});
-localStorage.setItem('jus_users', JSON.stringify(users));
-alert('✅ User Created! এখন '+r+' -> '+un+' দিয়ে Login করলে অটো তার Dashboard এ যাবে।');
-renderTable();
+localStorage.setItem('jus_users',JSON.stringify(users));
+render();
 }
-
-function deleteUser(idx){
-if(currentUser.role!=='Owner Admin'){alert('Delete শুধু Owner Admin করতে পারবে!');return;}
-if(users[idx].role==='Owner Admin'){alert('Owner Admin Delete করা যাবে না');return;}
-if(confirm('Delete করবে? '+users[idx].name)){
-users.splice(idx,1);
-localStorage.setItem('jus_users', JSON.stringify(users));
-renderTable();
-}
-}
-
-function doLogout(){
-localStorage.removeItem('jus_current');
-document.getElementById('dashboard').style.display='none';
-document.getElementById('loginSec').style.display='flex';
-}
-
-// Auto login if saved
-let saved = localStorage.getItem('jus_current');
-if(saved){
-currentUser=JSON.parse(saved);
-showDashboard();
-}
+function delUser(i){if(cur.role!=='Owner Admin')return;if(confirm('Delete?')){users.splice(i,1);localStorage.setItem('jus_users',JSON.stringify(users));render();}}
+function doLogout(){document.getElementById('dashboard').style.display='none';document.getElementById('loginSec').style.display='flex';}
+handleRole();
 </script>
 </body>
 </html>
