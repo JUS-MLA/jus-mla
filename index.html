@@ -18,7 +18,7 @@ input[readonly]{background:#f1f5f9;font-weight:700}
 .links{display:flex;justify-content:space-between;margin-top:12px;font-size:13px}.links a{color:#12307e;font-weight:700;text-decoration:none}
 #dashboard{display:none;background:#f1f5f9;min-height:100vh}
 .header{background:#12307e;color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-.searchBox{flex:1;max-width:420px;position:relative}.searchBox input{padding:10px 12px 10px 38px;border-radius:20px;border:none;font-size:13px}.searchBox span{position:absolute;left:12px;top:50%;transform:translateY(-50%)}
+.searchBox{flex:1;max-width:380px;position:relative}.searchBox input{padding:10px 12px 10px 38px;border-radius:20px;border:none;font-size:13px}.searchBox span{position:absolute;left:12px;top:50%;transform:translateY(-50%)}
 .sidebar{width:270px;background:#0f255e;min-height:calc(100vh - 62px);float:left;padding:15px}
 .sidebar b{color:#94a3b8;font-size:11px;display:block;margin:14px 0 8px}
 .sidebar a{display:block;padding:11px 10px;color:#cbd5e1;text-decoration:none;border-radius:8px;margin-bottom:5px;font-size:14px;cursor:pointer}
@@ -34,6 +34,8 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px;bord
 .reportBtn{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
 .reportBtn button{padding:8px 14px;border-radius:20px;border:1.5px solid #12307e;background:#fff;color:#12307e;cursor:pointer;font-size:12px;font-weight:700}
 .reportBtn button.active{background:#12307e;color:#fff}
+.filterRow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px;background:#fff;padding:10px;border-radius:10px}
+.filterRow select{max-width:250px}
 @media(max-width:768px){.sidebar{width:100%;float:none;min-height:auto}.main{margin-left:0}.create-grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -42,8 +44,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px;bord
 <div id="loginSec" class="login-wrap">
 <div class="card">
 <div class="logo"><img src="logo.png" onerror="this.src='https://via.placeholder.com/75?text=JUS'"><h2 style="margin:6px 0 2px;color:#12307e">JUS</h2><p style="margin:0;font-size:12px;color:#64748b">Janakalyan Unnayan Sohayok - JUS<br>Management & Accounting System</p></div>
-<label>Select Role</label>
-<select id="role" onchange="handleRole()"><option>Owner Admin</option><option>User Control Admin User</option><option>Owner Branch User</option><option>Client Branch User</option><option>Client User</option></select>
+<label>Select Role</label><select id="role" onchange="handleRole()"><option>Owner Admin</option><option>User Control Admin User</option><option>Owner Branch User</option><option>Client Branch User</option><option>Client User</option></select>
 <label>Organization Name</label><input type="text" id="orgName" value="Janakalyan Unnayan Sohayok - JUS" readonly>
 <label>Owner / Client Name</label><input type="text" id="ownerName" value="MD. LIMON AHAMMED">
 <label>BD Phone Number</label><input type="tel" id="phone" value="01949915225">
@@ -57,15 +58,25 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px;bord
 <div id="dashboard">
 <div class="header">
 <div style="display:flex;align-items:center;gap:10px"><img src="logo.png" style="height:38px;width:38px;border-radius:50%;background:#fff"><div><b>Janakalyan Unnayan Sohayok - JUS</b><br><small id="uInfo"></small></div></div>
-<div class="searchBox"><span>🔍</span><input type="text" id="globalSearch" placeholder="Advance Search - Branch / User / Phone খুঁজুন..." oninput="render()"></div>
+<div class="searchBox"><span>🔍</span><input type="text" id="globalSearch" placeholder="Advance Search - Branch / User / Phone..." oninput="render()"></div>
 <button onclick="doLogout()" style="background:#ef4444;color:#fff;border:none;padding:8px 14px;border-radius:20px;cursor:pointer">Logout</button>
 </div>
 
 <div class="sidebar" id="sideMenu"></div>
 
 <div class="main">
+<!-- BRANCH FILTER - NEW -->
+<div class="filterRow">
+<b style="font-size:13px">🔎 Branch Filter:</b>
+<select id="branchFilter" onchange="render()">
+<option value="all">All Branch - সব ব্রাঞ্চ</option>
+</select>
+<button onclick="document.getElementById('branchFilter').value='all';document.getElementById('globalSearch').value='';render()" style="padding:8px 12px;border-radius:20px;border:none;background:#e2e8f0;font-size:12px;cursor:pointer">Reset</button>
+<small id="filterInfo" style="color:#16a34a;font-weight:700"></small>
+</div>
+
 <div class="box" style="background:linear-gradient(135deg,#12307e,#1e40af);color:#fff">
-<h3 style="margin:0 0 12px">📊 Dashboard - Total Count</h3>
+<h3 style="margin:0 0 12px">📊 Dashboard - Total Count <small id="dashBranchName" style="background:rgba(255,255,255,.2);padding:3px 8px;border-radius:10px;font-size:11px;margin-left:8px"></small></h3>
 <div class="stat" style="margin-bottom:0">
 <div><b id="cTotalBranch">0</b><small>Total Branch</small></div>
 <div><b id="cOwnerBranch">0</b><small>Owner Branch User</small></div>
@@ -85,23 +96,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px;bord
 <div id="tab-allClient" class="tab"><div class="box"><h3>👥 All Client</h3><table id="tblAllClient"></table></div></div>
 <div id="tab-cheating" class="tab"><div class="box" style="border-left:5px solid #ef4444"><h3 style="color:#dc2626">🚨 Cheating Option</h3><table><tr><th>User</th><th>Issue</th><th>Action</th></tr><tr><td>client_branch</td><td>Fake Collection</td><td><button style="background:#dc2626;color:#fff;border:none;padding:5px 10px;border-radius:6px">Block</button></td></tr></table></div></div>
 
-<div id="tab-create" class="tab">
-<div class="box" style="border-left:5px solid #12307e">
-<h3>👑 Create New User - Address + Opening Date Added</h3>
-<div class="create-grid">
-<select id="newRole"><option>User Control Admin User</option><option>Owner Branch User</option><option>Client Branch User</option><option>Client User</option></select>
-<input id="newName" placeholder="Branch / Client Name">
-<input id="newPhone" placeholder="Phone Number">
-<input id="newUser" placeholder="Username">
-<input id="newPass" placeholder="Password" type="password">
-<input id="newOrg" placeholder="Organization Name">
-<input type="date" id="newOpenDate">
-<input id="newAddress" placeholder="Full Address - গ্রাম, থানা, জেলা" style="grid-column:span 2">
-</div>
-<button class="btn" onclick="createUser()">➕ Create & Save Safe</button>
-<p style="font-size:11px;color:#16a34a">Opening Date + Address সহ Save হবে</p>
-</div>
-</div>
+<div id="tab-create" class="tab"><div class="box" style="border-left:5px solid #12307e"><h3>👑 Create New User - Address + Opening Date Added</h3><div class="create-grid"><select id="newRole"><option>User Control Admin User</option><option>Owner Branch User</option><option>Client Branch User</option><option>Client User</option></select><input id="newName" placeholder="Branch / Client Name"><input id="newPhone" placeholder="Phone Number"><input id="newUser" placeholder="Username"><input id="newPass" placeholder="Password" type="password"><input id="newOrg" placeholder="Organization Name"><input type="date" id="newOpenDate"><input id="newAddress" placeholder="Full Address - গ্রাম, থানা, জেলা" style="grid-column:span 2"></div><button class="btn" onclick="createUser()">➕ Create & Save Safe</button></div></div>
 
 <div id="tab-delete" class="tab"><div class="box" style="border-left:5px solid #dc2626"><h3>🗑️ Member Delete Option - Only Owner Admin</h3><table id="tblDelete"></table></div></div>
 
@@ -115,36 +110,54 @@ if(users.length===0){users=[{role:'Owner Admin',name:'MD. LIMON AHAMMED',phone:'
 let cur=null;let reportType='daily';
 function handleRole(){let r=document.getElementById('role').value;let org=document.getElementById('orgName');if(r==='Owner Admin'||r==='User Control Admin User'||r==='Owner Branch User'){org.value='Janakalyan Unnayan Sohayok - JUS';org.readOnly=true;org.style.background='#f1f5f9';}else{org.value='';org.readOnly=false;org.style.background='#fff';org.placeholder='Enter Your Organization Name';}}
 function togglePass(){let p=document.getElementById('password');p.type=p.type==='password'?'text':'password';}
-function doLogin(){let r=document.getElementById('role').value;let u=document.getElementById('username').value;let p=document.getElementById('password').value;let f=users.find(x=>x.username===u && x.password===p && x.role===r);if(!f){alert('Role / Username / Password ভুল');return;}cur=f;document.getElementById('loginSec').style.display='none';document.getElementById('dashboard').style.display='block';document.getElementById('uInfo').innerText=f.role+' | '+f.name;let menu=document.getElementById('sideMenu');if(f.role==='Owner Admin'){menu.innerHTML=`<b>OWNER ADMIN ONLY</b>
-<a id="m1" class="active" onclick="openTab('ownerBranch')">🏢 All Owner Branch</a>
-<a id="m2" onclick="openTab('clientBranch')">🏦 All Client Branch</a>
-<a id="m3" onclick="openTab('allClient')">👥 All Client</a>
-<a id="m4" onclick="openTab('cheating')">🚨 Cheating Option</a>
-<b>CREATE & DELETE</b>
-<a id="m5" onclick="openTab('create')" style="background:#1e40af;color:#fff;border:1px dashed #93c5fd">➕ Create + Address + Date</a>
-<a id="m6" onclick="openTab('delete')" style="background:#991b1b;color:#fff">🗑️ Member Delete</a>`;}else{menu.innerHTML=`<b>${f.role}</b><a class="active">🏠 My Dashboard</a>`;}render();showReport('daily');}
+function doLogin(){let r=document.getElementById('role').value;let u=document.getElementById('username').value;let p=document.getElementById('password').value;let f=users.find(x=>x.username===u && x.password===p && x.role===r);if(!f){alert('Role / Username / Password ভুল');return;}cur=f;document.getElementById('loginSec').style.display='none';document.getElementById('dashboard').style.display='block';document.getElementById('uInfo').innerText=f.role+' | '+f.name;let menu=document.getElementById('sideMenu');if(f.role==='Owner Admin'){menu.innerHTML=`<b>OWNER ADMIN ONLY</b><a id="m1" class="active" onclick="openTab('ownerBranch')">🏢 All Owner Branch</a><a id="m2" onclick="openTab('clientBranch')">🏦 All Client Branch</a><a id="m3" onclick="openTab('allClient')">👥 All Client</a><a id="m4" onclick="openTab('cheating')">🚨 Cheating Option</a><b>CREATE & DELETE</b><a id="m5" onclick="openTab('create')" style="background:#1e40af;color:#fff;border:1px dashed #93c5fd">➕ Create + Address + Date</a><a id="m6" onclick="openTab('delete')" style="background:#991b1b;color:#fff">🗑️ Member Delete</a>`;}else{menu.innerHTML=`<b>${f.role}</b><a class="active">🏠 My Dashboard</a>`;}updateBranchFilter();render();showReport('daily');}
 function openTab(id){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');let map={ownerBranch:'m1',clientBranch:'m2',allClient:'m3',cheating:'m4',create:'m5',delete:'m6'};if(map[id]&&document.getElementById(map[id]))document.getElementById(map[id]).classList.add('active');}
-function showReport(type){reportType=type;document.querySelectorAll('.reportBtn button').forEach(b=>b.classList.remove('active'));document.getElementById('r'+type.charAt(0).toUpperCase()+type.slice(1)).classList.add('active');let now=new Date();let filtered=[];if(type==='daily'){filtered=users.filter(u=>new Date(u.createdAt).toDateString()===now.toDateString());}else if(type==='weekly'){let w=new Date();w.setDate(now.getDate()-7);filtered=users.filter(u=>new Date(u.createdAt)>=w);}else{filtered=users.filter(u=>new Date(u.createdAt).getMonth()===now.getMonth() && new Date(u.createdAt).getFullYear()===now.getFullYear());}let html=`<b>${type.toUpperCase()} - ${filtered.length} জন নতুন</b><br><table><tr><th>Name</th><th>Role</th><th>Opening Date</th><th>Address</th><th>Created</th></tr>`+filtered.map(u=>`<tr><td>${u.name}</td><td>${u.role}</td><td>${u.openDate||'-'}</td><td>${u.address||'-'}</td><td>${new Date(u.createdAt).toLocaleDateString()}</td></tr>`).join('')+'</table>';document.getElementById('reportBox').innerHTML=html||'<table><tr><td>No data</td></tr></table>';}
+function updateBranchFilter(){
+let sel=document.getElementById('branchFilter');
+let current=sel.value;
+let branches=[...new Set(users.filter(u=>u.role!=='Owner Admin').map(u=>u.name))];
+sel.innerHTML='<option value="all">All Branch - সব ব্রাঞ্চ</option>';
+branches.forEach(b=>{let opt=document.createElement('option');opt.value=b;opt.text=b;sel.appendChild(opt);});
+if(branches.includes(current)) sel.value=current;
+}
+function showReport(type){
+reportType=type;document.querySelectorAll('.reportBtn button').forEach(b=>b.classList.remove('active'));document.getElementById('r'+type.charAt(0).toUpperCase()+type.slice(1)).classList.add('active');
+let now=new Date();let branchF=document.getElementById('branchFilter').value;
+let base=branchF==='all'?users:users.filter(u=>u.name===branchF || u.org===branchF);
+let filtered=[];
+if(type==='daily'){filtered=base.filter(u=>new Date(u.createdAt).toDateString()===now.toDateString());}
+else if(type==='weekly'){let w=new Date();w.setDate(now.getDate()-7);filtered=base.filter(u=>new Date(u.createdAt)>=w);}
+else{filtered=base.filter(u=>new Date(u.createdAt).getMonth()===now.getMonth());}
+let html=`<b>${type.toUpperCase()} - ${filtered.length} জন - [${branchF==='all'?'All Branch':branchF}]</b><br><table><tr><th>Name</th><th>Role</th><th>Opening Date</th><th>Address</th><th>Created</th></tr>`+filtered.map(u=>`<tr><td>${u.name}</td><td>${u.role}</td><td>${u.openDate||'-'}</td><td>${u.address||'-'}</td><td>${new Date(u.createdAt).toLocaleDateString()}</td></tr>`).join('')+'</table>';
+document.getElementById('reportBox').innerHTML=html;
+}
 function render(){
 let q=(document.getElementById('globalSearch')?.value||'').toLowerCase();
-let filtered=users.filter(u=>(u.name+' '+u.role+' '+u.username+' '+u.phone+' '+(u.address||'')+' '+(u.openDate||'')).toLowerCase().includes(q));
-document.getElementById('cOwnerBranch').innerText=users.filter(x=>x.role==='Owner Branch User').length;
-document.getElementById('cClientBranch').innerText=users.filter(x=>x.role==='Client Branch User').length;
-document.getElementById('cClientUser').innerText=users.filter(x=>x.role==='Client User').length;
-document.getElementById('cTotalBranch').innerText=users.filter(x=>x.role.includes('Branch User')).length;
-document.getElementById('cTotalUser').innerText=users.length;
-document.getElementById('searchResult').innerText=q?` - ${filtered.length} found`:'';
+let branchF=document.getElementById('branchFilter')?.value||'all';
+let branchFiltered = branchF==='all'? users : users.filter(u=>u.name===branchF || u.org===branchF || u.role===branchF);
+let filtered=branchFiltered.filter(u=>(u.name+' '+u.role+' '+u.username+' '+u.phone+' '+(u.address||'')+' '+(u.openDate||'')).toLowerCase().includes(q));
+
+document.getElementById('filterInfo').innerText=branchF==='all'?'':'Filtered: '+branchF;
+document.getElementById('dashBranchName').innerText=branchF==='all'?'All Branch':branchF;
+
+document.getElementById('cOwnerBranch').innerText=branchFiltered.filter(x=>x.role==='Owner Branch User').length;
+document.getElementById('cClientBranch').innerText=branchFiltered.filter(x=>x.role==='Client Branch User').length;
+document.getElementById('cClientUser').innerText=branchFiltered.filter(x=>x.role==='Client User').length;
+document.getElementById('cTotalBranch').innerText=branchFiltered.filter(x=>x.role.includes('Branch User')).length;
+document.getElementById('cTotalUser').innerText=branchFiltered.length;
+document.getElementById('searchResult').innerText=q?` - ${filtered.length} found`:(branchF!=='all'?` - ${filtered.length} in ${branchF}`:'');
+
 let t=document.getElementById('userTable');
 t.innerHTML='<tr><th>Role</th><th>Name</th><th>Phone</th><th>Address</th><th>Opening Date</th><th>Action</th></tr>';
-filtered.forEach(u=>{let idx=users.indexOf(u);let del=cur.role==='Owner Admin'&&u.role!=='Owner Admin'?`<button onclick="delUser(${idx})" style="background:#dc2626;color:#fff;border:none;padding:5px 10px;border-radius:6px">Delete</button>`:(u.role==='Owner Admin'?'Protected':'No Permission');t.innerHTML+=`<tr><td>${u.role}</td><td>${u.name}</td><td>${u.phone}</td><td>${u.address||'-'}</td><td>${u.openDate||'-'}</td><td>${del}</td></tr>`;});
+filtered.forEach(u=>{let idx=users.indexOf(u);let del=cur && cur.role==='Owner Admin'&&u.role!=='Owner Admin'?`<button onclick="delUser(${idx})" style="background:#dc2626;color:#fff;border:none;padding:5px 10px;border-radius:6px">Delete</button>`:(u.role==='Owner Admin'?'Protected':'No Permission');t.innerHTML+=`<tr><td>${u.role}</td><td>${u.name}</td><td>${u.phone}</td><td>${u.address||'-'}</td><td>${u.openDate||'-'}</td><td>${del}</td></tr>`;});
 document.getElementById('tblDelete').innerHTML='<tr><th>Name</th><th>Role</th><th>Address</th><th>Opening Date</th><th>Delete</th></tr>'+filtered.filter(u=>u.role!=='Owner Admin').map(u=>{let idx=users.indexOf(u);return `<tr><td>${u.name}</td><td>${u.role}</td><td>${u.address||'-'}</td><td>${u.openDate||'-'}</td><td><button onclick="delUser(${idx})" style="background:#dc2626;color:#fff;border:none;padding:6px 12px;border-radius:6px">🗑️ Delete</button></td></tr>`;}).join('')||'<tr><td colspan=5>No Member</td></tr>';
-document.getElementById('tblOwner').innerHTML='<tr><th>Branch</th><th>Phone</th><th>Address</th><th>Opening Date</th></tr>'+users.filter(x=>x.role==='Owner Branch User').filter(x=>(x.name+(x.address||'')+(x.openDate||'')).toLowerCase().includes(q)).map(x=>`<tr><td>${x.name}</td><td>${x.phone}</td><td>${x.address||'-'}</td><td>${x.openDate||'-'}</td></tr>`).join('')||'<tr><td colspan=4>No Data</td></tr>';
-document.getElementById('tblClientBranch').innerHTML='<tr><th>Branch</th><th>Phone</th><th>Address</th><th>Opening Date</th></tr>'+users.filter(x=>x.role==='Client Branch User').filter(x=>(x.name+(x.address||'')+(x.openDate||'')).toLowerCase().includes(q)).map(x=>`<tr><td>${x.name}</td><td>${x.phone}</td><td>${x.address||'-'}</td><td>${x.openDate||'-'}</td></tr>`).join('')||'<tr><td colspan=4>No Data</td></tr>';
-document.getElementById('tblAllClient').innerHTML='<tr><th>ID</th><th>Name</th><th>Address</th><th>Opening Date</th></tr>'+users.filter(x=>x.role==='Client User').filter(x=>(x.name+(x.address||'')).toLowerCase().includes(q)).map((x,i)=>`<tr><td>C-${i+1}</td><td>${x.name}</td><td>${x.address||'-'}</td><td>${x.openDate||'-'}</td></tr>`).join('')||'<tr><td colspan=4>No Data</td></tr>';
-showReport(reportType);
+document.getElementById('tblOwner').innerHTML='<tr><th>Branch</th><th>Phone</th><th>Address</th><th>Opening Date</th></tr>'+filtered.filter(x=>x.role==='Owner Branch User').map(x=>`<tr><td>${x.name}</td><td>${x.phone}</td><td>${x.address||'-'}</td><td>${x.openDate||'-'}</td></tr>`).join('')||'<tr><td colspan=4>No Data in this filter</td></tr>';
+document.getElementById('tblClientBranch').innerHTML='<tr><th>Branch</th><th>Phone</th><th>Address</th><th>Opening Date</th></tr>'+filtered.filter(x=>x.role==='Client Branch User').map(x=>`<tr><td>${x.name}</td><td>${x.phone}</td><td>${x.address||'-'}</td><td>${x.openDate||'-'}</td></tr>`).join('')||'<tr><td colspan=4>No Data in this filter</td></tr>';
+document.getElementById('tblAllClient').innerHTML='<tr><th>ID</th><th>Name</th><th>Address</th><th>Opening Date</th></tr>'+filtered.filter(x=>x.role==='Client User').map((x,i)=>`<tr><td>C-${i+1}</td><td>${x.name}</td><td>${x.address||'-'}</td><td>${x.openDate||'-'}</td></tr>`).join('')||'<tr><td colspan=4>No Data in this filter</td></tr>';
+if(cur) showReport(reportType);
 }
-function createUser(){let r=document.getElementById('newRole').value;let n=document.getElementById('newName').value;let ph=document.getElementById('newPhone').value;let un=document.getElementById('newUser').value;let pw=document.getElementById('newPass').value;let org=document.getElementById('newOrg').value||'Janakalyan Unnayan Sohayok - JUS';let addr=document.getElementById('newAddress').value;let oDate=document.getElementById('newOpenDate').value;if(!n||!un||!pw){alert('Name, Username, Password দাও');return;}if(users.find(x=>x.username===un)){alert('Username আছে');return;}users.push({role:r,name:n,phone:ph,username:un,password:pw,org:org,address:addr,openDate:oDate,createdAt:new Date().toISOString()});localStorage.setItem('jus_users',JSON.stringify(users));alert('Created with Address & Opening Date!');document.getElementById('newName').value='';document.getElementById('newUser').value='';document.getElementById('newPass').value='';document.getElementById('newAddress').value='';document.getElementById('newOpenDate').value='';render();}
-function delUser(i){if(cur.role!=='Owner Admin'){alert('Only Owner Admin');return;}if(users[i].role==='Owner Admin'){alert('Owner Admin Delete হবে না');return;}if(confirm('Delete করবে? '+users[i].name)){users.splice(i,1);localStorage.setItem('jus_users',JSON.stringify(users));render();}}
+function createUser(){let r=document.getElementById('newRole').value;let n=document.getElementById('newName').value;let ph=document.getElementById('newPhone').value;let un=document.getElementById('newUser').value;let pw=document.getElementById('newPass').value;let org=document.getElementById('newOrg').value||'Janakalyan Unnayan Sohayok - JUS';let addr=document.getElementById('newAddress').value;let oDate=document.getElementById('newOpenDate').value;if(!n||!un||!pw){alert('Name, Username, Password দাও');return;}if(users.find(x=>x.username===un)){alert('Username আছে');return;}users.push({role:r,name:n,phone:ph,username:un,password:pw,org:org,address:addr,openDate:oDate,createdAt:new Date().toISOString()});localStorage.setItem('jus_users',JSON.stringify(users));alert('Created! এখন Filter এ ওই Branch টা আসবে');document.getElementById('newName').value='';document.getElementById('newUser').value='';document.getElementById('newPass').value='';document.getElementById('newAddress').value='';document.getElementById('newOpenDate').value='';updateBranchFilter();render();}
+function delUser(i){if(cur.role!=='Owner Admin'){alert('Only Owner Admin');return;}if(users[i].role==='Owner Admin'){alert('Owner Admin Delete হবে না');return;}if(confirm('Delete করবে? '+users[i].name)){users.splice(i,1);localStorage.setItem('jus_users',JSON.stringify(users));updateBranchFilter();render();}}
 function doLogout(){document.getElementById('dashboard').style.display='none';document.getElementById('loginSec').style.display='flex';}
 handleRole();
 </script>
