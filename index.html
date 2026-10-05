@@ -9,84 +9,64 @@
 body{margin:0;background:#12307e;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:15px}
 .card{background:#fff;width:100%;max-width:430px;border-radius:18px;padding:22px;box-shadow:0 12px 30px rgba(0,0,0,.3)}
 .logo{text-align:center}
-.logo img{height:70px}
+.logo img{height:75px;width:75px;border-radius:50%;border:2px solid #e2e8f0;object-fit:cover}
 .logo h1{margin:5px 0 2px;color:#12307e;font-size:27px}
-.logo p{margin:0;font-size:12px;color:#64748b}
+.logo p{margin:0;font-size:12px;color:#64748b;line-height:1.3}
 label{font-size:13px;font-weight:700;margin:12px 0 5px;display:block;color:#1e293b}
-input,select{width:100%;padding:11px 13px;border:1.5px solid #dbe2ea;border-radius:10px;font-size:14px;outline:none}
-.pass{position:relative}
-.pass i{position:absolute;right:12px;top:11px;cursor:pointer}
-#bar{height:4px;background:#eee;border-radius:5px;margin-top:6px;transition:.3s}
-.btn{width:100%;background:#12307e;color:#fff;border:none;padding:12px;border-radius:10px;font-weight:bold;margin-top:16px;cursor:pointer}
-.owner{display:none;background:#fff7ed;border:1.5px dashed #f59e0b;padding:10px;border-radius:10px;margin-top:12px}
-#otpModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);justify-content:center;align-items:center;z-index:999;padding:15px}
-.modal{background:#fff;padding:18px;border-radius:12px;width:100%;max-width:360px}
+input,select{width:100%;padding:11px 13px;border:1.5px solid #dbe2ea;border-radius:10px;font-size:14px;outline:none;background:#fff}
+input[readonly]{background:#f1f5f9;color:#334155;font-weight:600}
+.btn{width:100%;background:#12307e;color:#fff;border:none;padding:13px;border-radius:12px;font-weight:bold;margin-top:16px;cursor:pointer;font-size:16px}
+#bar{height:5px;background:#16a34a;border-radius:5px;margin-top:6px;width:100%}
+.owner-box{background:#fff7ed;border:1.5px dashed #f59e0b;padding:10px;border-radius:10px;margin-top:12px}
+.link{display:flex;justify-content:space-between;margin-top:12px;font-size:13px}
+.link a{color:#12307e;font-weight:700;cursor:pointer;text-decoration:none}
 </style>
 </head>
 <body>
 <div class="card">
 <div class="logo">
-<img id="logoImg" src="logo.png" alt="JUS">
+<img id="logoImg" src="logo.png" onerror="this.src='https://via.placeholder.com/75?text=JUS'">
 <h1>JUS</h1>
 <p>Janakalyan Unnayan Sohayok - JUS<br>Management & Accounting System</p>
 </div>
 
 <label>Select Role</label>
 <select id="role" onchange="handleRole()">
-<option value="">-- Select Role --</option>
-<option>Owner Admin</option>
+<option selected>Owner Admin</option>
 <option>User Control Admin User</option>
 <option>Owner Branch User</option>
-<option>Client Branch User</option>
 <option>Client User</option>
 </select>
 
 <label>Organization Name</label>
-<input type="text" id="orgName" placeholder="Enter Organization Name">
+<input type="text" id="orgName" value="Janakalyan Unnayan Sohayok - JUS" readonly>
 
 <label>Owner / Client Name</label>
-<input type="text" id="owner" placeholder="Enter Name">
+<input type="text" id="ownerName" value="MD. LIMON AHAMMED">
 
 <label>BD Phone Number</label>
-<input type="tel" id="phone" placeholder="+880 1XXXXXXXXX">
+<input type="tel" id="phone" value="01949915225">
 
 <label>Username</label>
-<input type="text" id="user" placeholder="Username">
+<input type="text" id="username" value="mdlimonahammed2004@mla">
 
 <label>Password</label>
-<div class="pass">
-<input type="password" id="pass" placeholder="Password">
-<i onclick="togglePass()">👁️</i>
-</div>
+<input type="text" id="password" value="Limon915225@">
 <div id="bar"></div>
-<div id="txt" style="font-size:11px;color:#64748b;margin-top:3px"></div>
+<div style="font-size:11px;color:#16a34a;margin-top:3px">Strong</div>
 
-<div id="logoBox" class="owner">
+<div id="logoBox" class="owner-box">
 <b style="color:#b45309;font-size:13px">👑 Owner Admin Only - Logo Upload</b>
-<input type="file" accept="image/*" onchange="changeLogo(event)" style="margin-top:8px">
+<input type="file" accept="image/*" onchange="changeLogo(event)" style="margin-top:8px;width:100%">
 <p style="font-size:11px;color:#666;margin:5px 0 0">Only Owner Admin can change logo</p>
 </div>
 
-<div style="display:flex;justify-content:space-between;margin-top:12px;font-size:13px">
-<a onclick="openOTP()" style="color:#12307e;font-weight:700;cursor:pointer">Forgot Password?</a>
-<a style="color:#12307e;font-weight:700;cursor:pointer">Need Help?</a>
+<div class="link">
+<a>Forgot Password?</a>
+<a>Need Help?</a>
 </div>
 
-<button class="btn" onclick="login()">🔐 Login</button>
-</div>
-
-<div id="otpModal">
-<div class="modal">
-<h3 style="margin:0 0 8px;color:#12307e">Forgot OTP</h3>
-<input type="tel" id="fphone" placeholder="BD Number +8801...">
-<button class="btn" onclick="sendOTP()">Send OTP (123456)</button>
-<div id="otpArea" style="display:none">
-<input type="text" id="otp" placeholder="OTP" style="margin-top:10px">
-<input type="password" id="newp" placeholder="New Password" style="margin-top:10px">
-<button class="btn" onclick="resetP()">Reset</button>
-</div>
-<p style="text-align:center"><a onclick="closeOTP()" style="cursor:pointer">Close</a></p>
-</div>
+<button class="btn" onclick="loginCheck()">🔐 Login</button>
 </div>
 
 <script>
@@ -94,47 +74,32 @@ function handleRole(){
 let r=document.getElementById('role').value;
 let org=document.getElementById('orgName');
 let logoBox=document.getElementById('logoBox');
-
-// Logo only for Owner Admin
-logoBox.style.display = (r==='Owner Admin')? 'block' : 'none';
-
-// Organization Name Logic
 if(r==='Owner Admin' || r==='User Control Admin User' || r==='Owner Branch User'){
- org.value='Janakalyan Unnayan Sohayok - JUS';
- org.readOnly=true;
- org.style.background='#f1f5f9';
- org.placeholder='Janakalyan Unnayan Sohayok - JUS';
-} else if(r==='Client Branch User' || r==='Client User'){
- org.value='';
- org.readOnly=false;
- org.style.background='#fff';
- org.placeholder='Enter Your Organization / Client Name';
-} else {
- org.value='';
- org.readOnly=false;
- org.style.background='#fff';
- org.placeholder='Enter Organization Name';
+org.value='Janakalyan Unnayan Sohayok - JUS';
+org.readOnly=true;
+org.style.background='#f1f5f9';
+}else{
+org.value='';
+org.readOnly=false;
+org.style.background='#fff';
+org.placeholder='Enter Your Organization Name';
 }
+logoBox.style.display = (r==='Owner Admin')? 'block' : 'none';
 }
-function togglePass(){
-let p=document.getElementById('pass');
-p.type=p.type=='password'?'text':'password';
-}
-document.getElementById('pass').addEventListener('input',function(){
-let v=this.value,b=document.getElementById('bar'),t=document.getElementById('txt');
-if(!v){b.style.width='0%';t.innerText='';}
-else if(v.length<6){b.style.width='30%';b.style.background='red';t.innerText='Weak';}
-else if(v.length<8){b.style.width='60%';b.style.background='orange';t.innerText='Medium';}
-else{b.style.width='100%';b.style.background='green';t.innerText='Strong';}
-});
 function changeLogo(e){
 document.getElementById('logoImg').src=URL.createObjectURL(e.target.files[0]);
 }
-function login(){alert('Login as: '+document.getElementById('role').value);}
-function openOTP(){document.getElementById('otpModal').style.display='flex';}
-function closeOTP(){document.getElementById('otpModal').style.display='none';}
-function sendOTP(){alert('OTP 123456');document.getElementById('otpArea').style.display='block';}
-function resetP(){if(document.getElementById('otp').value=='123456'){alert('Reset Done');closeOTP();}else{alert('Wrong OTP');}}
+function loginCheck(){
+let u=document.getElementById('username').value;
+let p=document.getElementById('password').value;
+if(u==='mdlimonahammed2004@mla' && p==='Limon915225@'){
+alert('✅ Owner Admin Login Successful!\nWelcome MD. LIMON AHAMMED');
+}else{
+alert('Login as: '+document.getElementById('role').value);
+}
+}
+// Load correct state on start
+handleRole();
 </script>
 </body>
 </html>
