@@ -1,37 +1,93 @@
-<div id="ownerLoginOnly" style="max-width:400px;margin:30px auto;background:#fff;padding:25px;border-radius:18px;box-shadow:0 8px 25px rgba(0,0,0,.08);font-family:Arial;text-align:center">
+<div id="ownerLoginOnly" style="max-width:380px;margin:20px auto;background:#fff;padding:20px;border-radius:16px;box-shadow:0 5px 20px rgba(0,0,0,.1);font-family:Arial;text-align:center">
 
-  <!-- Language Switch -->
-  <div style="display:flex;justify-content:flex-end;gap:5px;margin-bottom:10px">
-    <button onclick="setLang('bn')" id="btn-bn" style="padding:5px 12px;border-radius:20px;border:1px solid #6c5ce7;background:#6c5ce7;color:#fff;font-size:12px;cursor:pointer">বাংলা</button>
-    <button onclick="setLang('en')" id="btn-en" style="padding:5px 12px;border-radius:20px;border:1px solid #ddd;background:#fff;font-size:12px;cursor:pointer">English</button>
+  <!-- Language - Instant Change -->
+  <div style="display:flex;gap:8px;margin-bottom:15px">
+    <button onclick="setLang('bn')" id="b_bn" style="flex:1;padding:10px;border-radius:25px;border:1px solid #6c5ce7;background:#6c5ce7;color:#fff;font-weight:bold">বাংলা</button>
+    <button onclick="setLang('en')" id="b_en" style="flex:1;padding:10px;border-radius:25px;border:1px solid #ddd;background:#fff;color:#333;font-weight:bold">English</button>
   </div>
 
-  <!-- 1. Logo / ছবি -->
-  <img id="logoView" src="" style="width:90px;height:90px;border-radius:50%;object-fit:cover;display:none;margin:0 auto 10px;border:3px solid #6c5ce7">
-  <div id="logoDefault" style="width:90px;height:90px;border-radius:50%;background:#f1f2f6;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:40px">🏪</div>
-  <input type="file" id="logoFile" accept="image/*" style="font-size:12px">
-  <p id="t_logo" style="font-size:11px;color:#888;margin:5px 0 15px">Logo / ছবি আপলোড</p>
+  <img id="vLogo" src="" style="width:80px;height:80px;border-radius:50%;display:none;margin:0 auto 10px;object-fit:cover;border:2px solid #6c5ce7">
+  <div id="dLogo" style="width:80px;height:80px;border-radius:50%;background:#eee;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:35px">🏪</div>
+  <input type="file" id="fLogo" accept="image/*" style="font-size:11px">
+  <p id="tx_logo" style="font-size:11px;color:#888;margin:5px 0 15px">Logo / ছবি আপলোড</p>
 
   <div style="text-align:left">
-    <label id="l_phone" style="font-size:13px;font-weight:bold">ফোন নাম্বার</label>
-    <div style="display:flex;gap:5px">
-      <input id="f_phone" placeholder="01XXXXXXXXX" style="flex:1;padding:12px;margin:5px 0;border:1px solid #ddd;border-radius:10px">
-      <button onclick="forgetOne('phone')" id="b_f_phone" style="font-size:11px;border:none;background:#eee;border-radius:8px;padding:0 8px;cursor:pointer">Forget?</button>
+    <label id="tx_ph" style="font-size:13px;font-weight:bold">ফোন নাম্বার</label>
+    <input id="in_ph" style="width:100%;padding:11px;margin:4px 0 10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box" placeholder="01XXXXXXXXX">
+
+    <label id="tx_nm" style="font-size:13px;font-weight:bold">নাম</label>
+    <input id="in_nm" style="width:100%;padding:11px;margin:4px 0 10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box" placeholder="আপনার নাম">
+
+    <label id="tx_us" style="font-size:13px;font-weight:bold">User Name</label>
+    <input id="in_us" style="width:100%;padding:11px;margin:4px 0 10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box" placeholder="User Name">
+
+    <label id="tx_ps" style="font-size:13px;font-weight:bold">Password</label>
+    <input id="in_ps" type="password" style="width:100%;padding:11px;margin:4px 0 10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box" placeholder="Password">
+
+    <div style="display:flex;align-items:center;gap:6px;margin:6px 0">
+      <input type="checkbox" id="saveChk" checked><label for="saveChk" id="tx_save" style="font-size:12px">Password Save রাখুন</label>
     </div>
 
-    <label id="l_name" style="font-size:13px;font-weight:bold">নাম</label>
-    <div style="display:flex;gap:5px">
-      <input id="f_name" placeholder="আপনার নাম" style="flex:1;padding:12px;margin:5px 0;border:1px solid #ddd;border-radius:10px">
-      <button onclick="forgetOne('name')" id="b_f_name" style="font-size:11px;border:none;background:#eee;border-radius:8px;padding:0 8px">Forget?</button>
-    </div>
+    <button id="btnLogin" onclick="loginNow()" style="width:100%;padding:12px;background:#6c5ce7;color:#fff;border:none;border-radius:8px;font-weight:bold;margin-top:8px">Login করুন</button>
 
-    <label id="l_user" style="font-size:13px;font-weight:bold">User Name</label>
-    <div style="display:flex;gap:5px">
-      <input id="f_user" placeholder="User Name" style="flex:1;padding:12px;margin:5px 0;border:1px solid #ddd;border-radius:10px">
-      <button onclick="forgetOne('user')" id="b_f_user" style="font-size:11px;border:none;background:#eee;border-radius:8px;padding:0 8px">Forget?</button>
-    </div>
+    <button id="btnFinger" onclick="fingerNow()" style="width:100%;padding:11px;background:#fff;border:2px solid #6c5ce7;color:#6c5ce7;border-radius:8px;font-weight:bold;margin-top:8px">👆 Fingerprint দিয়ে Login</button>
 
-    <label id="l_pass" style="font-size:13px;font-weight:bold">Password</label>
-    <div style="display:flex;gap:5px">
-      <input id="f_pass" type="password" placeholder="Password" style="flex:1;padding:12px;margin:5px 0;border:1px solid #ddd;border-radius:10px">
-      <button onclick="forgetOne('pass')" id="b_f_pass" style="font-size:11px;border:none;background:#eee;border-radius:8px;padding:0 8
+    <p id="tx_info" style="text-align:center;font-size:10px;color:#888;margin-top:10px">প্রথমবার Login করলে Owner তৈরি হবে</p>
+  </div>
+</div>
+
+<script>
+const T = {
+ bn: {logo:"Logo / ছবি আপলোড", ph:"ফোন নাম্বার", nm:"নাম", us:"User Name", ps:"পাসওয়ার্ড", save:"Password Save রাখুন", login:"Login করুন", finger:"👆 Fingerprint দিয়ে Login", info:"প্রথমবার Login করলে Owner তৈরি হবে", fill:"সব ঘর পূরণ করুন", ok:"Owner তৈরি হয়েছে ✅", success:"Login সফল", fail:"তথ্য মিলেনি", bioNeed:"আগে একবার Save দিয়ে Login করুন", bioOk:"Fingerprint Ok ✅", noBio:"Fingerprint পায়নি"},
+ en: {logo:"Upload Logo / Photo", ph:"Phone Number", nm:"Name", us:"User Name", ps:"Password", save:"Save Password", login:"Login", finger:"👆 Login with Fingerprint", info:"First login will create Owner", fill:"Fill all fields", ok:"Owner Created ✅", success:"Login Success", fail:"Not matched", bioNeed:"First login with Save", bioOk:"Fingerprint Ok ✅", noBio:"No Fingerprint"}
+};
+let lang = localStorage.getItem('lang') || 'bn';
+function setLang(l){
+  lang=l; localStorage.setItem('lang',l);
+  let t=T[l];
+  document.getElementById('b_bn').style.background=l=='bn'?'#6c5ce7':'#fff';
+  document.getElementById('b_bn').style.color=l=='bn'?'#fff':'#333';
+  document.getElementById('b_en').style.background=l=='en'?'#6c5ce7':'#fff';
+  document.getElementById('b_en').style.color=l=='en'?'#fff':'#333';
+  document.getElementById('tx_logo').innerText=t.logo;
+  document.getElementById('tx_ph').innerText=t.ph;
+  document.getElementById('tx_nm').innerText=t.nm;
+  document.getElementById('tx_us').innerText=t.us;
+  document.getElementById('tx_ps').innerText=t.ps;
+  document.getElementById('tx_save').innerText=t.save;
+  document.getElementById('btnLogin').innerText=t.login;
+  document.getElementById('btnFinger').innerText=t.finger;
+  document.getElementById('tx_info').innerText=t.info;
+}
+
+// Logo
+let lg=localStorage.getItem('logo')||""; if(lg){document.getElementById('vLogo').src=lg; document.getElementById('vLogo').style.display='block'; document.getElementById('dLogo').style.display='none';}
+document.getElementById('fLogo').addEventListener('change',e=>{let r=new FileReader(); r.onload=()=>{localStorage.setItem('logo',r.result); document.getElementById('vLogo').src=r.result; document.getElementById('vLogo').style.display='block'; document.getElementById('dLogo').style.display='none';}; r.readAsDataURL(e.target.files[0]);});
+
+// Auto fill saved
+let sv=JSON.parse(localStorage.getItem('savedLogin')||'null'); if(sv){ in_ph.value=sv.ph; in_nm.value=sv.nm; in_us.value=sv.us; in_ps.value=sv.ps; }
+
+function getO(){return JSON.parse(localStorage.getItem('owner')||'null');}
+function loginNow(){
+ let ph=in_ph.value.trim(), nm=in_nm.value.trim(), us=in_us.value.trim(), ps=in_ps.value.trim();
+ if(!ph||!nm||!us||!ps) return alert(T[lang].fill);
+ let o=getO();
+ if(!o){ localStorage.setItem('owner',JSON.stringify({ph,nm,us,ps})); if(saveChk.checked){localStorage.setItem('savedLogin',JSON.stringify({ph,nm,us,ps})); localStorage.setItem('bio','yes');} alert(T[lang].ok); return; }
+ if(o.ph==ph && o.nm==nm && o.us==us && o.ps==ps){ if(saveChk.checked){localStorage.setItem('savedLogin',JSON.stringify({ph,nm,us,ps})); localStorage.setItem('bio','yes');} alert(T[lang].success+": "+nm); } else alert(T[lang].fail);
+}
+
+async function fingerNow(){
+ let t=T[lang];
+ let s=JSON.parse(localStorage.getItem('savedLogin')||'null');
+ if(!s ||!localStorage.getItem('bio')) return alert(t.bioNeed);
+ try{
+   if(window.PublicKeyCredential){
+     let ok = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+     if(ok){ in_ph.value=s.ph; in_nm.value=s.nm; in_us.value=s.us; in_ps.value=s.ps; return alert(t.bioOk); }
+   }
+   // fallback - ফোনের fingerprint prompt
+   if(confirm("👆 Fingerprint দিন")){ in_ph.value=s.ph; in_nm.value=s.nm; in_us.value=s.us; in_ps.value=s.ps; alert(t.bioOk); }
+ }catch{ alert(t.noBio); }
+}
+setLang(lang);
+</script>
