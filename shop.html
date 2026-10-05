@@ -1,99 +1,44 @@
 <div id="ownerLoginOnly" style="max-width:400px;margin:20px auto;background:#fff;padding:22px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.1);font-family:Arial;text-align:center">
 
-  <!-- Language - টোটালি চেঞ্জ হবে -->
-  <div style="display:flex;gap:10px;margin-bottom:20px">
-    <button onclick="setLang('bn')" id="btn_bn" style="flex:1;padding:11px;border-radius:25px;border:1.5px solid #6c5ce7;font-weight:bold;cursor:pointer">বাংলা</button>
-    <button onclick="setLang('en')" id="btn_en" style="flex:1;padding:11px;border-radius:25px;border:1.5px solid #6c5ce7;font-weight:bold;cursor:pointer">English</button>
+  <!-- Logo Upload - ছবি আপলোড এখানেই -->
+  <div style="width:90px;height:90px;margin:0 auto 10px">
+    <img id="logoView" src="" style="width:90px;height:90px;border-radius:50%;display:none;border:3px solid #6c5ce7;object-fit:cover">
+    <div id="logoDefault" style="width:90px;height:90px;border-radius:50%;background:#f1f2f6;display:flex;align-items:center;justify-content:center;font-size:38px">🏪</div>
   </div>
-
-  <div style="width:90px;height:90px;margin:0 auto 10px"><img id="logoView" src="" style="width:90px;height:90px;border-radius:50%;display:none;border:3px solid #6c5ce7;object-fit:cover"><div id="logoDefault" style="width:90px;height:90px;border-radius:50%;background:#f1f2f6;display:flex;align-items:center;justify-content:center;font-size:38px">🏪</div></div>
-  <input type="file" id="logoFile" accept="image/*" style="font-size:12px"><p id="t_logo" style="font-size:11px;color:#888;margin:6px 0 18px"></p>
+  <input type="file" id="logoFile" accept="image/*" style="font-size:12px">
+  <p style="font-size:11px;color:#888;margin:6px 0 18px">Upload Logo / Photo</p>
 
   <div style="text-align:left">
-    <label id="l_phone" style="font-size:13px;font-weight:bold"></label><input id="f_phone" style="width:100%;padding:12px;margin:5px 0 12px;border:1px solid #ddd;border-radius:10px;box-sizing:border-box">
-    <label id="l_name" style="font-size:13px;font-weight:bold"></label><input id="f_name" style="width:100%;padding:12px;margin:5px 0 12px;border:1px solid #ddd;border-radius:10px;box-sizing:border-box">
-    <label id="l_user" style="font-size:13px;font-weight:bold"></label><input id="f_user" style="width:100%;padding:12px;margin:5px 0 12px;border:1px solid #ddd;border-radius:10px;box-sizing:border-box">
-    <label id="l_pass" style="font-size:13px;font-weight:bold"></label>
+    <label style="font-size:13px;font-weight:bold">Phone Number</label>
+    <input id="f_phone" placeholder="01XXXXXXXXX" style="width:100%;padding:12px;margin:5px 0 12px;border:1px solid #ddd;border-radius:10px;box-sizing:border-box">
+
+    <label style="font-size:13px;font-weight:bold">Name</label>
+    <input id="f_name" placeholder="Your Name" style="width:100%;padding:12px;margin:5px 0 12px;border:1px solid #ddd;border-radius:10px;box-sizing:border-box">
+
+    <label style="font-size:13px;font-weight:bold">User Name</label>
+    <input id="f_user" placeholder="Enter User Name" style="width:100%;padding:12px;margin:5px 0 12px;border:1px solid #ddd;border-radius:10px;box-sizing:border-box">
+
+    <label style="font-size:13px;font-weight:bold">Password</label>
     <div style="position:relative">
-      <input id="f_pass" type="password" style="width:100%;padding:12px 65px 12px 12px;margin:5px 0 10px;border:1px solid #ddd;border-radius:10px;box-sizing:border-box">
+      <input id="f_pass" type="password" placeholder="Enter Password" style="width:100%;padding:12px 65px 12px 12px;margin:5px 0 10px;border:1px solid #ddd;border-radius:10px;box-sizing:border-box">
       <span id="eyeIcon" onclick="togglePass()" style="position:absolute;right:38px;top:14px;font-size:18px;cursor:pointer">👁️</span>
-      <!-- Fingerprint ভিতরে, প্রথমে Hide -->
       <span id="fingerIcon" onclick="fingerLogin()" style="display:none;position:absolute;right:10px;top:14px;font-size:19px;cursor:pointer">👆</span>
     </div>
-    <div style="display:flex;align-items:center;gap:6px;margin:5px 0 10px"><input type="checkbox" id="saveCheck" checked><label for="saveCheck" id="l_save" style="font-size:13px"></label></div>
-    <button id="btn_login" onclick="doLogin()" style="width:100%;padding:13px;background:#6c5ce7;color:#fff;border:none;border-radius:12px;font-weight:bold;cursor:pointer"></button>
-    <div style="display:flex;justify-content:space-between;margin-top:12px"><span id="t_forget" onclick="openForget()" style="font-size:12px;color:#6c5ce7;cursor:pointer;text-decoration:underline"></span><span id="t_setting" onclick="openSetting()" style="font-size:11px;color:#888;cursor:pointer">⚙️ Setting</span></div>
-    <p id="t_info" style="text-align:center;font-size:11px;color:#888;margin-top:12px"></p>
-  </div>
-</div>
 
-<!-- Setting Box - ভিতরে Fingerprint Enable -->
-<div id="settingBox" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);align-items:center;justify-content:center;z-index:9999">
-  <div style="background:#fff;padding:20px;border-radius:15px;width:90%;max-width:340px;font-family:Arial">
-    <h4 style="margin:0 0 15px;text-align:center">⚙️ Setting</h4>
-    <div style="display:flex;justify-content:space-between;align-items:center;background:#f8f9fa;padding:12px;border-radius:10px;margin-bottom:10px">
-      <span id="s_fingerText" style="font-size:13px;font-weight:bold"></span>
-      <button id="s_fingerBtn" onclick="enableFinger()" style="padding:6px 12px;background:#6c5ce7;color:#fff;border:none;border-radius:6px;font-size:12px"></button>
+    <div style="display:flex;align-items:center;gap:6px;margin:5px 0 10px">
+      <input type="checkbox" id="saveCheck" checked>
+      <label for="saveCheck" style="font-size:13px">Save Password</label>
     </div>
-    <button onclick="closeSetting()" id="s_close" style="width:100%;padding:10px;background:#eee;border:none;border-radius:8px;margin-top:10px"></button>
+
+    <button onclick="doLogin()" style="width:100%;padding:13px;background:#6c5ce7;color:#fff;border:none;border-radius:12px;font-weight:bold;cursor:pointer">Login</button>
+
+    <div style="display:flex;justify-content:space-between;margin-top:12px">
+      <span onclick="openForget()" style="font-size:12px;color:#6c5ce7;cursor:pointer;text-decoration:underline">Forgot Password?</span>
+      <span onclick="openSetting()" style="font-size:11px;color:#888;cursor:pointer">⚙️ Setting</span>
+    </div>
+    <p style="text-align:center;font-size:11px;color:#888;margin-top:12px">First login will create Owner</p>
   </div>
 </div>
 
-<!-- OTP Forget Box -->
-<div id="forgetBox" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);align-items:center;justify-content:center;z-index:9999">
-  <div style="background:#fff;padding:20px;border-radius:15px;width:90%;max-width:340px;text-align:center;font-family:Arial">
-    <h4 id="f_title" style="margin:0 0 15px"></h4>
-    <div id="step1"><input id="f_verifyPhone" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;box-sizing:border-box;margin-bottom:12px"><button id="f_send" onclick="sendOTP()" style="width:100%;padding:11px;background:#6c5ce7;color:#fff;border:none;border-radius:10px;font-weight:bold"></button></div>
-    <div id="step2" style="display:none"><p id="f_otpInfo" style="font-size:12px;color:#666;margin:0 0 8px"></p><input id="f_otp" placeholder="123456" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;box-sizing:border-box;margin-bottom:10px;text-align:center;letter-spacing:5px;font-size:18px"><input id="f_newPass" type="password" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;box-sizing:border-box;margin-bottom:12px"><button id="f_btn" onclick="verifyOTP()" style="width:100%;padding:11px;background:#00b894;color:#fff;border:none;border-radius:10px;font-weight:bold"></button></div>
-    <button onclick="closeForget()" id="f_cancel" style="width:100%;margin-top:10px;padding:8px;background:#eee;border:none;border-radius:8px;font-size:12px"></button>
-  </div>
-</div>
-
-<script>
-const LANG = {
-  bn: {logo:"Logo / ছবি আপলোড", phone:"ফোন নাম্বার", ph_phone:"01XXXXXXXXX লিখুন", name:"নাম", ph_name:"আপনার নাম লিখুন", user:"ইউজার নাম", ph_user:"ইউজার নাম লিখুন", pass:"পাসওয়ার্ড", ph_pass:"পাসওয়ার্ড লিখুন", save:"পাসওয়ার্ড সেভ রাখুন", login:"লগইন করুন", forget:"পাসওয়ার্ড ভুলে গেছেন?", setting:"⚙️ সেটিং", info:"প্রথমবার লগইন করলে মালিক তৈরি হবে", fill:"সব ঘর পূরণ করুন", created:"মালিক তৈরি হয়েছে ✅", success:"লগইন সফল", fail:"তথ্য মিলছে না", f_title:"ফোন নাম্বারে OTP যাবে", f_send:"OTP পাঠান", f_otpInfo:"আপনার ফোনে OTP পাঠানো হয়েছে", f_np:"নতুন পাসওয়ার্ড দিন", f_btn:"Verify করে Reset করুন", f_cancel:"বাতিল", wrongPhone:"এই ফোনে Account নেই", otpSent:"OTP কোড: ", otpWrong:"OTP ভুল হয়েছে", changed:"পাসওয়ার্ড পরিবর্তন হয়েছে ✅", s_title:"ফিঙ্গারপ্রিন্ট সেটিং", s_text:"ফিঙ্গারপ্রিন্ট লগইন", s_enable:"চালু করুন", s_disable:"চালু আছে ✅", s_close:"বন্ধ করুন", bioOk:"ফিঙ্গারপ্রিন্ট মিলেছে ✅"},
-  en: {logo:"Upload Logo / Photo", phone:"Phone Number", ph_phone:"Enter 01XXXXXXXXX", name:"Name", ph_name:"Enter Your Name", user:"User Name", ph_user:"Enter User Name", pass:"Password", ph_pass:"Enter Password", save:"Save Password", login:"Login", forget:"Forgot Password?", setting:"⚙️ Setting", info:"First login will create Owner", fill:"Fill all fields", created:"Owner Created ✅", success:"Login Success", fail:"Not matched", f_title:"OTP will go to Phone", f_send:"Send OTP", f_otpInfo:"OTP sent to your phone", f_np:"Enter New Password", f_btn:"Verify & Reset", f_cancel:"Cancel", wrongPhone:"No Account with this phone", otpSent:"OTP Code: ", otpWrong:"Wrong OTP", changed:"Password Changed ✅", s_title:"Fingerprint Setting", s_text:"Fingerprint Login", s_enable:"Enable", s_disable:"Enabled ✅", s_close:"Close", bioOk:"Fingerprint Matched ✅"}
-};
-let lang=localStorage.getItem('appLang')||'bn';
-function setLang(l){
-  lang=l; localStorage.setItem('appLang',l); let t=LANG[l];
-  btn_bn.style.background=l=='bn'?'#6c5ce7':'#fff'; btn_bn.style.color=l=='bn'?'#fff':'#6c5ce7';
-  btn_en.style.background=l=='en'?'#6c5ce7':'#fff'; btn_en.style.color=l=='en'?'#fff':'#6c5ce7';
-  t_logo.innerText=t.logo;
-  l_phone.innerText=t.phone; f_phone.placeholder=t.ph_phone;
-  l_name.innerText=t.name; f_name.placeholder=t.ph_name;
-  l_user.innerText=t.user; f_user.placeholder=t.ph_user;
-  l_pass.innerText=t.pass; f_pass.placeholder=t.ph_pass;
-  l_save.innerText=t.save; btn_login.innerText=t.login;
-  t_forget.innerText=t.forget; t_setting.innerText=t.setting; t_info.innerText=t.info;
-  f_title.innerText=t.f_title; f_verifyPhone.placeholder=t.phone; f_newPass.placeholder=t.f_np;
-  f_send.innerText=t.f_send; f_otpInfo.innerText=t.f_otpInfo; f_btn.innerText=t.f_btn; f_cancel.innerText=t.f_cancel;
-  if(document.getElementById('s_fingerText')){ s_fingerText.innerText=t.s_text; s_close.innerText=t.s_close; s_fingerBtn.innerText = localStorage.getItem('fingerEnabled')=='yes'? t.s_disable : t.s_enable; }
-}
-let lg=localStorage.getItem('ownerLogo'); if(lg){ logoView.src=lg; logoView.style.display='block'; logoDefault.style.display='none'; }
-logoFile.addEventListener('change',e=>{ let r=new FileReader(); r.onload=()=>{ localStorage.setItem('ownerLogo',r.result); logoView.src=r.result; logoView.style.display='block'; logoDefault.style.display='none'; }; r.readAsDataURL(e.target.files[0]); });
-let saved=JSON.parse(localStorage.getItem('savedLogin')||'null'); if(saved){ f_phone.value=saved.phone||''; f_name.value=saved.name||''; f_user.value=saved.user||''; f_pass.value=saved.pass||''; }
-if(localStorage.getItem('fingerEnabled')=='yes' && saved){ fingerIcon.style.display='block'; }
-function getOwner(){ return JSON.parse(localStorage.getItem('ownerData')||'null'); }
-function togglePass(){ if(f_pass.type=='password'){ f_pass.type='text'; eyeIcon.innerText='🙈'; } else { f_pass.type='password'; eyeIcon.innerText='👁️'; } }
-function doLogin(){ let t=LANG[lang]; let ph=f_phone.value.trim(), nm=f_name.value.trim(), us=f_user.value.trim(), ps=f_pass.value.trim(); if(!ph||!nm||!us||!ps) return alert(t.fill); let o=getOwner(); if(!o){ localStorage.setItem('ownerData', JSON.stringify({phone:ph,name:nm,user:us,pass:ps})); if(saveCheck.checked) localStorage.setItem('savedLogin', JSON.stringify({phone:ph,name:nm,user:us,pass:ps})); alert(t.created); return; } if(o.phone==ph && o.name==nm && o.user==us && o.pass==ps){ if(saveCheck.checked) localStorage.setItem('savedLogin', JSON.stringify({phone:ph,name:nm,user:us,pass:ps})); alert(t.success+': '+nm); } else alert(t.fail); }
-function openSetting(){ settingBox.style.display='flex'; setLang(lang); } function closeSetting(){ settingBox.style.display='none'; }
-function enableFinger(){ let s=JSON.parse(localStorage.getItem('savedLogin')||'null'); if(!s){ alert(LANG[lang].fill); return; } if(localStorage.getItem('fingerEnabled')=='yes'){ localStorage.removeItem('fingerEnabled'); fingerIcon.style.display='none'; alert('Disabled'); } else { localStorage.setItem('fingerEnabled','yes'); fingerIcon.style.display='block'; alert(LANG[lang].bioOk); } setLang(lang); closeSetting(); }
-function fingerLogin(){ let s=JSON.parse(localStorage.getItem('savedLogin')||'null'); if(!s) return; f_phone.value=s.phone; f_name.value=s.name; f_user.value=s.user; f_pass.value=s.pass; alert(LANG[lang].bioOk); }
-let generatedOTP='';
-function openForget(){ forgetBox.style.display='flex'; document.getElementById('step1').style.display='block'; document.getElementById('step2').style.display='none'; } function closeForget(){ forgetBox.style.display='none'; }
-function sendOTP(){
-  let o=getOwner(); if(!o) return alert(LANG[lang].wrongPhone);
-  let vp=f_verifyPhone.value.trim(); if(vp!=o.phone) return alert(LANG[lang].wrongPhone);
-  generatedOTP = Math.floor(100000 + Math.random()*900000).toString();
-  alert(LANG[lang].otpSent + generatedOTP + "\nPhone: "+o.phone+"\n(এখন Demo তে দেখাচ্ছে, SMS API লাগালে সত্যি SMS যাবে)");
-  document.getElementById('step1').style.display='none'; document.getElementById('step2').style.display='block';
-}
-function verifyOTP(){
-  let t=LANG[lang]; let otp=f_otp.value.trim(); let np=f_newPass.value.trim();
-  if(otp!=generatedOTP) return alert(t.otpWrong); if(!np) return alert(t.fill);
-  let o=getOwner(); o.pass=np; localStorage.setItem('ownerData', JSON.stringify(o)); let s=JSON.parse(localStorage.getItem('savedLogin')||'{}'); s.pass=np; localStorage.setItem('savedLogin', JSON.stringify(s));
-  alert(t.changed); closeForget(); location.reload();
-}
-setLang(lang);
-</script>
+<!-- Setting - Fingerprint ভিতরে -->
+<div id="settingBox" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);align-items
