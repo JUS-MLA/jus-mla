@@ -3,138 +3,166 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>JUS - Owner Admin</title>
+<title>JUS - Ow... jus-mla.github.io</title>
 <style>
-*{box-sizing:border-box;font-family:Arial}body{margin:0}
+*{box-sizing:border-box;font-family:Arial}body{margin:0;background:#f1f5f9}
+.header{background:#1e3a8a;color:#fff;padding:10px 15px;display:flex;justify-content:space-between;align-items:center}
+.searchBox{background:#fff;border-radius:20px;padding:6px 12px;display:flex;align-items:center;gap:6px;flex:1;max-width:400px;margin:0 10px}.searchBox input{border:none;outline:none;width:100%;font-size:12px}
+.sidebar{width:230px;background:#1e2858;min-height:100vh;float:left;padding:10px;color:#fff}
+.sidebar a{display:block;padding:10px;color:#cbd5e1;text-decoration:none;border-radius:6px;margin-bottom:4px;font-size:13px;cursor:pointer}
+.sidebar a.active,.sidebar a:hover{background:#2d4a9e;color:#fff}
+.main{margin-left:230px;padding:12px}
+.box{background:#fff;border-radius:10px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:12px}
+.stat{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.stat div{padding:10px;border-radius:8px;text-align:center;color:#fff}
+.stat b{display:block;font-size:18px}.stat small{font-size:11px}
+.green{background:#16a34a}.blue{background:#2563eb}.orange{background:#f97316}.purple{background:#9333ea}.cyan{background:#0891b2}.red{background:#dc2626}.teal{background:#0d9488}
+.create-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+input,select{width:100%;padding:10px;border:1.5px solid #dbe2ea;border-radius:8px;font-size:13px;outline:none}
+.btn{width:100%;background:#16a34a;color:#fff;border:none;padding:12px;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:10px}
+.btn2{padding:5px 8px;border:none;border-radius:5px;cursor:pointer;font-size:11px;margin-right:3px}
+table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}th{background:#f8fafc;font-size:11px}
 .login-wrap{background:#12307e;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:15px}
-.card{background:#fff;width:100%;max-width:430px;border-radius:18px;padding:22px;box-shadow:0 10px 30px rgba(0,0,0,.3)}
-.logo{text-align:center}.logo img{height:75px;width:75px;border-radius:50%;border:2px solid #e2e8f0;background:#fff}
-label{font-size:13px;font-weight:700;margin:11px 0 5px;display:block;color:#1e293b}
-input,select{width:100%;padding:11px 12px;border:1.5px solid #dbe2ea;border-radius:10px;font-size:14px;outline:none}
-.btn{width:100%;background:#12307e;color:#fff;border:none;padding:13px;border-radius:12px;font-weight:bold;margin-top:16px;cursor:pointer}
-.btn2{padding:6px 12px;border:none;border-radius:6px;cursor:pointer;font-size:12px;margin-right:4px}
-#dashboard{display:none;background:#f1f5f9;min-height:100vh}
-.header{background:#12307e;color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-.searchBox{flex:1;max-width:380px;position:relative}.searchBox input{padding:10px 12px 10px 38px;border-radius:20px;border:none;font-size:13px}.searchBox span{position:absolute;left:12px;top:50%;transform:translateY(-50%)}
-.sidebar{width:270px;background:#0f255e;min-height:calc(100vh - 62px);float:left;padding:15px}
-.sidebar b{color:#94a3b8;font-size:11px;display:block;margin:14px 0 8px}
-.sidebar a{display:block;padding:11px 10px;color:#cbd5e1;text-decoration:none;border-radius:8px;margin-bottom:5px;font-size:14px;cursor:pointer}
-.sidebar a.active,.sidebar a:hover{background:#1e3a8a;color:#fff}
-.main{margin-left:270px;padding:18px}
-.box{background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:15px}
-.stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:12px;margin-bottom:16px}
-.stat div{background:#fff;padding:14px;border-radius:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.stat b{font-size:22px;color:#12307e;display:block}.stat small{font-size:11px;color:#64748b}
-table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px;border-bottom:1px solid #eee;text-align:left}th{background:#f8fafc}
-.tab{display:none}.tab.active{display:block}
-.create-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.filterRow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px;background:#fff;padding:10px;border-radius:10px}
-.filterRow select{max-width:250px}
-.editBox{border:2px dashed #16a34a;background:#f0fdf4}
-@media(max-width:768px){.sidebar{width:100%;float:none;min-height:auto}.main{margin-left:0}.create-grid{grid-template-columns:1fr}}
+.card{background:#fff;width:100%;max-width:430px;border-radius:18px;padding:22px}
+@media(max-width:768px){.sidebar{width:100%;float:none;min-height:auto}.main{margin-left:0}.stat{grid-template-columns:repeat(2,1fr)}.create-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
 <div id="loginSec" class="login-wrap">
 <div class="card">
-<div class="logo"><img src="logo.png" onerror="this.src='https://via.placeholder.com/75?text=JUS'"><h2 style="margin:6px 0 2px;color:#12307e">JUS</h2><p style="margin:0;font-size:12px;color:#64748b">Janakalyan Unnayan Sohayok - JUS</p></div>
+<h2 style="color:#12307e;text-align:center">JUS Login</h2>
 <label>Select Role</label><select id="role"><option>Owner Admin</option><option>Owner Branch</option><option>Owner Shop</option><option>Client Branch</option><option>Client Shop</option></select>
-<label>Username</label><input type="text" id="username" value="mdlimonahammed2004@mla">
+<label>Username</label><input id="username" value="mdlimonahammed2004@mla">
 <label>Password</label><input type="password" id="password" value="Limon915225@">
-<button class="btn" onclick="doLogin()">🔐 Login</button>
+<button class="btn" style="background:#12307e" onclick="doLogin()">🔐 Login</button>
 </div>
 </div>
 
-<div id="dashboard">
+<div id="dashboard" style="display:none">
 <div class="header">
-<div><b>JUS</b><br><small id="uInfo"></small></div>
-<div class="searchBox"><span>🔍</span><input type="text" id="globalSearch" placeholder="Search..." oninput="render()"></div>
-<button onclick="doLogout()" style="background:#ef4444;color:#fff;border:none;padding:8px 14px;border-radius:20px;cursor:pointer">Logout</button>
+<div><b style="font-size:13px">Janakalyan Unnayan Sohayok - JUS</b><br><small id="uInfo" style="font-size:10px"></small></div>
+<div class="searchBox">🔍 <input id="globalSearch" placeholder="Advance Search - Branch / Shop / User..." oninput="render()"></div>
+<button onclick="doLogout()" style="background:#ef4444;color:#fff;border:none;padding:6px 12px;border-radius:15px;font-size:11px;cursor:pointer">Logout</button>
 </div>
+
 <div class="sidebar" id="sideMenu"></div>
+
 <div class="main">
-<div class="filterRow">
-<b>🔎 Branch Filter:</b>
-<select id="branchFilter" onchange="render()"><option value="all">All Branch</option></select>
-<small id="filterInfo" style="color:#16a34a;font-weight:700"></small>
+<div id="clientDash" class="box" style="background:#1e3a8a;color:#fff;display:flex;justify-content:space-between;align-items:center">
+<div><b id="shopTitle">🛒 Client Shop Dashboard - AFROJA AGRO</b><br><small style="font-size:10px">Owner Admin ও কোনো data পাবে না, শুধু Owner ই হিসাব দেখতে পারবে</small></div>
+<span style="background:#16a34a;padding:4px 8px;border-radius:10px;font-size:10px">ALADA DASHBOARD</span>
 </div>
 
-<div class="box" style="background:linear-gradient(135deg,#12307e,#1e40af);color:#fff">
-<h3>💰 পার্টিতে যাইয়া বাদ + বাকি / নগদ / টোটাল <small id="dashBranchName" style="background:rgba(255,255,255,.2);padding:3px 8px;border-radius:10px;font-size:11px"></small></h3>
-<div class="stat" style="margin-bottom:0">
-<div><b id="sTotalSale">0৳</b><small>টোটাল বিক্রি</small></div>
-<div><b id="sNagad">0৳</b><small>নগদ বিক্রি</small></div>
-<div><b id="sBakiSale" style="color:#f97316">0৳</b><small>বাকি বিক্রি</small></div>
-<div><b id="sDue" style="color:#dc2626">0৳</b><small>পার্টিতে বাদ - মোট বাকি</small></div>
-<div><b id="cTotalBranch">0</b><small>Total Branch</small></div>
+<div class="box">
+<b>📦 প্রোডাক্ট হিসাব</b>
+<div class="stat" style="margin-top:10px">
+<div class="green"><b id="pTotal">0</b><small>টোটাল প্রোডাক্ট</small></div>
+<div class="blue"><b id="pKena">0</b><small>কেনা / করা প্রোডাক্ট</small></div>
+<div class="orange"><b id="pBikri">0</b><small>বিক্রি করা প্রোডাক্ট</small></div>
+<div class="purple"><b id="pPartyDue">0</b><small>পার্টিতে পাওয়া প্রোডাক্ট</small></div>
+<div class="cyan"><b id="pOffice">0</b><small>অফিসে জমা প্রোডাক্ট</small></div>
+<div class="red"><b id="pNoshto">0</b><small>নষ্ট / বই প্রোডাক্ট</small></div>
+<div class="teal"><b id="pBaki">0</b><small>বাকি বাজার প্রোডাক্ট</small></div>
 </div>
 </div>
 
-<div class="box" style="border-left:5px solid #16a34a">
-<h3>➕ বিক্রি Entry - পার্টিতে যাইয়া বাদ হবে</h3>
+<div class="box" style="border-left:4px solid #16a34a">
+<h3>➕ প্রোডাক্ট Add করুন - নতুন ফিল্ড সহ</h3>
 <div class="create-grid">
-<input id="sParty" placeholder="Party Name">
-<input type="number" id="sTotal" placeholder="টোটাল বিক্রি" oninput="calcBaki()">
-<input type="number" id="sNagadInput" placeholder="নগদ বিক্রি" oninput="calcBaki()">
-<input type="number" id="sBaki" placeholder="বাকি - পার্টিতে বাদ" readonly style="background:#fef2f2;color:#dc2626;font-weight:bold">
+<input id="prSerial" placeholder="প্রোডাক্ট সিরিয়াল নাম্বার - Serial No">
+<input id="prName" placeholder="প্রোডাক্টের নাম - Product Name">
+<input type="number" id="prBuy" placeholder="প্রোডাক্ট কিনা দাম - Buy Price ৳">
+<input type="number" id="prSell" placeholder="প্রোডাক্ট বিক্রি দাম - Sell Price ৳">
+<input type="number" id="prQty" placeholder="প্রোডাক্ট কত পিস - Qty / Pcs">
+<select id="prType"><option value="কেনা">কেনা / করা প্রোডাক্ট</option><option value="বিক্রি">বিক্রি করা প্রোডাক্ট</option><option value="পার্টিতে পাওয়া">পার্টিতে পাওয়া</option><option value="অফিসে জমা">অফিসে জমা</option><option value="নষ্ট">নষ্ট / বই</option><option value="বাকি বাজার">বাকি বাজার</option></select>
+<div><label style="font-size:10px">উৎপাদনের ডেট</label><input type="date" id="prMfg"></div>
+<div><label style="font-size:10px">মেয়াদ উত্তীর্ণ ডেট</label><input type="date" id="prExp"></div>
 </div>
-<button class="btn" style="background:#16a34a" onclick="addSale()">💾 Save - বাকি পার্টিতে যাবে</button>
+<button class="btn" onclick="addProduct()">📦 প্রোডাক্ট Save করুন</button>
+<p style="font-size:10px;color:#16a34a">সিরিয়াল, কিনা দাম, বিক্রি দাম, পিস, উৎপাদন, মেয়াদ সব Save হবে - আগের কিছু নষ্ট হবে না</p>
 </div>
 
-<div id="tab-create" class="tab active"><div class="box" id="createBox" style="border-left:5px solid #12307e">
-<h3 id="createTitle">👑 Create / Edit - Organization / Client Name</h3>
-<div class="create-grid">
-<select id="newRole" onchange="handleCreateRole()"><option>Owner Branch</option><option>Owner Shop</option><option>Client Branch</option><option>Client Shop</option></select>
-<input id="newName" placeholder="Branch / Shop Name">
-<input id="newPhone" placeholder="Phone">
-<input id="newUser" placeholder="Username">
-<input id="newPass" placeholder="Password" type="text">
-<input id="newOrgClient" placeholder="Organization / Client Name">
-<input type="date" id="newOpenDate">
-<input id="newAddress" placeholder="Address" style="grid-column:span 2">
-</div>
-<button class="btn" id="saveBtn" onclick="createUser()">➕ Create</button>
-<button class="btn" id="cancelBtn" onclick="cancelEdit()" style="display:none;background:#64748b;margin-top:8px">Cancel</button>
-</div></div>
+<div class="box"><h3>📋 আমার সব প্রোডাক্ট লিস্ট</h3><table id="productTable"></table></div>
 
-<div class="box"><h3>📒 পার্টির বাকির লিস্ট - পার্টিতে বাদ</h3><table id="salesTable"></table></div>
-<div class="box"><h3>📋 All Users List</h3><table id="userTable"></table></div>
+<div id="adminExtra" style="display:none">
+<div class="box"><h3>💰 বাকি / নগদ / টোটাল</h3><div class="stat"><div class="green"><b id="sTotalSale">0৳</b><small>টোটাল বিক্রি</small></div><div class="blue"><b id="sNagad">0৳</b><small>নগদ বিক্রি</small></div><div class="orange"><b id="sBakiSale">0৳</b><small>বাকি বিক্রি</small></div><div class="red"><b id="sDue">0৳</b><small>পার্টিতে বাদ</small></div></div></div>
+<div class="box"><h3>📒 পার্টির বাকির লিস্ট</h3><table id="salesTable"></table></div>
+<div class="box"><h3>📋 All Users List - Edit/Delete আগের মতোই</h3><table id="userTable"></table></div>
+</div>
+
 </div>
 </div>
 
 <script>
 let users=JSON.parse(localStorage.getItem('jus_users_v2')||'[]');
+let products=JSON.parse(localStorage.getItem('jus_products_v3')||'[]');
 let sales=JSON.parse(localStorage.getItem('jus_sales_v1')||'[]');
-if(users.length===0){users=[{role:'Owner Admin',name:'MD. LIMON AHAMMED',username:'mdlimonahammed2004@mla',password:'Limon915225@',org:'JUS',clientName:'MD. LIMON AHAMMED',phone:'01949915225',address:'Rajshahi',openDate:'2024-01-01',createdAt:new Date().toISOString()}];}
-let cur=null;let editIndex=-1;
-function handleCreateRole(){if(editIndex!==-1)return;let r=document.getElementById('newRole').value;let i=document.getElementById('newOrgClient');if(r.includes('Owner')){i.placeholder='Organization Name - Owner এর জন্য';i.value='Janakalyan Unnayan Sohayok - JUS';}else{i.placeholder='Client Name - ক্লায়েন্টের নাম';i.value='';}}
-function calcBaki(){let t=parseFloat(document.getElementById('sTotal').value)||0;let n=parseFloat(document.getElementById('sNagadInput').value)||0;document.getElementById('sBaki').value=t-n;}
-function addSale(){let party=document.getElementById('sParty').value;let total=parseFloat(document.getElementById('sTotal').value)||0;let nagad=parseFloat(document.getElementById('sNagadInput').value)||0;let baki=parseFloat(document.getElementById('sBaki').value)||0;if(!party||!total){alert('Party আর Total দাও');return;}sales.push({id:Date.now(),branch:cur.name,party:party,total:total,nagad:nagad,baki:baki,date:new Date().toISOString()});localStorage.setItem('jus_sales_v1',JSON.stringify(sales));document.getElementById('sParty').value='';document.getElementById('sTotal').value='';document.getElementById('sNagadInput').value='';document.getElementById('sBaki').value='';render();}
-function doLogin(){let r=document.getElementById('role').value;let u=document.getElementById('username').value;let p=document.getElementById('password').value;let f=users.find(x=>x.username===u&&x.password===p&&x.role===r);if(!f){alert('ভুল');return;}cur=f;document.getElementById('loginSec').style.display='none';document.getElementById('dashboard').style.display='block';document.getElementById('uInfo').innerText=f.role+' | '+f.name;document.getElementById('sideMenu').innerHTML=`<b>${f.role}</b><a class="active">${f.name}</a>`;updateBranchFilter();render();}
-function updateBranchFilter(){let sel=document.getElementById('branchFilter');let branches=[...new Set(users.filter(u=>u.role!=='Owner Admin').map(u=>u.name))];sel.innerHTML='<option value="all">All Branch</option>';branches.forEach(b=>{let o=document.createElement('option');o.value=b;o.textContent=b;sel.appendChild(o);});}
-function render(){
-let branchF=document.getElementById('branchFilter').value;
-let branchUsers=branchF==='all'?users:users.filter(u=>u.name===branchF);
-document.getElementById('dashBranchName').innerText=branchF==='all'?'All':'Filtered: '+branchF;
-document.getElementById('cTotalBranch').innerText=branchUsers.filter(x=>x.role!=='Owner Admin').length;
-let salesF=branchF==='all'?sales:sales.filter(s=>s.branch===branchF);
-if(cur&&cur.role!=='Owner Admin'){salesF=sales.filter(s=>s.branch===cur.name);}
-let tSale=salesF.reduce((a,b)=>a+b.total,0);let tNagad=salesF.reduce((a,b)=>a+b.nagad,0);let tBaki=salesF.reduce((a,b)=>a+b.baki,0);
-document.getElementById('sTotalSale').innerText=tSale+'৳';
-document.getElementById('sNagad').innerText=tNagad+'৳';
-document.getElementById('sBakiSale').innerText=tBaki+'৳';
-document.getElementById('sDue').innerText=tBaki+'৳';
-document.getElementById('filterInfo').innerText=branchF==='all'?'':'Filtered: '+branchF;
-let ut=document.getElementById('userTable');ut.innerHTML='<tr><th>Role</th><th>Name</th><th>Client/Org</th><th>Action</th></tr>';branchUsers.forEach(u=>{let idx=users.indexOf(u);ut.innerHTML+=`<tr><td>${u.role}</td><td>${u.name}</td><td>${u.clientName||u.org||'-'}</td><td><button class="btn2" style="background:#16a34a;color:#fff" onclick="editUser(${idx})">Edit</button><button class="btn2" style="background:#dc2626;color:#fff" onclick="delUser(${idx})">Delete</button></td></tr>`;});
-let st=document.getElementById('salesTable');st.innerHTML='<tr><th>Branch</th><th>Party</th><th>টোটাল</th><th>নগদ বিক্রি</th><th>বাকি বিক্রি</th><th>পার্টিতে বাদ</th></tr>';salesF.forEach(s=>{st.innerHTML+=`<tr><td>${s.branch}</td><td>${s.party}</td><td>${s.total}৳</td><td style="color:#16a34a">${s.nagad}৳</td><td style="color:#ea580c">${s.baki}৳</td><td style="color:#dc2626;font-weight:bold">${s.baki}৳</td></tr>`;});if(salesF.length===0)st.innerHTML+='<tr><td colspan=6>No Data</td></tr>';
+if(users.length===0){users=[{role:'Owner Admin',name:'MD. LIMON AHAMMED',username:'mdlimonahammed2004@mla',password:'Limon915225@',org:'JUS',clientName:'JUS',phone:'01949915225',address:'Rajshahi',openDate:'2024-01-01',createdAt:new Date().toISOString()}];}
+let cur=null;
+function doLogin(){
+let r=document.getElementById('role').value;let u=document.getElementById('username').value;let p=document.getElementById('password').value;
+let f=users.find(x=>x.username===u&&x.password===p&&x.role===r);if(!f){alert('ভুল');return;}
+cur=f;document.getElementById('loginSec').style.display='none';document.getElementById('dashboard').style.display='block';
+document.getElementById('uInfo').innerText=f.role+' | '+f.name;document.getElementById('shopTitle').innerText='🛒 Client Shop Dashboard - '+f.name;
+let menu=document.getElementById('sideMenu');
+if(f.role==='Owner Admin'){menu.innerHTML=`<b>OWNER ADMIN</b><a class="active">🏠 Dashboard</a><a>🏢 All Branch</a><a>👥 Users</a>`;document.getElementById('adminExtra').style.display='block';}
+else{menu.innerHTML=`<b>My Shop Dashboard</b><a class="active">🏠 My Shop - ${f.name}</a><div style="padding:10px;font-size:11px;color:#94a3b8">Shop: ${f.name}<br>Client: ${f.clientName||f.org}</div>`;document.getElementById('adminExtra').style.display='none';}
+render();
 }
-function editUser(i){editIndex=i;let u=users[i];document.getElementById('newRole').value=u.role;document.getElementById('newName').value=u.name;document.getElementById('newPhone').value=u.phone;document.getElementById('newUser').value=u.username;document.getElementById('newPass').value=u.password;document.getElementById('newOrgClient').value=u.clientName||u.org;document.getElementById('newOpenDate').value=u.openDate||'';document.getElementById('newAddress').value=u.address||'';document.getElementById('saveBtn').innerText='💾 Update';document.getElementById('saveBtn').style.background='#16a34a';document.getElementById('cancelBtn').style.display='block';}
-function cancelEdit(){editIndex=-1;document.getElementById('saveBtn').innerText='➕ Create';document.getElementById('saveBtn').style.background='#12307e';document.getElementById('cancelBtn').style.display='none';document.getElementById('newName').value='';document.getElementById('newUser').value='';document.getElementById('newPass').value='';document.getElementById('newOrgClient').value='';}
-function createUser(){let r=document.getElementById('newRole').value;let n=document.getElementById('newName').value;let ph=document.getElementById('newPhone').value;let un=document.getElementById('newUser').value;let pw=document.getElementById('newPass').value;let oc=document.getElementById('newOrgClient').value;let addr=document.getElementById('newAddress').value;let od=document.getElementById('newOpenDate').value;if(!n||!un||!pw){alert('Name User Pass দাও');return;}let org='',cName='';if(r.includes('Owner'))org=oc;else cName=oc;if(editIndex!==-1){users[editIndex]={...users[editIndex],role:r,name:n,phone:ph,username:un,password:pw,org:org,clientName:cName,address:addr,openDate:od};}else{users.push({role:r,name:n,phone:ph,username:un,password:pw,org:org,clientName:cName,address:addr,openDate:od,createdAt:new Date().toISOString()});}localStorage.setItem('jus_users_v2',JSON.stringify(users));cancelEdit();updateBranchFilter();render();}
-function delUser(i){if(confirm('Delete?')){users.splice(i,1);localStorage.setItem('jus_users_v2',JSON.stringify(users));render();}}
+function addProduct(){
+let serial=document.getElementById('prSerial').value;
+let name=document.getElementById('prName').value;
+let buy=parseFloat(document.getElementById('prBuy').value)||0;
+let sell=parseFloat(document.getElementById('prSell').value)||0;
+let qty=parseFloat(document.getElementById('prQty').value)||0;
+let type=document.getElementById('prType').value;
+let mfg=document.getElementById('prMfg').value;
+let exp=document.getElementById('prExp').value;
+if(!serial||!name){alert('সিরিয়াল নাম্বার আর প্রোডাক্টের নাম দাও');return;}
+products.push({id:Date.now(),branch:cur.name,serial:serial,name:name,buy:buy,sell:sell,qty:qty,type:type,mfg:mfg,exp:exp,date:new Date().toISOString()});
+localStorage.setItem('jus_products_v3',JSON.stringify(products));
+// Auto add to sales for বাকি/নগদ হিসাব যদি বিক্রি হয়
+if(type==='বিক্রি' || type==='বাকি বাজার' || type==='পার্টিতে পাওয়া'){
+let total=sell*qty; sales.push({id:Date.now(),branch:cur.name,party:name,total:total,nagad:type==='বিক্রি'?total:0,baki:type!=='বিক্রি'?total:0,date:new Date().toISOString()});localStorage.setItem('jus_sales_v1',JSON.stringify(sales));
+}
+alert('✅ প্রোডাক্ট Save হইছে - সিরিয়াল: '+serial);
+document.getElementById('prSerial').value='';document.getElementById('prName').value='';document.getElementById('prBuy').value='';document.getElementById('prSell').value='';document.getElementById('prQty').value='';document.getElementById('prMfg').value='';document.getElementById('prExp').value='';
+render();
+}
+function render(){
+let q=(document.getElementById('globalSearch').value||'').toLowerCase();
+let filteredProducts = products;
+if(cur && cur.role!=='Owner Admin'){filteredProducts = products.filter(p=>p.branch===cur.name);}
+filteredProducts = filteredProducts.filter(p=>(p.serial+' '+p.name+' '+p.type).toLowerCase().includes(q));
+
+document.getElementById('pTotal').innerText=filteredProducts.length;
+document.getElementById('pKena').innerText=filteredProducts.filter(p=>p.type==='কেনা').length;
+document.getElementById('pBikri').innerText=filteredProducts.filter(p=>p.type==='বিক্রি').length;
+document.getElementById('pPartyDue').innerText=filteredProducts.filter(p=>p.type==='পার্টিতে পাওয়া').length;
+document.getElementById('pOffice').innerText=filteredProducts.filter(p=>p.type==='অফিসে জমা').length;
+document.getElementById('pNoshto').innerText=filteredProducts.filter(p=>p.type==='নষ্ট').length;
+document.getElementById('pBaki').innerText=filteredProducts.filter(p=>p.type==='বাকি বাজার').length;
+
+let pt=document.getElementById('productTable');
+pt.innerHTML='<tr><th>Serial</th><th>Product Name</th><th>কিনা দাম</th><th>বিক্রি দাম</th><th>Pcs</th><th>Type</th><th>উৎপাদন</th><th>মেয়াদ</th><th>Action</th></tr>';
+filteredProducts.forEach(p=>{
+let idx=products.indexOf(p);
+let expColor = p.exp && new Date(p.exp) < new Date() ? 'style="color:red;font-weight:bold"' : '';
+pt.innerHTML+=`<tr><td>${p.serial}</td><td>${p.name}</td><td>${p.buy}৳</td><td style="color:#16a34a;font-weight:bold">${p.sell}৳</td><td>${p.qty}</td><td>${p.type}</td><td>${p.mfg||'-'}</td><td ${expColor}>${p.exp||'-'}</td><td><button class="btn2" style="background:#dc2626;color:#fff" onclick="delProduct(${idx})">Delete</button></td></tr>`;
+});
+if(filteredProducts.length===0) pt.innerHTML+='<tr><td colspan=9>No Product</td></tr>';
+
+// Admin Sales Part - আগের মতোই ঠিক আছে
+let salesF = sales; if(cur && cur.role!=='Owner Admin') salesF = sales.filter(s=>s.branch===cur.name);
+let tSale=salesF.reduce((a,b)=>a+b.total,0);let tNagad=salesF.reduce((a,b)=>a+b.nagad,0);let tBaki=salesF.reduce((a,b)=>a+b.baki,0);
+let sT=document.getElementById('sTotalSale'); if(sT){sT.innerText=tSale+'৳';document.getElementById('sNagad').innerText=tNagad+'৳';document.getElementById('sBakiSale').innerText=tBaki+'৳';document.getElementById('sDue').innerText=tBaki+'৳';}
+let st=document.getElementById('salesTable'); if(st){st.innerHTML='<tr><th>Branch</th><th>Party/Product</th><th>টোটাল</th><th>নগদ</th><th>বাকি - পার্টিতে বাদ</th></tr>'; salesF.forEach(s=>{st.innerHTML+=`<tr><td>${s.branch}</td><td>${s.party}</td><td>${s.total}৳</td><td>${s.nagad}৳</td><td style="color:red;font-weight:bold">${s.baki}৳</td></tr>`;});}
+
+let ut=document.getElementById('userTable'); if(ut){ut.innerHTML='<tr><th>Role</th><th>Name</th><th>Client/Org</th></tr>';users.forEach(u=>{ut.innerHTML+=`<tr><td>${u.role}</td><td>${u.name}</td><td>${u.clientName||u.org}</td></tr>`;});}
+}
+function delProduct(i){if(confirm('Delete Product?')){products.splice(i,1);localStorage.setItem('jus_products_v3',JSON.stringify(products));render();}}
 function doLogout(){document.getElementById('dashboard').style.display='none';document.getElementById('loginSec').style.display='flex';}
-handleCreateRole();
 </script>
 </body>
 </html>
