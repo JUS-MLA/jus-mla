@@ -29,6 +29,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px;bord
 .tab{display:none}.tab.active{display:block}
 .create-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .filterRow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px;background:#fff;padding:10px;border-radius:10px}
+.filterRow select{max-width:250px}
 .editBox{border:2px dashed #16a34a;background:#f0fdf4}
 @media(max-width:768px){.sidebar{width:100%;float:none;min-height:auto}.main{margin-left:0}.create-grid{grid-template-columns:1fr}}
 </style>
@@ -38,8 +39,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px;bord
 <div id="loginSec" class="login-wrap">
 <div class="card">
 <div class="logo"><img src="logo.png" onerror="this.src='https://via.placeholder.com/75?text=JUS'"><h2 style="margin:6px 0 2px;color:#12307e">JUS</h2><p style="margin:0;font-size:12px;color:#64748b">Janakalyan Unnayan Sohayok - JUS</p></div>
-<label>Select Role</label><select id="role" onchange="handleRole()"><option>Owner Admin</option><option>Owner Branch</option><option>Owner Shop</option><option>Client Branch</option><option>Client Shop</option></select>
-<label>Organization Name</label><input type="text" id="orgName" value="Janakalyan Unnayan Sohayok - JUS" readonly>
+<label>Select Role</label><select id="role"><option>Owner Admin</option><option>Owner Branch</option><option>Owner Shop</option><option>Client Branch</option><option>Client Shop</option></select>
 <label>Username</label><input type="text" id="username" value="mdlimonahammed2004@mla">
 <label>Password</label><input type="password" id="password" value="Limon915225@">
 <button class="btn" onclick="doLogin()">🔐 Login</button>
@@ -48,16 +48,20 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px;bord
 
 <div id="dashboard">
 <div class="header">
-<div><b>JUS</b> | <small id="uInfo"></small></div>
-<div class="searchBox"><span>🔍</span><input id="globalSearch" placeholder="Search..." oninput="render()"></div>
+<div><b>JUS</b><br><small id="uInfo"></small></div>
+<div class="searchBox"><span>🔍</span><input type="text" id="globalSearch" placeholder="Search..." oninput="render()"></div>
 <button onclick="doLogout()" style="background:#ef4444;color:#fff;border:none;padding:8px 14px;border-radius:20px;cursor:pointer">Logout</button>
 </div>
 <div class="sidebar" id="sideMenu"></div>
 <div class="main">
-<div class="filterRow"><b>🔎 Branch Filter:</b><select id="branchFilter" onchange="render()"><option value="all">All Branch</option></select><small id="filterInfo" style="color:#16a34a;font-weight:700"></small></div>
+<div class="filterRow">
+<b>🔎 Branch Filter:</b>
+<select id="branchFilter" onchange="render()"><option value="all">All Branch</option></select>
+<small id="filterInfo" style="color:#16a34a;font-weight:700"></small>
+</div>
 
 <div class="box" style="background:linear-gradient(135deg,#12307e,#1e40af);color:#fff">
-<h3>💰 পার্টিতে বাদ + বাকি / নগদ / টোটাল <small id="dashBranchName" style="background:rgba(255,255,255,.2);padding:3px 8px;border-radius:10px;font-size:11px"></small></h3>
+<h3>💰 পার্টিতে যাইয়া বাদ + বাকি / নগদ / টোটাল <small id="dashBranchName" style="background:rgba(255,255,255,.2);padding:3px 8px;border-radius:10px;font-size:11px"></small></h3>
 <div class="stat" style="margin-bottom:0">
 <div><b id="sTotalSale">0৳</b><small>টোটাল বিক্রি</small></div>
 <div><b id="sNagad">0৳</b><small>নগদ বিক্রি</small></div>
@@ -75,11 +79,11 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px;bord
 <input type="number" id="sNagadInput" placeholder="নগদ বিক্রি" oninput="calcBaki()">
 <input type="number" id="sBaki" placeholder="বাকি - পার্টিতে বাদ" readonly style="background:#fef2f2;color:#dc2626;font-weight:bold">
 </div>
-<button class="btn" style="background:#16a34a" onclick="addSale()">💾 Save Sale</button>
+<button class="btn" style="background:#16a34a" onclick="addSale()">💾 Save - বাকি পার্টিতে যাবে</button>
 </div>
 
 <div id="tab-create" class="tab active"><div class="box" id="createBox" style="border-left:5px solid #12307e">
-<h3 id="createTitle">👑 Create / Edit User</h3>
+<h3 id="createTitle">👑 Create / Edit - Organization / Client Name</h3>
 <div class="create-grid">
 <select id="newRole" onchange="handleCreateRole()"><option>Owner Branch</option><option>Owner Shop</option><option>Client Branch</option><option>Client Shop</option></select>
 <input id="newName" placeholder="Branch / Shop Name">
@@ -91,21 +95,20 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px;bord
 <input id="newAddress" placeholder="Address" style="grid-column:span 2">
 </div>
 <button class="btn" id="saveBtn" onclick="createUser()">➕ Create</button>
-<button class="btn" id="cancelBtn" onclick="cancelEdit()" style="display:none;background:#64748b;margin-top:8px">Cancel Edit</button>
+<button class="btn" id="cancelBtn" onclick="cancelEdit()" style="display:none;background:#64748b;margin-top:8px">Cancel</button>
 </div></div>
 
-<div class="box"><h3>📒 পার্টির বাকির লিস্ট</h3><table id="salesTable"></table></div>
-<div class="box"><h3>📋 All Users List - Edit সহ</h3><table id="userTable"></table></div>
+<div class="box"><h3>📒 পার্টির বাকির লিস্ট - পার্টিতে বাদ</h3><table id="salesTable"></table></div>
+<div class="box"><h3>📋 All Users List</h3><table id="userTable"></table></div>
 </div>
 </div>
 
 <script>
 let users=JSON.parse(localStorage.getItem('jus_users_v2')||'[]');
 let sales=JSON.parse(localStorage.getItem('jus_sales_v1')||'[]');
-if(users.length===0){users=[{role:'Owner Admin',name:'MD. LIMON AHAMMED',username:'mdlimonahammed2004@mla',password:'Limon915225@',org:'Janakalyan Unnayan Sohayok - JUS',clientName:'MD. LIMON AHAMMED',phone:'01949915225',address:'Rajshahi',openDate:'2024-01-01',createdAt:new Date().toISOString()}];}
+if(users.length===0){users=[{role:'Owner Admin',name:'MD. LIMON AHAMMED',username:'mdlimonahammed2004@mla',password:'Limon915225@',org:'JUS',clientName:'MD. LIMON AHAMMED',phone:'01949915225',address:'Rajshahi',openDate:'2024-01-01',createdAt:new Date().toISOString()}];}
 let cur=null;let editIndex=-1;
-function handleRole(){let r=document.getElementById('role').value;let org=document.getElementById('orgName');if(r==='Owner Admin'||r.includes('Owner')){org.value='Janakalyan Unnayan Sohayok - JUS';org.readOnly=true;}else{org.value='';org.readOnly=false;org.placeholder='Client Name';}}
-function handleCreateRole(){if(editIndex!==-1)return;let r=document.getElementById('newRole').value;let i=document.getElementById('newOrgClient');if(r.includes('Owner')){i.placeholder='Organization Name';i.value='Janakalyan Unnayan Sohayok - JUS';}else{i.placeholder='Client Name';i.value='';}}
+function handleCreateRole(){if(editIndex!==-1)return;let r=document.getElementById('newRole').value;let i=document.getElementById('newOrgClient');if(r.includes('Owner')){i.placeholder='Organization Name - Owner এর জন্য';i.value='Janakalyan Unnayan Sohayok - JUS';}else{i.placeholder='Client Name - ক্লায়েন্টের নাম';i.value='';}}
 function calcBaki(){let t=parseFloat(document.getElementById('sTotal').value)||0;let n=parseFloat(document.getElementById('sNagadInput').value)||0;document.getElementById('sBaki').value=t-n;}
 function addSale(){let party=document.getElementById('sParty').value;let total=parseFloat(document.getElementById('sTotal').value)||0;let nagad=parseFloat(document.getElementById('sNagadInput').value)||0;let baki=parseFloat(document.getElementById('sBaki').value)||0;if(!party||!total){alert('Party আর Total দাও');return;}sales.push({id:Date.now(),branch:cur.name,party:party,total:total,nagad:nagad,baki:baki,date:new Date().toISOString()});localStorage.setItem('jus_sales_v1',JSON.stringify(sales));document.getElementById('sParty').value='';document.getElementById('sTotal').value='';document.getElementById('sNagadInput').value='';document.getElementById('sBaki').value='';render();}
 function doLogin(){let r=document.getElementById('role').value;let u=document.getElementById('username').value;let p=document.getElementById('password').value;let f=users.find(x=>x.username===u&&x.password===p&&x.role===r);if(!f){alert('ভুল');return;}cur=f;document.getElementById('loginSec').style.display='none';document.getElementById('dashboard').style.display='block';document.getElementById('uInfo').innerText=f.role+' | '+f.name;document.getElementById('sideMenu').innerHTML=`<b>${f.role}</b><a class="active">${f.name}</a>`;updateBranchFilter();render();}
@@ -113,14 +116,17 @@ function updateBranchFilter(){let sel=document.getElementById('branchFilter');le
 function render(){
 let branchF=document.getElementById('branchFilter').value;
 let branchUsers=branchF==='all'?users:users.filter(u=>u.name===branchF);
-document.getElementById('dashBranchName').innerText=branchF==='all'?'All':branchF;
+document.getElementById('dashBranchName').innerText=branchF==='all'?'All':'Filtered: '+branchF;
 document.getElementById('cTotalBranch').innerText=branchUsers.filter(x=>x.role!=='Owner Admin').length;
 let salesF=branchF==='all'?sales:sales.filter(s=>s.branch===branchF);
 if(cur&&cur.role!=='Owner Admin'){salesF=sales.filter(s=>s.branch===cur.name);}
 let tSale=salesF.reduce((a,b)=>a+b.total,0);let tNagad=salesF.reduce((a,b)=>a+b.nagad,0);let tBaki=salesF.reduce((a,b)=>a+b.baki,0);
-document.getElementById('sTotalSale').innerText=tSale+'৳';document.getElementById('sNagad').innerText=tNagad+'৳';document.getElementById('sBakiSale').innerText=tBaki+'৳';document.getElementById('sDue').innerText=tBaki+'৳';
+document.getElementById('sTotalSale').innerText=tSale+'৳';
+document.getElementById('sNagad').innerText=tNagad+'৳';
+document.getElementById('sBakiSale').innerText=tBaki+'৳';
+document.getElementById('sDue').innerText=tBaki+'৳';
 document.getElementById('filterInfo').innerText=branchF==='all'?'':'Filtered: '+branchF;
-let ut=document.getElementById('userTable');ut.innerHTML='<tr><th>Role</th><th>Name</th><th>Client/Org</th><th>Action</th></tr>';branchUsers.forEach(u=>{let idx=users.indexOf(u);ut.innerHTML+=`<tr><td>${u.role}</td><td>${u.name}</td><td>${u.clientName||u.org||'-'}</td><td><button class="btn2" style="background:#16a34a;color:#fff" onclick="editUser(${idx})">✏️ Edit</button><button class="btn2" style="background:#dc2626;color:#fff" onclick="delUser(${idx})">Delete</button></td></tr>`;});
+let ut=document.getElementById('userTable');ut.innerHTML='<tr><th>Role</th><th>Name</th><th>Client/Org</th><th>Action</th></tr>';branchUsers.forEach(u=>{let idx=users.indexOf(u);ut.innerHTML+=`<tr><td>${u.role}</td><td>${u.name}</td><td>${u.clientName||u.org||'-'}</td><td><button class="btn2" style="background:#16a34a;color:#fff" onclick="editUser(${idx})">Edit</button><button class="btn2" style="background:#dc2626;color:#fff" onclick="delUser(${idx})">Delete</button></td></tr>`;});
 let st=document.getElementById('salesTable');st.innerHTML='<tr><th>Branch</th><th>Party</th><th>টোটাল</th><th>নগদ বিক্রি</th><th>বাকি বিক্রি</th><th>পার্টিতে বাদ</th></tr>';salesF.forEach(s=>{st.innerHTML+=`<tr><td>${s.branch}</td><td>${s.party}</td><td>${s.total}৳</td><td style="color:#16a34a">${s.nagad}৳</td><td style="color:#ea580c">${s.baki}৳</td><td style="color:#dc2626;font-weight:bold">${s.baki}৳</td></tr>`;});if(salesF.length===0)st.innerHTML+='<tr><td colspan=6>No Data</td></tr>';
 }
 function editUser(i){editIndex=i;let u=users[i];document.getElementById('newRole').value=u.role;document.getElementById('newName').value=u.name;document.getElementById('newPhone').value=u.phone;document.getElementById('newUser').value=u.username;document.getElementById('newPass').value=u.password;document.getElementById('newOrgClient').value=u.clientName||u.org;document.getElementById('newOpenDate').value=u.openDate||'';document.getElementById('newAddress').value=u.address||'';document.getElementById('saveBtn').innerText='💾 Update';document.getElementById('saveBtn').style.background='#16a34a';document.getElementById('cancelBtn').style.display='block';}
@@ -128,7 +134,7 @@ function cancelEdit(){editIndex=-1;document.getElementById('saveBtn').innerText=
 function createUser(){let r=document.getElementById('newRole').value;let n=document.getElementById('newName').value;let ph=document.getElementById('newPhone').value;let un=document.getElementById('newUser').value;let pw=document.getElementById('newPass').value;let oc=document.getElementById('newOrgClient').value;let addr=document.getElementById('newAddress').value;let od=document.getElementById('newOpenDate').value;if(!n||!un||!pw){alert('Name User Pass দাও');return;}let org='',cName='';if(r.includes('Owner'))org=oc;else cName=oc;if(editIndex!==-1){users[editIndex]={...users[editIndex],role:r,name:n,phone:ph,username:un,password:pw,org:org,clientName:cName,address:addr,openDate:od};}else{users.push({role:r,name:n,phone:ph,username:un,password:pw,org:org,clientName:cName,address:addr,openDate:od,createdAt:new Date().toISOString()});}localStorage.setItem('jus_users_v2',JSON.stringify(users));cancelEdit();updateBranchFilter();render();}
 function delUser(i){if(confirm('Delete?')){users.splice(i,1);localStorage.setItem('jus_users_v2',JSON.stringify(users));render();}}
 function doLogout(){document.getElementById('dashboard').style.display='none';document.getElementById('loginSec').style.display='flex';}
-handleRole();handleCreateRole();
+handleCreateRole();
 </script>
 </body>
 </html>
