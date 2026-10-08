@@ -1,33 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JUS Portal - Login</title>
+<title>Janakalyan Unnayan Sohayok (JUS)</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@600;800&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Outfit',sans-serif}
-body{min-height:100vh;background:#020a1e;background-image:linear-gradient(rgba(59,130,246,0.13) 1px, transparent 1px),linear-gradient(90deg, rgba(59,130,246,0.13) 1px, transparent 1px);background-size:42px 42px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
-.logo-box{background:#fff;width:155px;border-radius:18px;padding:10px;box-shadow:0 0 25px rgba(96,165,250,0.6)}
-.logo-box img{width:100%;border-radius:12px;display:block}
-.main-title{font-size:52px;font-weight:800;background:linear-gradient(#7dd3fc,#0ea5e9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-top:12px;letter-spacing:2px}
-.sub{color:#38bdf8;letter-spacing:5px;font-size:11px;margin-top:2px}
-.card{margin-top:24px;background:rgba(255,255,255,0.09);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.18);border-radius:20px;padding:22px;width:100%;max-width:370px;box-shadow:0 10px 30px rgba(0,0,0,0.3)}
-select,input{width:100%;padding:13px;margin:7px 0;border-radius:11px;border:none;outline:none;font-size:14px;background:#fff}
-.btn{width:100%;padding:13px;background:#fff;color:#000;border:none;border-radius:11px;font-weight:800;margin-top:12px;cursor:pointer;font-size:15px}
+body{min-height:100vh;background:#020a1e;background-image:linear-gradient(rgba(59,130,246,0.14) 1px, transparent 1px),linear-gradient(90deg, rgba(59,130,246,0.14) 1px, transparent 1px);background-size:42px 42px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.logo-box{background:#fff;width:165px;height:95px;border-radius:20px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 35px rgba(56,189,248,0.6), inset 0 0 10px rgba(0,0,0,0.05)}
+.logo-box span{font-size:52px;font-weight:800;background:linear-gradient(180deg,#0ea5e9,#0354a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px}
+.title{font-size:46px;font-weight:800;color:#38bdf8;margin-top:14px;letter-spacing:2px}
+.fullname{font-size:13px;color:#7dd3fc;margin-top:4px;text-align:center;letter-spacing:0.5px}
+.sub{color:#38bdf8;letter-spacing:5px;font-size:10px;margin-top:6px;opacity:0.9}
+.card{margin-top:26px;background:rgba(255,255,255,0.10);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.20);border-radius:20px;padding:22px;width:100%;max-width:380px;box-shadow:0 15px 40px rgba(0,0,0,0.4)}
+label{font-size:11px;color:#7dd3fc;margin-left:4px}
+select,input{width:100%;padding:13px;margin:6px 0 10px 0;border-radius:11px;border:none;outline:none;font-size:14px;background:#ffffff}
+select{font-weight:600}
+.btn{width:100%;padding:13px;background:#ffffff;color:#000;border:none;border-radius:11px;font-weight:800;margin-top:10px;cursor:pointer;font-size:15px;letter-spacing:0.5px}
 .btn:active{transform:scale(0.98)}
-.lock{font-size:11px;text-align:left;margin:3px 0 8px 4px}
+.lock{font-size:11px;margin:-4px 0 10px 4px}
+#msg{color:#7dd3fc;font-size:12px;text-align:center;margin-top:12px;min-height:16px}
 </style>
 </head>
 <body>
 
-<div class="logo-box"><img src="logo.png" alt="JUS Logo"></div>
-<div class="main-title">JUS</div>
+<div class="logo-box"><span>JUS</span></div>
+<div class="title">JUS</div>
+<div class="fullname">Janakalyan Unnayan Sohayok (JUS)</div>
 <div class="sub">TRUST • QUALITY • GROWTH</div>
 
 <div class="card">
+  <label>SELECT ROLE</label>
   <select id="role" onchange="checkRole()">
-    <option value="">Select Role</option>
+    <option value="">-- Select Role --</option>
     <option value="Owner">Owner</option>
     <option value="Owner Branch">Owner Branch</option>
     <option value="Owner Shop">Owner Shop</option>
@@ -36,58 +42,75 @@ select,input{width:100%;padding:13px;margin:7px 0;border-radius:11px;border:none
     <option value="Shop Client">Shop Client</option>
   </select>
 
+  <label>ORGANIZATION NAME</label>
   <input type="text" id="org" placeholder="Organization Name">
-  <div id="orgLock" class="lock" style="color:#7dd3fc">Select Role First</div>
+  <div id="lock" class="lock" style="color:#7dd3fc">Select Role First</div>
 
+  <label>PHONE NUMBER</label>
   <input type="text" id="phone" placeholder="Phone Number">
+
+  <label>PASSWORD</label>
   <input type="password" id="pass" placeholder="Password">
 
   <button class="btn" onclick="doLogin()">LOGIN - AUTO SAVE</button>
-  <p id="msg" style="color:#7dd3fc;font-size:12px;margin-top:12px;text-align:center"></p>
+  <p id="msg"></p>
 </div>
 
 <script>
-// Auto Load Saved Data
+// Auto Load Saved Login
 window.onload = function(){
-  if(localStorage.getItem("jus_phone")){
-    document.getElementById('role').value = localStorage.getItem("jus_role")||"";
-    document.getElementById('org').value = localStorage.getItem("jus_org")||"";
-    document.getElementById('phone').value = localStorage.getItem("jus_phone")||"";
-    document.getElementById('pass').value = localStorage.getItem("jus_pass")||"";
+  const r = localStorage.getItem("jus_role");
+  const o = localStorage.getItem("jus_org");
+  const p = localStorage.getItem("jus_phone");
+  const ps = localStorage.getItem("jus_pass");
+  if(p){
+    document.getElementById('role').value = r||"";
+    document.getElementById('org').value = o||"";
+    document.getElementById('phone').value = p||"";
+    document.getElementById('pass').value = ps||"";
     checkRole();
+    document.getElementById('msg').innerText = "✅ Auto Loaded: "+r;
   }
 }
+
 function checkRole(){
   let role = document.getElementById('role').value;
   let org = document.getElementById('org');
-  let lock = document.getElementById('orgLock');
-  if(role==="Owner"){
+  let lock = document.getElementById('lock');
+  if(role === "Owner"){
     org.disabled = true;
     org.style.background = "#cbd5e1";
-    lock.innerHTML = "🔒 Locked: Only Owner View";
+    lock.innerHTML = "🔒 Locked for Owner - Cannot Edit";
     lock.style.color = "#f87171";
-  } else {
+  }else{
     org.disabled = false;
     org.style.background = "#fff";
     lock.innerHTML = role ? "✏️ Editable for "+role : "Select Role First";
     lock.style.color = "#7dd3fc";
   }
 }
+
 function doLogin(){
   let role = document.getElementById('role').value;
   let org = document.getElementById('org').value;
   let phone = document.getElementById('phone').value;
   let pass = document.getElementById('pass').value;
+  let msg = document.getElementById('msg');
+
   if(!role || !phone || !pass){
-    document.getElementById('msg').innerText = "❌ Role, Phone, Password দাও ভাই";
+    msg.innerText = "❌ Role, Phone, Password লাগবে ভাই";
     return;
   }
-  // Auto Save
+
+  // Auto Save to Device
   localStorage.setItem("jus_role", role);
   localStorage.setItem("jus_org", org);
   localStorage.setItem("jus_phone", phone);
   localStorage.setItem("jus_pass", pass);
-  document.getElementById('msg').innerText = "✅ Auto Saved! Welcome "+role;
+
+  msg.innerText = "✅ Auto Saved! Welcome "+role+" | "+phone;
+  // এখানে তোমার Portal এ Redirect করতে চাইলে:
+  // window.location.href = "dashboard.html";
 }
 </script>
 </body>
