@@ -3,63 +3,91 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JUS - Login</title>
+<title>JUS Portal - Login</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
-body{min-height:100vh;background:#020a1e;background-image:linear-gradient(rgba(59,130,246,0.12) 1px, transparent 1px),linear-gradient(90deg, rgba(59,130,246,0.12) 1px, transparent 1px);background-size:40px 40px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
-.logo-box{background:#fff;width:150px;height:90px;border-radius:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 25px rgba(96,165,250,0.5);font-weight:900;font-size:42px;color:#0ea5e9;letter-spacing:1px}
-.title{font-size:48px;font-weight:800;color:#38bdf8;margin-top:12px}
-.sub{color:#38bdf8;letter-spacing:4px;font-size:10px}
-.login-card{margin-top:22px;background:rgba(255,255,255,0.09);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.18);border-radius:18px;padding:20px;width:100%;max-width:360px}
-select,input{width:100%;padding:13px;margin:6px 0;border-radius:10px;border:none;outline:none;font-size:14px}
-.btn{width:100%;padding:13px;background:#fff;color:#000;border:none;border-radius:12px;font-weight:800;margin-top:10px;cursor:pointer}
-.lock{font-size:11px;color:#7dd3fc;margin:2px 0 6px 4px}
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Outfit',sans-serif}
+body{min-height:100vh;background:#020a1e;background-image:linear-gradient(rgba(59,130,246,0.13) 1px, transparent 1px),linear-gradient(90deg, rgba(59,130,246,0.13) 1px, transparent 1px);background-size:42px 42px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.logo-box{background:#fff;width:155px;border-radius:18px;padding:10px;box-shadow:0 0 25px rgba(96,165,250,0.6)}
+.logo-box img{width:100%;border-radius:12px;display:block}
+.main-title{font-size:52px;font-weight:800;background:linear-gradient(#7dd3fc,#0ea5e9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-top:12px;letter-spacing:2px}
+.sub{color:#38bdf8;letter-spacing:5px;font-size:11px;margin-top:2px}
+.card{margin-top:24px;background:rgba(255,255,255,0.09);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.18);border-radius:20px;padding:22px;width:100%;max-width:370px;box-shadow:0 10px 30px rgba(0,0,0,0.3)}
+select,input{width:100%;padding:13px;margin:7px 0;border-radius:11px;border:none;outline:none;font-size:14px;background:#fff}
+.btn{width:100%;padding:13px;background:#fff;color:#000;border:none;border-radius:11px;font-weight:800;margin-top:12px;cursor:pointer;font-size:15px}
+.btn:active{transform:scale(0.98)}
+.lock{font-size:11px;text-align:left;margin:3px 0 8px 4px}
 </style>
 </head>
 <body>
 
-<div class="logo-box">JUS</div>
-<div class="title">JUS</div>
+<div class="logo-box"><img src="logo.png" alt="JUS Logo"></div>
+<div class="main-title">JUS</div>
 <div class="sub">TRUST • QUALITY • GROWTH</div>
 
-<div class="login-card">
+<div class="card">
   <select id="role" onchange="checkRole()">
     <option value="">Select Role</option>
-    <option>Owner</option>
-    <option>Owner Branch</option>
-    <option>Owner Shop</option>
-    <option>Client</option>
-    <option>Branch Client</option>
-    <option>Shop Client</option>
+    <option value="Owner">Owner</option>
+    <option value="Owner Branch">Owner Branch</option>
+    <option value="Owner Shop">Owner Shop</option>
+    <option value="Client">Client</option>
+    <option value="Branch Client">Branch Client</option>
+    <option value="Shop Client">Shop Client</option>
   </select>
+
   <input type="text" id="org" placeholder="Organization Name">
-  <div id="orgLock" class="lock">Select Role First</div>
+  <div id="orgLock" class="lock" style="color:#7dd3fc">Select Role First</div>
+
   <input type="text" id="phone" placeholder="Phone Number">
   <input type="password" id="pass" placeholder="Password">
+
   <button class="btn" onclick="doLogin()">LOGIN - AUTO SAVE</button>
-  <p id="msg" style="color:#7dd3fc;font-size:12px;margin-top:10px;text-align:center"></p>
+  <p id="msg" style="color:#7dd3fc;font-size:12px;margin-top:12px;text-align:center"></p>
 </div>
 
 <script>
-window.onload=function(){
+// Auto Load Saved Data
+window.onload = function(){
   if(localStorage.getItem("jus_phone")){
-    document.getElementById('role').value=localStorage.getItem("jus_role")||"";
-    document.getElementById('org').value=localStorage.getItem("jus_org")||"";
-    document.getElementById('phone').value=localStorage.getItem("jus_phone")||"";
-    document.getElementById('pass').value=localStorage.getItem("jus_pass")||"";
+    document.getElementById('role').value = localStorage.getItem("jus_role")||"";
+    document.getElementById('org').value = localStorage.getItem("jus_org")||"";
+    document.getElementById('phone').value = localStorage.getItem("jus_phone")||"";
+    document.getElementById('pass').value = localStorage.getItem("jus_pass")||"";
     checkRole();
   }
 }
 function checkRole(){
-  let r=document.getElementById('role').value, o=document.getElementById('org'), l=document.getElementById('orgLock');
-  if(r==="Owner"){o.disabled=true;o.style.background="#cbd5e1";l.innerHTML="🔒 Locked for Owner";l.style.color="#f87171";}
-  else{o.disabled=false;o.style.background="#fff";l.innerHTML=r?"✏️ Editable for "+r:"Select Role First";l.style.color="#7dd3fc";}
+  let role = document.getElementById('role').value;
+  let org = document.getElementById('org');
+  let lock = document.getElementById('orgLock');
+  if(role==="Owner"){
+    org.disabled = true;
+    org.style.background = "#cbd5e1";
+    lock.innerHTML = "🔒 Locked: Only Owner View";
+    lock.style.color = "#f87171";
+  } else {
+    org.disabled = false;
+    org.style.background = "#fff";
+    lock.innerHTML = role ? "✏️ Editable for "+role : "Select Role First";
+    lock.style.color = "#7dd3fc";
+  }
 }
 function doLogin(){
-  let r=document.getElementById('role').value, org=document.getElementById('org').value, ph=document.getElementById('phone').value, pa=document.getElementById('pass').value;
-  if(!r||!ph||!pa){document.getElementById('msg').innerText="❌ Fill Role, Phone, Password";return;}
-  localStorage.setItem("jus_role",r);localStorage.setItem("jus_org",org);localStorage.setItem("jus_phone",ph);localStorage.setItem("jus_pass",pa);
-  document.getElementById('msg').innerText="✅ Saved! Welcome "+r;
+  let role = document.getElementById('role').value;
+  let org = document.getElementById('org').value;
+  let phone = document.getElementById('phone').value;
+  let pass = document.getElementById('pass').value;
+  if(!role || !phone || !pass){
+    document.getElementById('msg').innerText = "❌ Role, Phone, Password দাও ভাই";
+    return;
+  }
+  // Auto Save
+  localStorage.setItem("jus_role", role);
+  localStorage.setItem("jus_org", org);
+  localStorage.setItem("jus_phone", phone);
+  localStorage.setItem("jus_pass", pass);
+  document.getElementById('msg').innerText = "✅ Auto Saved! Welcome "+role;
 }
 </script>
 </body>
