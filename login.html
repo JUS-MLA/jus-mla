@@ -2,29 +2,59 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>JUS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JUS Login</title>
 <style>
-body{margin:0;background:#0b4da1;display:flex;justify-content:center;align-items:center;min-height:100vh;font-family:Arial}
-.box{background:#fff;width:88%;max-width:340px;border-radius:18px;padding:28px;text-align:center}
-h1{margin:0;color:#0b4da1;font-size:42px;letter-spacing:3px}
-.sub{font-size:12px;color:#555;margin:4px 0 20px 0}
-input{width:100%;padding:12px;margin:6px 0 12px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;text-align:left}
-.btn{width:100%;background:#6b7280;color:#fff;border:none;padding:12px;border-radius:8px;font-weight:bold;margin-top:6px}
-label{font-size:12px;font-weight:bold;display:block;text-align:left}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#020a1e;background-image:linear-gradient(rgba(59,130,246,0.15) 1px, transparent 1px),linear-gradient(90deg, rgba(59,130,246,0.15) 1px, transparent 1px);background-size:45px 45px;font-family:sans-serif}
+.box{background:rgba(255,255,255,0.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.2);padding:28px;border-radius:20px;width:90%;max-width:380px;text-align:center}
+.box img{width:85px;background:#fff;padding:10px;border-radius:12px}
+select,input{width:100%;padding:12px;margin:7px 0;border-radius:10px;border:none;outline:none;box-sizing:border-box}
+button{width:100%;padding:13px;background:#fff;color:#000;border:none;border-radius:10px;font-weight:800;margin-top:12px;cursor:pointer}
+.lock{font-size:11px;color:#7dd3fc;text-align:left;margin:2px 0 8px 4px}
 </style>
 </head>
 <body>
 <div class="box">
-<h1>JUS</h1>
-<div class="sub">Janakalyan Unnayan Sohayok</div>
+  <img src="logo.png">
+  <h2 style="color:#fff">JUS LOGIN</h2>
+  
+  <select id="role" onchange="checkRole()">
+    <option value="">Select Role</option>
+    <option value="Owner">Owner</option>
+    <option value="Owner Branch">Owner Branch</option>
+    <option value="Owner Shop">Owner Shop</option>
+    <option value="Client">Client</option>
+    <option value="Branch Client">Branch Client</option>
+    <option value="Shop Client">Shop Client</option>
+  </select>
 
-<label>Username</label>
-<input type="text" placeholder="Username">
-<label>Password</label>
-<input type="password" placeholder="Password">
+  <input type="text" id="org" placeholder="Organization Name">
+  <div id="orgLock" class="lock">🔒 Organization is locked for Owner</div>
 
-<button class="btn">Coming Soon</button>
+  <input type="text" id="phone" placeholder="Phone Number">
+  <input type="password" id="pass" placeholder="Password">
+
+  <button onclick="doLogin()">LOGIN - AUTO SAVE</button>
+  <p id="msg" style="color:#7dd3fc;font-size:12px;margin-top:10px"></p>
 </div>
-</body>
-</html>
+
+<script>
+// Auto Load Saved Data
+window.onload = function(){
+  if(localStorage.getItem("jus_phone")){
+    document.getElementById('role').value = localStorage.getItem("jus_role");
+    document.getElementById('org').value = localStorage.getItem("jus_org");
+    document.getElementById('phone').value = localStorage.getItem("jus_phone");
+    document.getElementById('pass').value = localStorage.getItem("jus_pass");
+    checkRole();
+  }
+}
+
+function checkRole(){
+  let role = document.getElementById('role').value;
+  let orgInput = document.getElementById('org');
+  let lockText = document.getElementById('orgLock');
+  
+  if(role === "Owner"){
+    orgInput.disabled = true;
+    orgInput.style.background =
