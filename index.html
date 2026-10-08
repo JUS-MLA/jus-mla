@@ -1,39 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Janakalyan Unnayan Sohayok (JUS)</title>
+<title>JUS - Login</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@600;800&display=swap');
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Outfit',sans-serif}
-body{min-height:100vh;background:#020a1e;background-image:linear-gradient(rgba(59,130,246,0.14) 1px, transparent 1px),linear-gradient(90deg, rgba(59,130,246,0.14) 1px, transparent 1px);background-size:42px 42px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
-.logo-box{background:#fff;width:165px;height:95px;border-radius:20px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 35px rgba(56,189,248,0.6), inset 0 0 10px rgba(0,0,0,0.05)}
-.logo-box span{font-size:52px;font-weight:800;background:linear-gradient(180deg,#0ea5e9,#0354a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px}
-.title{font-size:46px;font-weight:800;color:#38bdf8;margin-top:14px;letter-spacing:2px}
-.fullname{font-size:13px;color:#7dd3fc;margin-top:4px;text-align:center;letter-spacing:0.5px}
-.sub{color:#38bdf8;letter-spacing:5px;font-size:10px;margin-top:6px;opacity:0.9}
-.card{margin-top:26px;background:rgba(255,255,255,0.10);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.20);border-radius:20px;padding:22px;width:100%;max-width:380px;box-shadow:0 15px 40px rgba(0,0,0,0.4)}
-label{font-size:11px;color:#7dd3fc;margin-left:4px}
-select,input{width:100%;padding:13px;margin:6px 0 10px 0;border-radius:11px;border:none;outline:none;font-size:14px;background:#ffffff}
-select{font-weight:600}
-.btn{width:100%;padding:13px;background:#ffffff;color:#000;border:none;border-radius:11px;font-weight:800;margin-top:10px;cursor:pointer;font-size:15px;letter-spacing:0.5px}
-.btn:active{transform:scale(0.98)}
+*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
+body{min-height:100vh;background:#020a1e;background-image:linear-gradient(rgba(59,130,246,0.15) 1px, transparent 1px),linear-gradient(90deg, rgba(59,130,246,0.15) 1px, transparent 1px);background-size:42px 42px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.logo{background:#fff;width:160px;height:85px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:48px;color:#0a7bc2;box-shadow:0 0 25px rgba(56,189,248,0.6)}
+.t1{font-size:42px;font-weight:800;color:#38bdf8;margin-top:10px}
+.t2{color:#7dd3fc;font-size:11px;margin-top:4px;text-align:center}
+.card{margin-top:20px;background:rgba(255,255,255,0.10);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px;width:100%;max-width:380px}
+input,select{width:100%;padding:12px;margin:6px 0 10px 0;border-radius:10px;border:none;outline:none;font-size:14px}
+.btn{width:100%;padding:13px;background:#fff;color:#000;border:none;border-radius:10px;font-weight:800;margin-top:8px;cursor:pointer}
 .lock{font-size:11px;margin:-4px 0 10px 4px}
-#msg{color:#7dd3fc;font-size:12px;text-align:center;margin-top:12px;min-height:16px}
 </style>
 </head>
 <body>
-
-<div class="logo-box"><span>JUS</span></div>
-<div class="title">JUS</div>
-<div class="fullname">Janakalyan Unnayan Sohayok (JUS)</div>
-<div class="sub">TRUST • QUALITY • GROWTH</div>
+<div class="logo">JUS</div>
+<div class="t1">JUS</div>
+<div class="t2">Janakalyan Unnayan Sohayok (JUS)<br>TRUST • QUALITY • GROWTH</div>
 
 <div class="card">
-  <label>SELECT ROLE</label>
+  <input type="text" id="org" value="Janakalyan Unnayan Sohayok (JUS)">
+  <div id="orgLock" class="lock"></div>
+
+  <input type="text" id="branch" placeholder="Branch & Shop Name">
+
   <select id="role" onchange="checkRole()">
-    <option value="">-- Select Role --</option>
+    <option value="">Select Role</option>
     <option value="Owner">Owner</option>
     <option value="Owner Branch">Owner Branch</option>
     <option value="Owner Shop">Owner Shop</option>
@@ -42,75 +37,39 @@ select{font-weight:600}
     <option value="Shop Client">Shop Client</option>
   </select>
 
-  <label>ORGANIZATION NAME</label>
-  <input type="text" id="org" placeholder="Organization Name">
-  <div id="lock" class="lock" style="color:#7dd3fc">Select Role First</div>
-
-  <label>PHONE NUMBER</label>
   <input type="text" id="phone" placeholder="Phone Number">
-
-  <label>PASSWORD</label>
   <input type="password" id="pass" placeholder="Password">
-
   <button class="btn" onclick="doLogin()">LOGIN - AUTO SAVE</button>
-  <p id="msg"></p>
+  <p id="msg" style="color:#7dd3fc;font-size:12px;text-align:center;margin-top:10px"></p>
 </div>
 
 <script>
-// Auto Load Saved Login
-window.onload = function(){
-  const r = localStorage.getItem("jus_role");
-  const o = localStorage.getItem("jus_org");
-  const p = localStorage.getItem("jus_phone");
-  const ps = localStorage.getItem("jus_pass");
-  if(p){
-    document.getElementById('role').value = r||"";
-    document.getElementById('org').value = o||"";
-    document.getElementById('phone').value = p||"";
-    document.getElementById('pass').value = ps||"";
-    checkRole();
-    document.getElementById('msg').innerText = "✅ Auto Loaded: "+r;
-  }
-}
-
 function checkRole(){
-  let role = document.getElementById('role').value;
-  let org = document.getElementById('org');
-  let lock = document.getElementById('lock');
-  if(role === "Owner"){
-    org.disabled = true;
-    org.style.background = "#cbd5e1";
-    lock.innerHTML = "🔒 Locked for Owner - Cannot Edit";
-    lock.style.color = "#f87171";
-  }else{
-    org.disabled = false;
-    org.style.background = "#fff";
-    lock.innerHTML = role ? "✏️ Editable for "+role : "Select Role First";
-    lock.style.color = "#7dd3fc";
-  }
+ let role=document.getElementById('role').value;
+ let org=document.getElementById('org');
+ let lock=document.getElementById('orgLock');
+ if(role==="Owner"){
+   org.disabled=false; org.style.background="#fff";
+   lock.innerHTML="✏️ Owner can edit Org Name"; lock.style.color="#4ade80";
+ }else{
+   org.disabled=true; org.style.background="#cbd5e1"; org.value="Janakalyan Unnayan Sohayok (JUS)";
+   lock.innerHTML="🔒 Locked - Only Owner can edit"; lock.style.color="#f87171";
+ }
 }
-
 function doLogin(){
-  let role = document.getElementById('role').value;
-  let org = document.getElementById('org').value;
-  let phone = document.getElementById('phone').value;
-  let pass = document.getElementById('pass').value;
-  let msg = document.getElementById('msg');
-
-  if(!role || !phone || !pass){
-    msg.innerText = "❌ Role, Phone, Password লাগবে ভাই";
-    return;
-  }
-
-  // Auto Save to Device
-  localStorage.setItem("jus_role", role);
-  localStorage.setItem("jus_org", org);
-  localStorage.setItem("jus_phone", phone);
-  localStorage.setItem("jus_pass", pass);
-
-  msg.innerText = "✅ Auto Saved! Welcome "+role+" | "+phone;
-  // এখানে তোমার Portal এ Redirect করতে চাইলে:
-  // window.location.href = "dashboard.html";
+ let role=document.getElementById('role').value, org=document.getElementById('org').value, branch=document.getElementById('branch').value, phone=document.getElementById('phone').value, pass=document.getElementById('pass').value;
+ if(!role||!phone||!pass){document.getElementById('msg').innerText="❌ Fill Role, Phone, Password";return;}
+ localStorage.setItem("jus_role",role); localStorage.setItem("jus_org",org); localStorage.setItem("jus_branch",branch); localStorage.setItem("jus_phone",phone); localStorage.setItem("jus_pass",pass);
+ document.getElementById('msg').innerText="✅ Auto Saved! "+role;
+}
+window.onload=function(){
+ if(localStorage.getItem("jus_phone")){
+   document.getElementById('role').value=localStorage.getItem("jus_role")||"";
+   document.getElementById('branch').value=localStorage.getItem("jus_branch")||"";
+   document.getElementById('phone').value=localStorage.getItem("jus_phone")||"";
+   document.getElementById('pass').value=localStorage.getItem("jus_pass")||"";
+ }
+ checkRole();
 }
 </script>
 </body>
