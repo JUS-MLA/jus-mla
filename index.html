@@ -22,11 +22,6 @@ input,select{width:100%;padding:12px;margin:6px 0 10px 0;border-radius:10px;bord
 <div class="t2">Janakalyan Unnayan Sohayok (JUS)<br>TRUST • QUALITY • GROWTH</div>
 
 <div class="card">
-  <input type="text" id="org" value="Janakalyan Unnayan Sohayok (JUS)">
-  <div id="orgLock" class="lock"></div>
-
-  <input type="text" id="branch" placeholder="Branch & Shop Name">
-
   <select id="role" onchange="checkRole()">
     <option value="">Select Role</option>
     <option value="Owner">Owner</option>
@@ -37,6 +32,10 @@ input,select{width:100%;padding:12px;margin:6px 0 10px 0;border-radius:10px;bord
     <option value="Shop Client">Shop Client</option>
   </select>
 
+  <input type="text" id="org" placeholder="Organization Name">
+  <div id="orgLock" class="lock" style="color:#7dd3fc">Select Role First</div>
+
+  <input type="text" id="branch" placeholder="Branch & Shop Name">
   <input type="text" id="phone" placeholder="Phone Number">
   <input type="password" id="pass" placeholder="Password">
   <button class="btn" onclick="doLogin()">LOGIN - AUTO SAVE</button>
@@ -45,32 +44,17 @@ input,select{width:100%;padding:12px;margin:6px 0 10px 0;border-radius:10px;bord
 
 <script>
 function checkRole(){
- let role=document.getElementById('role').value;
- let org=document.getElementById('org');
- let lock=document.getElementById('orgLock');
- if(role==="Owner"){
-   org.disabled=false; org.style.background="#fff";
-   lock.innerHTML="✏️ Owner can edit Org Name"; lock.style.color="#4ade80";
- }else{
-   org.disabled=true; org.style.background="#cbd5e1"; org.value="Janakalyan Unnayan Sohayok (JUS)";
-   lock.innerHTML="🔒 Locked - Only Owner can edit"; lock.style.color="#f87171";
- }
-}
-function doLogin(){
- let role=document.getElementById('role').value, org=document.getElementById('org').value, branch=document.getElementById('branch').value, phone=document.getElementById('phone').value, pass=document.getElementById('pass').value;
- if(!role||!phone||!pass){document.getElementById('msg').innerText="❌ Fill Role, Phone, Password";return;}
- localStorage.setItem("jus_role",role); localStorage.setItem("jus_org",org); localStorage.setItem("jus_branch",branch); localStorage.setItem("jus_phone",phone); localStorage.setItem("jus_pass",pass);
- document.getElementById('msg').innerText="✅ Auto Saved! "+role;
-}
-window.onload=function(){
- if(localStorage.getItem("jus_phone")){
-   document.getElementById('role').value=localStorage.getItem("jus_role")||"";
-   document.getElementById('branch').value=localStorage.getItem("jus_branch")||"";
-   document.getElementById('phone').value=localStorage.getItem("jus_phone")||"";
-   document.getElementById('pass').value=localStorage.getItem("jus_pass")||"";
- }
- checkRole();
-}
-</script>
-</body>
-</html>
+ let role = document.getElementById('role').value;
+ let org = document.getElementById('org');
+ let lock = document.getElementById('orgLock');
+
+ if(role === "Owner"){
+   org.value = "Janakalyan Unnayan Sohayok (JUS)"; // AUTO ASBE
+   org.disabled = false;
+   org.style.background = "#fff";
+   lock.innerHTML = "✏️ Auto Filled for Owner - Editable";
+   lock.style.color = "#4ade80";
+ } else if(role !== ""){
+   org.value = "Janakalyan Unnayan Sohayok (JUS)"; // AUTO ASBE
+   org.disabled = true;
+   org.style.background = "#cbd5
